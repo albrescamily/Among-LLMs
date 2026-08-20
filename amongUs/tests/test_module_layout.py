@@ -38,6 +38,8 @@ MODULES = [
     # multiplayer only
     "multiplayer.protocol",
     "multiplayer.server",
+    "multiplayer.state_sync",
+    "multiplayer.world_sync",
     # the god object, still at the root
     "game",
     # main is deliberately absent: it is a bare `while True:` loop.

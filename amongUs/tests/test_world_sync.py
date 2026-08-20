@@ -16,12 +16,11 @@ import pytest
 from conftest import (SENTINEL_DEAD, SENTINEL_DOWN, SENTINEL_LEFT,
                       SENTINEL_RIGHT, SENTINEL_UP, FakeRemotePlayer,
                       remote_game)
-from game import Game
+from multiplayer.world_sync import apply_row
 
 
 def apply(game, row, player_id=1):
-    """Unbound, the way test_state_packet calls the packet builder."""
-    return Game._apply_remote_row(game, row, player_id)
+    return apply_row(game, row, player_id)
 
 
 def known_peer(peer_id=7, **overrides):
