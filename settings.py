@@ -27,6 +27,10 @@ GRIDWIDTH = WIDTH / TILESIZE
 GRIDHEIGHT = HEIGHT / TILESIZE
 FONT = 'Assets/Fonts/Rubik-ExtraBold.TTF'
 
+# Meeting settings
+MEETING_SPLASH_TIME = 1500    # "Discuss!" splash shown when a meeting starts
+MEETING_CHAT_TIME = 20000     # how long the discussion chat stays open
+
 
 # Menu setting
 INTRO_SPRITE_WIDTH = 40

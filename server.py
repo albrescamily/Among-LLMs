@@ -4,6 +4,8 @@ import random
 import pickle
 import time
 
+import protocol
+
 BUFFERSIZE = 8192
 
 print("Server Address: " + socket.gethostbyname(socket.gethostname()))
@@ -37,6 +39,10 @@ class Minion:
     self.got_reported = False
     self.eject_sync = False
     self.eject_img = None
+    # last meeting chat line this player sent, rebroadcast until replaced
+    self.chat_seq = 0
+    self.chat_author = ""
+    self.chat_text = ""
 
 minionmap = {}
 
@@ -68,6 +74,10 @@ def updateWorld(message):
   got_reported = arr[23]
   eject_sync = arr[24]
   eject_img = arr[25]
+  # chat fields are appended at the end, older clients simply omit them
+  chat_seq = arr[protocol.IN_CHAT_SEQ] if len(arr) > protocol.IN_CHAT_SEQ else 0
+  chat_author = arr[protocol.IN_CHAT_AUTHOR] if len(arr) > protocol.IN_CHAT_AUTHOR else ""
+  chat_text = arr[protocol.IN_CHAT_TEXT] if len(arr) > protocol.IN_CHAT_TEXT else ""
 
   if player_id == 0: return
 
@@ -95,6 +105,9 @@ def updateWorld(message):
   minionmap[player_id].got_reported = got_reported
   minionmap[player_id].eject_sync = eject_sync
   minionmap[player_id].eject_img = eject_img
+  minionmap[player_id].chat_seq = chat_seq
+  minionmap[player_id].chat_author = chat_author
+  minionmap[player_id].chat_text = chat_text
 
   remove = []
 
@@ -102,7 +115,7 @@ def updateWorld(message):
     update = ['player locations']
 
     for key, value in minionmap.items():
-      update.append([value.player_id, value.x, value.y, value.alive_status, value.sync_img, value.sync_img_index, value.left_img_index, value.right_img_index, value.up_img_index, value.down_img_index, value.player_colour, value.tasks_completed, value.sabotagelights_sync, value.sabotagereactor_sync, value.victim_id, value.imposter, value.emergency_sync, value.voted, value.got_votes, value.emergency_meeting_img_sync, value.emergency_meeting_img_sync_report, value.victim_id_report, value.got_reported, value.eject_sync, value.eject_img])
+      update.append([value.player_id, value.x, value.y, value.alive_status, value.sync_img, value.sync_img_index, value.left_img_index, value.right_img_index, value.up_img_index, value.down_img_index, value.player_colour, value.tasks_completed, value.sabotagelights_sync, value.sabotagereactor_sync, value.victim_id, value.imposter, value.emergency_sync, value.voted, value.got_votes, value.emergency_meeting_img_sync, value.emergency_meeting_img_sync_report, value.victim_id_report, value.got_reported, value.eject_sync, value.eject_img, value.chat_seq, value.chat_author, value.chat_text])
     
     try:
       i.send(pickle.dumps(update))
@@ -138,5 +151,10 @@ class SecondaryServer(asyncore.dispatcher_with_send):
       updateWorld(recievedData)
     else: self.close()
 
-MainServer(4321)
-asyncore.loop()
+def serve(port=4321):
+  MainServer(port)
+  asyncore.loop()
+
+# guarded so the module can be imported (by tests) without opening a socket
+if __name__ == '__main__':
+  serve()

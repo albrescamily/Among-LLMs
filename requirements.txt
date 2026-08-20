@@ -1,0 +1,5 @@
+pygame>=2.5.0
+pytmx>=3.32
+pyaudio>=0.2.13
+pyasyncore>=1.0.2; python_version >= "3.12"
+pytest>=8.0

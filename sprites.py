@@ -305,7 +305,9 @@ class Bot(pg.sprite.Sprite):
         
         self.bot_direction = bot_direction
         self.bot_colour = bot_colour
-        
+        # nickname this bot speaks under in the meeting chat
+        self.bot_name = game.take_bot_name()
+
         if bot_direction == "Left":
             if bot_colour == "Red":
                 self.image = red_player_imgs_left[0]

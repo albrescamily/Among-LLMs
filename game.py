@@ -12,6 +12,8 @@ from tilemap import *
 from pygame import mixer
 from menu import Menu
 from board import Board
+from chat import MeetingChat, BOT_NAMES
+import protocol
 from gamefunctions import GameFunctions
 from tasks import *
 import time, datetime
@@ -64,6 +66,11 @@ class Game:
         self.score_list = []
         self.voters = []
         self.menu = Menu(self)
+
+        # Meeting chat - the discussion window shown while a meeting runs.
+        # Nicknames are handed out to the bots as they spawn (take_bot_name)
+        self.meeting_chat = MeetingChat(self)
+        self.bot_names_pool = random.sample(BOT_NAMES, len(BOT_NAMES))
 
         # These two variables used in progress bar's formula
         # for imposter in multiplayer mode
@@ -670,6 +677,46 @@ class Game:
         for type in AMBIENT_SOUNDS:
             self.ambient_sounds[type] = pg.mixer.Sound(path.join(self.sound_folder, AMBIENT_SOUNDS[type]))
 
+    def build_state_packet(self, player_id):
+        # The whole local state, as the positional list the server reads.
+        # Field order is the protocol: see protocol.py before touching it.
+        # Our last chat line rides along on every packet until a newer one
+        # replaces it, which is what makes late listeners still receive it.
+        chat_fields = list(self.meeting_chat.outgoing_fields())
+
+        if self.player.alive_status:
+            return ['position update', player_id, self.player.pos.x, self.player.pos.y, self.player.alive_status,
+                    self.player.sync_img, self.player.sync_img_index, self.player.left_img_index,
+                    self.player.right_img_index, self.player.up_img_index, self.player.down_img_index,
+                    self.player.player_colour, self.player.tasks_completed, self.night_sync, self.night_reactor_sync,
+                    self.player.victim_id, self.player.imposter, self.emergency_sync, self.player.voted,
+                    self.player.got_votes, self.emergency_img_sync, self.emergency_img_sync_report,
+                    self.player.victim_id_report, self.player.got_reported, self.eject_sync,
+                    self.eject_img] + chat_fields
+
+        if self.player.got_reported == False:
+            # dead, body still lying where it was killed
+            return ['position update', player_id, self.player.pos_corpse.x, self.player.pos_corpse.y,
+                    self.player.alive_status, self.player.pos_corpse_img, self.player.pos_corpse_img_index, 0, 0, 0,
+                    0, self.player.player_colour, self.player.tasks_completed, self.night_sync,
+                    self.night_reactor_sync, 0, self.player.imposter, self.emergency_sync, None, 0, None,
+                    self.emergency_img_sync_report, 0, self.player.got_reported, self.eject_sync,
+                    self.eject_img] + chat_fields
+
+        # dead and already reported, so we move around as a ghost
+        return ['position update', player_id, self.player.pos_corpse.x, self.player.pos_corpse.y,
+                self.player.alive_status, self.player.ghost_img, self.player.ghost_img_index, 0, 0, 0, 0,
+                self.player.player_colour, self.player.tasks_completed, self.night_sync, self.night_reactor_sync,
+                0, self.player.imposter, self.emergency_sync, None, 0, None, self.emergency_img_sync_report, 0,
+                self.player.got_reported, self.eject_sync, self.eject_img] + chat_fields
+
+    def take_bot_name(self):
+        # Pops a nickname for a bot, so the meeting chat shows a name instead
+        # of just a colour. Refills the pool if we ever run out.
+        if not self.bot_names_pool:
+            self.bot_names_pool = random.sample(BOT_NAMES, len(BOT_NAMES))
+        return self.bot_names_pool.pop()
+
     # THIS METHOD CREATES ALL OBJECTS, INSTANCES & VARIABLES
     # create sprites/ objects/ walls/ camera = all sprites
     def new(self):
@@ -1183,6 +1230,16 @@ class Game:
                             self.Players[p[0]].victim_id_report = p[21]
                             self.Players[p[0]].got_reported = p[22]
 
+                            # Meeting chat line this player is broadcasting.
+                            # receive_remote drops repeats, so it is safe to
+                            # feed it the same state on every frame
+                            if len(p) > protocol.OUT_CHAT_TEXT:
+                                self.meeting_chat.receive_remote(
+                                    p[0], p[protocol.OUT_CHAT_SEQ],
+                                    p[protocol.OUT_CHAT_AUTHOR],
+                                    p[protocol.OUT_COLOUR],
+                                    p[protocol.OUT_CHAT_TEXT])
+
                             if self.player.player_id == p[14] and self.player.alive_status == True:
                                 self.player.alive_status = False
                                 self.player.image = self.player.image_dead
@@ -1375,26 +1432,7 @@ class Game:
             # now after receiving data from the server, time to send data to the server
             # update local player object in the list
             self.Players[self.player.player_id] = self.player
-            if self.player.alive_status:
-                ge = ['position update', player_id, self.player.pos.x, self.player.pos.y, self.player.alive_status,
-                      self.player.sync_img, self.player.sync_img_index, self.player.left_img_index,
-                      self.player.right_img_index, self.player.up_img_index, self.player.down_img_index,
-                      self.player.player_colour, self.player.tasks_completed, self.night_sync, self.night_reactor_sync,
-                      self.player.victim_id, self.player.imposter, self.emergency_sync, self.player.voted,
-                      self.player.got_votes, self.emergency_img_sync, self.emergency_img_sync_report,
-                      self.player.victim_id_report, self.player.got_reported, self.eject_sync, self.eject_img]
-            elif self.player.alive_status == False and self.player.got_reported == False:
-                ge = ['position update', player_id, self.player.pos_corpse.x, self.player.pos_corpse.y,
-                      self.player.alive_status, self.player.pos_corpse_img, self.player.pos_corpse_img_index, 0, 0, 0,
-                      0, self.player.player_colour, self.player.tasks_completed, self.night_sync,
-                      self.night_reactor_sync, 0, self.player.imposter, self.emergency_sync, None, 0, None,
-                      self.emergency_img_sync_report, 0, self.player.got_reported, self.eject_sync, self.eject_img]
-            elif self.player.alive_status == False and self.player.got_reported == True:
-                ge = ['position update', player_id, self.player.pos_corpse.x, self.player.pos_corpse.y,
-                      self.player.alive_status, self.player.ghost_img, self.player.ghost_img_index, 0, 0, 0, 0,
-                      self.player.player_colour, self.player.tasks_completed, self.night_sync, self.night_reactor_sync,
-                      0, self.player.imposter, self.emergency_sync, None, 0, None, self.emergency_img_sync_report, 0,
-                      self.player.got_reported, self.eject_sync, self.eject_img]
+            ge = self.build_state_packet(player_id)
 
             # Add try exception block here
             #s.send(pickle.dumps(ge))
@@ -1499,6 +1537,9 @@ class Game:
     def update(self):
         # update portion of the game loop
         self.all_sprites.update()
+
+        # release any bot line whose delay has elapsed
+        self.meeting_chat.update()
 
 
         # Update camera in every loop
@@ -1837,9 +1878,14 @@ class Game:
             if self.emergency_meeting_index == 0 and (self.timer - self.timer_start) < 1500:
                 self.screen.blit(self.dim_screen, (0, 0))
                 self.display_meeting_alert()  # this layer is beneath the screen
-            elif self.emergency_meeting_index == 1 and (self.timer - self.timer_start) < 10000:
+            elif self.emergency_meeting_index == 1 and (self.timer - self.timer_start) < MEETING_CHAT_TIME:
                 self.screen.blit(self.dim_screen, (0, 0))
-                self.display_chat()  # this layer is beneath the screen
+                if (self.timer - self.timer_start) < MEETING_SPLASH_TIME:
+                    self.display_chat()  # "Discuss!" splash
+                else:
+                    # open() is a no-op once the chat is already up
+                    self.meeting_chat.open(MEETING_CHAT_TIME - MEETING_SPLASH_TIME)
+                    self.meeting_chat.draw(self.screen)
             elif self.emergency_meeting_index == 2 and (self.timer - self.timer_start) < 30000:
                 self.screen.blit(self.dim_screen, (0, 0))
                 self.display_vote()  # this layer is beneath the screen
@@ -1855,6 +1901,9 @@ class Game:
                 # when player has not called the meeting.So, If player has not called meeting then
                 # hide the meeting timer if it is showing
                 self.meeting_timer_visible_status = False
+
+                # discussion is over, drop the chat before the voting window
+                self.meeting_chat.close()
 
                 self.emergency_meeting_index += 1
                 self.timer_start = pygame.time.get_ticks()
@@ -1895,9 +1944,14 @@ class Game:
             if self.emergency_meeting_index == 0 and (self.timer - self.timer_start) < 1500:
                 self.screen.blit(self.dim_screen, (0, 0))
                 self.display_meeting_alert_report()  # this layer is beneath the screen
-            elif self.emergency_meeting_index == 1 and (self.timer - self.timer_start) < 1500:
+            elif self.emergency_meeting_index == 1 and (self.timer - self.timer_start) < MEETING_CHAT_TIME:
                 self.screen.blit(self.dim_screen, (0, 0))
-                self.display_chat()  # this layer is beneath the screen
+                if (self.timer - self.timer_start) < MEETING_SPLASH_TIME:
+                    self.display_chat()  # "Discuss!" splash
+                else:
+                    # open() is a no-op once the chat is already up
+                    self.meeting_chat.open(MEETING_CHAT_TIME - MEETING_SPLASH_TIME)
+                    self.meeting_chat.draw(self.screen)
             elif self.emergency_meeting_index == 2 and (self.timer - self.timer_start) < 30000:
                 self.screen.blit(self.dim_screen, (0, 0))
                 self.display_vote()  # this layer is beneath the screen
@@ -1914,6 +1968,9 @@ class Game:
                 # when player has not called the meeting.So, If player has not called meeting then
                 # hide the meeting timer if it is showing
                 self.meeting_timer_visible_status = False
+
+                # discussion is over, drop the chat before the voting window
+                self.meeting_chat.close()
 
                 self.emergency_meeting_index += 1
                 self.timer_start = pygame.time.get_ticks()
@@ -2482,7 +2539,8 @@ class Game:
         if self.emergency_timer_icon_status and self.time_left_to_end_meeting_cooldown <= 0 and self.player.alive_status and not self.isdoingTask and not self.emerg_meeting_button_status and not self.eject:
             self.display_emergency_icon()
         # Emergency Meeting cool down Blit
-        if self.time_left_to_end_meeting_cooldown !=0 and self.meeting_timer_cooldown_visible_status and not self.isdoingTask and not self.eject:
+        if self.time_left_to_end_meeting_cooldown !=0 and self.meeting_timer_cooldown_visible_status and not self.isdoingTask and not self.eject and not self.meeting_chat.is_open:
+            # hidden while the chat is up, it would land on top of the input box
             self.screen.blit(self.board.draw_kill_timer_text(self.time_left_to_end_meeting_cooldown, YELLOW, 30), (WIDTH - 506, HEIGHT-90))
 
         # If emergency meeting is called then show this timer on voting screen
@@ -2609,6 +2667,11 @@ class Game:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.quit()
+
+            # While the discussion chat is up it owns the keyboard and the
+            # clicks on its panel, so typing does not trigger game actions
+            if self.meeting_chat.is_open and self.meeting_chat.handle_event(event):
+                continue
 
             # This is a custom user event which calculates time interval for light ON/OFF
             if event.type == self.light_timer_event and self.light_timer_visible_status:
