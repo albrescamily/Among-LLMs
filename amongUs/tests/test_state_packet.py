@@ -3,6 +3,10 @@
 Everything is addressed by position, so a field in the wrong slot silently
 corrupts another one. These tests pin the layout against protocol.py, which is
 the same module the server indexes with.
+
+The stub is a SimpleNamespace rather than a real Game: the packet builder only
+ever reads attributes off it, and building a Game would load every image and
+sound in the project to test a list literal.
 """
 
 from types import SimpleNamespace
@@ -10,7 +14,7 @@ from types import SimpleNamespace
 import pytest
 
 from multiplayer import protocol
-from game import Game
+from multiplayer.state_sync import build_state_packet
 
 
 def stub_game(alive=True, got_reported=False, chat=(0, "", "")):
@@ -38,7 +42,7 @@ def stub_game(alive=True, got_reported=False, chat=(0, "", "")):
 def test_chat_travels_in_every_packet_variant(alive, got_reported):
     game = stub_game(alive, got_reported, chat=(3, "camily", "ciano"))
 
-    packet = Game.build_state_packet(game, 42)
+    packet = build_state_packet(game, 42)
 
     assert packet[protocol.IN_CHAT_SEQ] == 3
     assert packet[protocol.IN_CHAT_AUTHOR] == "camily"
@@ -49,7 +53,7 @@ def test_chat_travels_in_every_packet_variant(alive, got_reported):
 @pytest.mark.parametrize("alive, got_reported", [
     (True, False), (False, False), (False, True)])
 def test_identity_fields_keep_their_slots(alive, got_reported):
-    packet = Game.build_state_packet(stub_game(alive, got_reported), 42)
+    packet = build_state_packet(stub_game(alive, got_reported), 42)
 
     assert packet[0] == 'position update'
     assert packet[1] == 42
@@ -57,14 +61,14 @@ def test_identity_fields_keep_their_slots(alive, got_reported):
 
 
 def test_living_player_sends_its_own_position():
-    packet = Game.build_state_packet(stub_game(alive=True), 42)
+    packet = build_state_packet(stub_game(alive=True), 42)
 
     assert (packet[2], packet[3]) == (100, 200)
     assert packet[4] is True
 
 
 def test_dead_player_sends_the_corpse_position():
-    packet = Game.build_state_packet(stub_game(alive=False), 42)
+    packet = build_state_packet(stub_game(alive=False), 42)
 
     assert (packet[2], packet[3]) == (10, 20)
     assert packet[4] is False
@@ -72,7 +76,7 @@ def test_dead_player_sends_the_corpse_position():
 
 
 def test_reported_ghost_switches_to_the_ghost_sprite():
-    packet = Game.build_state_packet(stub_game(alive=False, got_reported=True), 42)
+    packet = build_state_packet(stub_game(alive=False, got_reported=True), 42)
 
     assert packet[5] == "ghost"
 

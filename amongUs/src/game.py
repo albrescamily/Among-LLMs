@@ -15,6 +15,7 @@ from core.menu import Menu
 from core.board import Board
 from core.chat import MeetingChat, BOT_NAMES
 from multiplayer import protocol
+from multiplayer import state_sync
 from core.gamefunctions import GameFunctions
 from core.tasks import *
 import time, datetime
@@ -677,39 +678,6 @@ class Game:
         # Load each sound from sound directory into AMBIENT_SOUNDS array
         for type in AMBIENT_SOUNDS:
             self.ambient_sounds[type] = pg.mixer.Sound(path.join(self.sound_folder, AMBIENT_SOUNDS[type]))
-
-    def build_state_packet(self, player_id):
-        # The whole local state, as the positional list the server reads.
-        # Field order is the protocol: see protocol.py before touching it.
-        # Our last chat line rides along on every packet until a newer one
-        # replaces it, which is what makes late listeners still receive it.
-        chat_fields = list(self.meeting_chat.outgoing_fields())
-
-        if self.player.alive_status:
-            return ['position update', player_id, self.player.pos.x, self.player.pos.y, self.player.alive_status,
-                    self.player.sync_img, self.player.sync_img_index, self.player.left_img_index,
-                    self.player.right_img_index, self.player.up_img_index, self.player.down_img_index,
-                    self.player.player_colour, self.player.tasks_completed, self.night_sync, self.night_reactor_sync,
-                    self.player.victim_id, self.player.imposter, self.emergency_sync, self.player.voted,
-                    self.player.got_votes, self.emergency_img_sync, self.emergency_img_sync_report,
-                    self.player.victim_id_report, self.player.got_reported, self.eject_sync,
-                    self.eject_img] + chat_fields
-
-        if self.player.got_reported == False:
-            # dead, body still lying where it was killed
-            return ['position update', player_id, self.player.pos_corpse.x, self.player.pos_corpse.y,
-                    self.player.alive_status, self.player.pos_corpse_img, self.player.pos_corpse_img_index, 0, 0, 0,
-                    0, self.player.player_colour, self.player.tasks_completed, self.night_sync,
-                    self.night_reactor_sync, 0, self.player.imposter, self.emergency_sync, None, 0, None,
-                    self.emergency_img_sync_report, 0, self.player.got_reported, self.eject_sync,
-                    self.eject_img] + chat_fields
-
-        # dead and already reported, so we move around as a ghost
-        return ['position update', player_id, self.player.pos_corpse.x, self.player.pos_corpse.y,
-                self.player.alive_status, self.player.ghost_img, self.player.ghost_img_index, 0, 0, 0, 0,
-                self.player.player_colour, self.player.tasks_completed, self.night_sync, self.night_reactor_sync,
-                0, self.player.imposter, self.emergency_sync, None, 0, None, self.emergency_img_sync_report, 0,
-                self.player.got_reported, self.eject_sync, self.eject_img] + chat_fields
 
     def take_bot_name(self):
         # Pops a nickname for a bot, so the meeting chat shows a name instead
@@ -1433,7 +1401,7 @@ class Game:
             # now after receiving data from the server, time to send data to the server
             # update local player object in the list
             self.Players[self.player.player_id] = self.player
-            ge = self.build_state_packet(player_id)
+            ge = state_sync.build_state_packet(self, player_id)
 
             # Add try exception block here
             #s.send(pickle.dumps(ge))
