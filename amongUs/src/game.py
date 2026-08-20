@@ -6,7 +6,7 @@ import math
 from os import path
 import pygame.font
 import tasks
-from paths import ROOT, asset
+from core.paths import ROOT, asset
 from settings import *
 from sprites import *
 from tilemap import *

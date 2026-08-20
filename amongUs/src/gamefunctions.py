@@ -1,6 +1,6 @@
 import pygame as pg
 
-from paths import asset
+from core.paths import asset
 from settings import *
 
 

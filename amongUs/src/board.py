@@ -1,7 +1,7 @@
 import pygame as pg
 import pygame.font
 
-from paths import asset
+from core.paths import asset
 
 from settings import *
 from settings import *

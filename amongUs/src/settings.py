@@ -1,6 +1,6 @@
 import pygame
 
-from paths import asset
+from core.paths import asset
 
 # define some colors (R, G, B)
 WHITE = (255, 255, 255)
