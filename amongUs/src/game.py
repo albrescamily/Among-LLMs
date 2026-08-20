@@ -19,6 +19,8 @@ from multiplayer import state_sync
 from multiplayer import world_sync
 from multiplayer.net_client import NetClient
 from core.gamefunctions import GameFunctions
+from core.audio import stop_all_audio
+from core.loop import tick
 from core.tasks import *
 import time, datetime
 import time
@@ -1011,70 +1013,26 @@ class Game:
         self.time_left = 20
 
         while self.playing:
-            self.dt = self.clock.tick(FPS) / 1000
-            self.events()
-            if self.paused == False:
-                self.update()
-            self.draw()
-
-            self.killcooldown = pygame.time.get_ticks()
-            self.sabotagecooldown = pygame.time.get_ticks()
-            self.sabotagecriticaltimer = pygame.time.get_ticks()
-            self.ventcooldown = pygame.time.get_ticks()
-            self.meetingcooldown = pygame.time.get_ticks()
-            self.timer = pygame.time.get_ticks()
+            tick(self)
             self.seconds = (pg.time.get_ticks() - self.start_ticks) / 1000
             self.sabotage_timer_visible_status = True
 
             # If missions are completed then win or loss display
             # For crew mate
             if self.missions_done == 8:
-                pg.mixer.music.stop()  # turn off background music
-                pg.mixer.Channel(0).stop()
-                for m in self.foot_sounds['footsteps']:
-                    m.stop()
-                for m in self.effect_sounds.values():
-                    m.stop()
-                for m in self.electric_shock_sounds['electric_shock']:
-                    m.stop()
-                for m in self.comms_radio_sounds['comms_radio']:
-                    m.stop()
-                for m in self.ambient_sounds.values():
-                    m.stop()
+                stop_all_audio(self)
                 self.effect_sounds["victory_crew"].play()
                 self.menu.game_over(self.score_list, '')
                 return
             # For imposter
             # if imposter kills all the bots or reactor meltdown sabotage timer equals to 0 then imposter wins
             elif self.bot_count == 0 or (self.sabotagecritical == True and (self.sabotagecriticaltimer - self.sabotagecriticaltimer_start) > 20000):
-                pg.mixer.music.stop()  # turn off background music
-                pg.mixer.Channel(0).stop()
-                for m in self.foot_sounds['footsteps']:
-                    m.stop()
-                for m in self.effect_sounds.values():
-                    m.stop()
-                for m in self.electric_shock_sounds['electric_shock']:
-                    m.stop()
-                for m in self.comms_radio_sounds['comms_radio']:
-                    m.stop()
-                for m in self.ambient_sounds.values():
-                    m.stop()
+                stop_all_audio(self)
                 self.effect_sounds["victory_imposter"].play()
                 self.menu.game_over_imposter(self.score_list, '')
                 return
             elif self.game_left:
-                pg.mixer.music.stop()  # turn off background music
-                pg.mixer.Channel(0).stop()
-                for m in self.foot_sounds['footsteps']:
-                    m.stop()
-                for m in self.effect_sounds.values():
-                    m.stop()
-                for m in self.electric_shock_sounds['electric_shock']:
-                    m.stop()
-                for m in self.comms_radio_sounds['comms_radio']:
-                    m.stop()
-                for m in self.ambient_sounds.values():
-                    m.stop()
+                stop_all_audio(self)
                 self.effect_sounds["game_left"].play()
                 return
 
@@ -1110,18 +1068,7 @@ class Game:
 
         self.playing = True
         while self.playing:
-            self.dt = self.clock.tick(FPS) / 1000
-            self.events()
-            if self.paused == False:
-                self.update()
-            self.draw()
-
-            self.killcooldown = pygame.time.get_ticks()
-            self.sabotagecooldown = pygame.time.get_ticks()
-            self.sabotagecriticaltimer = pygame.time.get_ticks()
-            self.ventcooldown = pygame.time.get_ticks()
-            self.meetingcooldown = pygame.time.get_ticks()
-            self.timer = pygame.time.get_ticks()
+            tick(self)
 
             if (self.timer - self.timer_start) > 3000:
                 self.imposter_among_us_status = False
@@ -1151,36 +1098,14 @@ class Game:
                     if p.tasks_completed < 8 and p.imposter == False:
                         break
                 else:
-                    pg.mixer.music.stop()  # turn off background music
-                    pg.mixer.Channel(0).stop()
-                    for m in self.foot_sounds['footsteps']:
-                        m.stop()
-                    for m in self.effect_sounds.values():
-                        m.stop()
-                    for m in self.electric_shock_sounds['electric_shock']:
-                        m.stop()
-                    for m in self.comms_radio_sounds['comms_radio']:
-                        m.stop()
-                    for m in self.ambient_sounds.values():
-                        m.stop()
+                    stop_all_audio(self)
                     self.effect_sounds["victory_crew"].play()
                     self.menu.game_over(self.score_list, '')
                     return
                 # When imposter is ejecting
                 for p in self.Players.values():
                     if p.alive_status == False and p.imposter == True and self.emergency == False:
-                        pg.mixer.music.stop()  # turn off background music
-                        pg.mixer.Channel(0).stop()
-                        for m in self.foot_sounds['footsteps']:
-                            m.stop()
-                        for m in self.effect_sounds.values():
-                            m.stop()
-                        for m in self.electric_shock_sounds['electric_shock']:
-                            m.stop()
-                        for m in self.comms_radio_sounds['comms_radio']:
-                            m.stop()
-                        for m in self.ambient_sounds.values():
-                            m.stop()
+                        stop_all_audio(self)
                         self.effect_sounds["victory_crew"].play()
                         # self.effect_sounds["victory_imposter"].play()
                         self.menu.game_over(self.score_list, '')
@@ -1193,36 +1118,14 @@ class Game:
                 else:
                     pass
                     if self.emergency == False and self.kill_victim_anim == False:
-                        pg.mixer.music.stop()  # turn off background music
-                        pg.mixer.Channel(0).stop()
-                        for m in self.foot_sounds['footsteps']:
-                            m.stop()
-                        for m in self.effect_sounds.values():
-                            m.stop()
-                        for m in self.electric_shock_sounds['electric_shock']:
-                            m.stop()
-                        for m in self.comms_radio_sounds['comms_radio']:
-                            m.stop()
-                        for m in self.ambient_sounds.values():
-                            m.stop()
+                        stop_all_audio(self)
                         self.effect_sounds["victory_imposter"].play()
                         self.menu.game_over_imposter(self.score_list, '')
                         return
                 # For imposter - Critical Sabotage
                 if self.sabotagecritical == True and (
                         self.sabotagecriticaltimer - self.sabotagecriticaltimer_start) > 20000:
-                    pg.mixer.music.stop()  # turn off background music
-                    pg.mixer.Channel(0).stop()
-                    for m in self.foot_sounds['footsteps']:
-                        m.stop()
-                    for m in self.effect_sounds.values():
-                        m.stop()
-                    for m in self.electric_shock_sounds['electric_shock']:
-                        m.stop()
-                    for m in self.comms_radio_sounds['comms_radio']:
-                        m.stop()
-                    for m in self.ambient_sounds.values():
-                        m.stop()
+                    stop_all_audio(self)
                     self.effect_sounds["victory_imposter"].play()
                     self.menu.game_over_imposter(self.score_list, '')
                     return

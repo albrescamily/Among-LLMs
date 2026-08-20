@@ -35,6 +35,8 @@ MODULES = [
     "core.board",
     "core.menu",
     "core.gamefunctions",
+    "core.audio",
+    "core.loop",
     # multiplayer only
     "multiplayer.protocol",
     "multiplayer.server",
