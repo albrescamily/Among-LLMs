@@ -101,6 +101,48 @@ def chat(make_chat):
     return make_chat()
 
 
+@pytest.fixture
+def lan():
+    """A running server plus a pump() that lets it process pending I/O.
+
+    Shared by the chat end-to-end tests and the net client tests, which both
+    need a real listener rather than a stand-in.
+    """
+    import asyncore
+    import pickle
+    import socket
+
+    from multiplayer import server
+
+    server.minionmap.clear()
+    del server.outgoing[:]
+    listener = server.MainServer(0)             # port 0 = pick a free one
+    port = listener.socket.getsockname()[1]
+    clients = []
+
+    def pump(rounds=6):
+        for _ in range(rounds):
+            asyncore.loop(timeout=0.02, count=1)
+
+    def join():
+        sock = socket.create_connection(("127.0.0.1", port), timeout=2)
+        sock.settimeout(2)
+        clients.append(sock)
+        pump()
+        tag, player_id = pickle.loads(sock.recv(8192))
+        assert tag == 'id update'
+        return sock, player_id
+
+    yield join, pump, port
+
+    for sock in clients:
+        sock.close()
+    listener.close()
+    asyncore.close_all()
+    server.minionmap.clear()
+    del server.outgoing[:]
+
+
 class Recorder:
     """A sound that remembers it was asked to play, and a timer that isn't one."""
 

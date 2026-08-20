@@ -17,16 +17,12 @@ from core.chat import MeetingChat, BOT_NAMES
 from multiplayer import protocol
 from multiplayer import state_sync
 from multiplayer import world_sync
+from multiplayer.net_client import NetClient
 from core.gamefunctions import GameFunctions
 from core.tasks import *
 import time, datetime
 import time
 from pygame.locals import *
-import pickle
-import select
-import socket
-
-BUFFERSIZE = 8192
 
 
 class Game:
@@ -1102,9 +1098,7 @@ class Game:
         self.timer_start = pygame.time.get_ticks()
 
 
-        # socket
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((self.serveraddress.strip(), 4321))
+        net = NetClient(self.serveraddress).connect()
 
         # temp var to store dynamically generated id
         player_id = 0
@@ -1135,41 +1129,20 @@ class Game:
             # update player tasks count for server
             self.player.tasks_completed = self.missions_done
 
-            # server shit
-            ins, outs, ex = select.select([s], [], [], 0)
-            for inm in ins:
-                # receiving data from server and storing in gameEvent
-                # gameEvent = pickle.loads(inm.recv(BUFFERSIZE))
-                try:
-                    gameEvent = pickle.loads(inm.recv(BUFFERSIZE))
-                except Exception:
-                    print("yes exception")
-
-                # if event is such that it contains below string
+            # whatever the server has sent since the last frame
+            for gameEvent in net.poll():
                 if gameEvent[0] == 'id update':
-                    # generate player id
+                    # the id the server generated for us
                     player_id = gameEvent[1]
-                    print(player_id)
-                # if event is such that it contains below string
                 if gameEvent[0] == 'player locations':
-                    # remove the string
-                    gameEvent.pop(0)
-                    # iterating gameEvent
+                    gameEvent.pop(0)        # drop the tag, the rest is rows
                     for p in gameEvent:
                         world_sync.apply_row(self, p, player_id)
 
             # now after receiving data from the server, time to send data to the server
             # update local player object in the list
             self.Players[self.player.player_id] = self.player
-            ge = state_sync.build_state_packet(self, player_id)
-
-            # Add try exception block here
-            #s.send(pickle.dumps(ge))
-
-            try:
-               s.send(pickle.dumps(ge))
-            except Exception:
-               print("very exception")
+            net.send(state_sync.build_state_packet(self, player_id))
 
             # check for game end condition
             if len(self.Players) > 1:

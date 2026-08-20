@@ -15,38 +15,6 @@ from multiplayer import protocol
 from multiplayer import server
 
 
-@pytest.fixture
-def lan():
-    """A running server plus a pump() that lets it process pending I/O."""
-    server.minionmap.clear()
-    del server.outgoing[:]
-    listener = server.MainServer(0)             # port 0 = pick a free one
-    port = listener.socket.getsockname()[1]
-    clients = []
-
-    def pump(rounds=6):
-        for _ in range(rounds):
-            asyncore.loop(timeout=0.02, count=1)
-
-    def join():
-        sock = socket.create_connection(("127.0.0.1", port), timeout=2)
-        sock.settimeout(2)
-        clients.append(sock)
-        pump()
-        tag, player_id = pickle.loads(sock.recv(8192))
-        assert tag == 'id update'
-        return sock, player_id
-
-    yield join, pump
-
-    for sock in clients:
-        sock.close()
-    listener.close()
-    asyncore.close_all()
-    server.minionmap.clear()
-    del server.outgoing[:]
-
-
 def state(player_id, colour="Red", chat=(0, "", "")):
     return pickle.dumps(['position update', player_id, 100, 200, True,
                          "img", "[0]", 0, 0, 0, 0, colour, 0, 0, 0, 0, False,
@@ -83,7 +51,7 @@ def feed(chat, rows, skip_id):
 
 
 def test_message_typed_by_one_player_shows_up_for_the_other(lan, make_chat):
-    join, pump = lan
+    join, pump, _port = lan
     alice, alice_id = join()
     bob, bob_id = join()
 
@@ -101,7 +69,7 @@ def test_message_typed_by_one_player_shows_up_for_the_other(lan, make_chat):
 
 
 def test_repeated_state_packets_do_not_duplicate_the_line(lan, make_chat):
-    join, pump = lan
+    join, pump, _port = lan
     alice, alice_id = join()
     bob, bob_id = join()
 
@@ -118,7 +86,7 @@ def test_repeated_state_packets_do_not_duplicate_the_line(lan, make_chat):
 
 
 def test_both_players_see_each_other(lan, make_chat):
-    join, pump = lan
+    join, pump, _port = lan
     alice, alice_id = join()
     bob, bob_id = join()
 
@@ -141,7 +109,7 @@ def test_both_players_see_each_other(lan, make_chat):
 
 
 def test_player_does_not_see_their_own_line_twice(lan, make_chat):
-    join, pump = lan
+    join, pump, _port = lan
     alice, alice_id = join()
 
     chat = make_chat()
