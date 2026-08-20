@@ -1,4 +1,4 @@
-"""The client packet has to line up with what the server reads.
+﻿"""The client packet has to line up with what the server reads.
 
 Everything is addressed by position, so a field in the wrong slot silently
 corrupts another one. These tests pin the layout against protocol.py, which is
@@ -9,7 +9,7 @@ from types import SimpleNamespace
 
 import pytest
 
-import protocol
+from multiplayer import protocol
 from game import Game
 
 
@@ -32,8 +32,8 @@ def stub_game(alive=True, got_reported=False, chat=(0, "", "")):
 
 @pytest.mark.parametrize("alive, got_reported", [
     (True, False),          # jogador vivo
-    (False, False),         # corpo no chão
-    (False, True),          # fantasma, corpo já reportado
+    (False, False),         # corpo no chÃ£o
+    (False, True),          # fantasma, corpo jÃ¡ reportado
 ])
 def test_chat_travels_in_every_packet_variant(alive, got_reported):
     game = stub_game(alive, got_reported, chat=(3, "camily", "ciano"))

@@ -1,4 +1,4 @@
-"""Shared test setup.
+﻿"""Shared test setup.
 
 The game is a pygame app, so the tests need a video/audio driver. Both are set
 to SDL's dummy backends before pygame is imported, which lets the whole suite
@@ -27,7 +27,7 @@ sys.path.insert(0, path.join(path.dirname(path.dirname(path.abspath(__file__))),
 
 import pygame as pg
 
-from settings import WIDTH, HEIGHT
+from core.settings import WIDTH, HEIGHT
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -83,7 +83,7 @@ def fake_game():
 @pytest.fixture
 def make_chat():
     """Builds an open chat over a custom FakeGame."""
-    from chat import MeetingChat
+    from core.chat import MeetingChat
 
     def factory(**kwargs):
         instance = MeetingChat(FakeGame(**kwargs))

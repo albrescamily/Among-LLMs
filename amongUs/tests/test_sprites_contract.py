@@ -1,4 +1,4 @@
-"""The multiplayer concept that lives inside a core sprite.
+﻿"""The multiplayer concept that lives inside a core sprite.
 
 Player.__init__ puts every *remote* player into game.players_server as well as
 game.all_sprites. That group is a multiplayer idea, but it sits in core/ and
@@ -13,7 +13,7 @@ from types import SimpleNamespace
 
 import pygame as pg
 
-from sprites import Player
+from core.sprites import Player
 
 
 def make_host():

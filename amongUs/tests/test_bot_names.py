@@ -1,10 +1,10 @@
-"""Ciclo 6 - every bot gets a nickname to show in the chat."""
+﻿"""Ciclo 6 - every bot gets a nickname to show in the chat."""
 
 import pygame as pg
 import pytest
 
-from chat import BOT_NAMES
-from sprites import Bot
+from core.chat import BOT_NAMES
+from core.sprites import Bot
 
 
 class NameSource:

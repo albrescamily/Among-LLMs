@@ -1,22 +1,22 @@
-import random
+﻿import random
 from time import sleep
 import pygame as pg
 import sys
 import math
 from os import path
 import pygame.font
-import tasks
+from core import tasks
 from core.paths import ROOT, asset
-from settings import *
-from sprites import *
-from tilemap import *
+from core.settings import *
+from core.sprites import *
+from core.tilemap import *
 from pygame import mixer
-from menu import Menu
-from board import Board
-from chat import MeetingChat, BOT_NAMES
-import protocol
-from gamefunctions import GameFunctions
-from tasks import *
+from core.menu import Menu
+from core.board import Board
+from core.chat import MeetingChat, BOT_NAMES
+from multiplayer import protocol
+from core.gamefunctions import GameFunctions
+from core.tasks import *
 import time, datetime
 import time
 from pygame.locals import *

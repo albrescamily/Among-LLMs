@@ -1,5 +1,5 @@
-import pygame as pg
-from settings import *
+﻿import pygame as pg
+from core.settings import *
 
 class Task():
     def __init__(self, game):

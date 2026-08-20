@@ -1,6 +1,6 @@
-"""Ciclo 4 - the responder hook, where an LLM plugs in."""
+﻿"""Ciclo 4 - the responder hook, where an LLM plugs in."""
 
-from chat import DEMO_LINES, MeetingChat
+from core.chat import DEMO_LINES, MeetingChat
 
 
 def record_calls(chat):
@@ -61,7 +61,7 @@ def test_demo_chatter_is_spread_over_time(fake_game):
     chat.open()
 
     deadlines = sorted(deadline for deadline, _ in chat.pending)
-    assert deadlines[0] > chat.opened_at            # ninguém fala instantaneamente
+    assert deadlines[0] > chat.opened_at            # ninguÃ©m fala instantaneamente
     assert len(set(deadlines)) == len(deadlines)    # nem todos de uma vez
 
 

@@ -1,8 +1,8 @@
-"""Ciclo 5 - drawing must never blow up, and must not re-render every frame."""
+﻿"""Ciclo 5 - drawing must never blow up, and must not re-render every frame."""
 
 import pygame as pg
 
-from settings import HEIGHT, WIDTH
+from core.settings import HEIGHT, WIDTH
 
 
 def canvas():
@@ -26,7 +26,7 @@ def test_draw_wraps_a_long_message(chat):
 
     chat.draw(canvas())
 
-    # o balão longo quebra em várias linhas, então é bem mais alto que o curto
+    # o balÃ£o longo quebra em vÃ¡rias linhas, entÃ£o Ã© bem mais alto que o curto
     assert long.height > short.height * 2
     assert long.surface.get_width() == short.surface.get_width()
 
@@ -84,7 +84,7 @@ def test_scrolled_log_still_draws(chat):
 
 
 def test_seconds_left_counts_down_and_stops_at_zero(fake_game, monkeypatch):
-    from chat import MeetingChat
+    from core.chat import MeetingChat
 
     chat = MeetingChat(fake_game)
     monkeypatch.setattr(chat, "_now", lambda: 0)

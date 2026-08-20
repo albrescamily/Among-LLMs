@@ -1,4 +1,4 @@
-"""Meeting chat.
+﻿"""Meeting chat.
 
 The discussion window that shows up while an emergency meeting (or a body
 report) is running: the message log, the scrollbar, the text input, the
@@ -30,7 +30,7 @@ import random
 
 import pygame as pg
 
-from settings import *
+from core.settings import *
 
 CHAT_MAX_CHARS = 100            # what the counter shows: 0/100
 CHAT_PANEL_W = 660
@@ -449,7 +449,7 @@ class MeetingChat:
         pg.draw.rect(surface, HEADER_BG, self.header_rect,
                      border_top_left_radius=16, border_top_right_radius=16)
 
-        title = self._font(20).render("DISCUSSÃO", True, TEXT_LIGHT)
+        title = self._font(20).render("DISCUSSÃƒO", True, TEXT_LIGHT)
         surface.blit(title, (self.header_rect.x + 16,
                              self.header_rect.centery - title.get_height() // 2))
         seconds = self.seconds_left()
@@ -467,7 +467,7 @@ class MeetingChat:
         pg.draw.rect(surface, HEADER_BG, view.inflate(8, 8), border_radius=10)
 
         if not self.messages:
-            hint = self._font(15).render("Ninguém falou ainda...", True,
+            hint = self._font(15).render("NinguÃ©m falou ainda...", True,
                                          TEXT_MUTED)
             surface.blit(hint, (view.centerx - hint.get_width() // 2,
                                 view.centery - hint.get_height() // 2))
@@ -530,7 +530,7 @@ class MeetingChat:
                              (x, self.input_rect.bottom - 10), 2)
             surface.set_clip(clip)
         else:
-            hint = font.render("Você está morto - só pode observar", True,
+            hint = font.render("VocÃª estÃ¡ morto - sÃ³ pode observar", True,
                                (110, 114, 126))
             surface.blit(hint, (self.input_rect.x + 12,
                                 self.input_rect.centery - hint.get_height() // 2))

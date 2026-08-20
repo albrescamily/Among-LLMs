@@ -1,10 +1,10 @@
-import socket
+﻿import socket
 import asyncore
 import random
 import pickle
 import time
 
-import protocol
+from multiplayer import protocol
 
 BUFFERSIZE = 8192
 

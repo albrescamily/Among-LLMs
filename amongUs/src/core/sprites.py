@@ -1,8 +1,8 @@
-import time
+﻿import time
 import pygame as pg
 from os import path
 import sys
-from settings import *
+from core.settings import *
 vec = pg.math.Vector2
 from os import path
 import random

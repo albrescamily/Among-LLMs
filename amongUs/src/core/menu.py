@@ -1,8 +1,8 @@
-from os import path
-from drawable import Drawable
+﻿from os import path
+from core.drawable import Drawable
 import pygame as pg
 import sys
-from settings import *
+from core.settings import *
 from pygame import mixer
 
 #player_colour = None

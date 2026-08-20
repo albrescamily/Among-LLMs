@@ -1,4 +1,4 @@
-"""End to end: a line typed by one player reaches another player's chat.
+﻿"""End to end: a line typed by one player reaches another player's chat.
 
 Runs the real server over a real socket on localhost, with two real client
 connections, and feeds what comes back into a real MeetingChat.
@@ -11,8 +11,8 @@ import socket
 
 import pytest
 
-import protocol
-import server
+from multiplayer import protocol
+from multiplayer import server
 
 
 @pytest.fixture

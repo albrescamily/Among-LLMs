@@ -1,7 +1,7 @@
-import pygame as pg
+﻿import pygame as pg
 
 from core.paths import asset
-from settings import *
+from core.settings import *
 
 
 class GameFunctions:

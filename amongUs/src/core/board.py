@@ -1,10 +1,10 @@
-import pygame as pg
+﻿import pygame as pg
 import pygame.font
 
 from core.paths import asset
 
-from settings import *
-from settings import *
+from core.settings import *
+from core.settings import *
 
 
 # Board surface on screen to draw menus
