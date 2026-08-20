@@ -573,3 +573,31 @@ white_player_imgs_up.append(pygame.image.load('Assets/Images/Player/White/White_
 white_player_imgs_up[0] = pygame.transform.smoothscale(white_player_imgs_up[0], (64, 86))
     
 white_player_imgs_dead = pygame.image.load('Assets/Images/Player/Dead/DeadWhite.png')
+
+# PLAYER SPRITE REGISTRY ------------------------------
+# One lookup table for every colour, so game code can ask for
+# PLAYER_SPRITES["Red"].walk["Left"] instead of a wall of if/elif.
+PLAYER_COLOURS = ["Red", "Blue", "Orange", "Yellow", "Green",
+                  "Black", "Brown", "Pink", "Purple", "White"]
+
+DIRECTIONS = ["Left", "Right", "Up", "Down"]
+
+
+class PlayerSprites:
+    """All the images belonging to a single player colour."""
+
+    def __init__(self, colour):
+        prefix = colour.lower() + '_player_'
+        images = globals()
+        self.colour = colour
+        # walk["Left"] etc. -- the animation frame lists
+        self.walk = {d: images[prefix + 'imgs_' + d.lower()] for d in DIRECTIONS}
+        self.dead = images[prefix + 'imgs_dead']
+        # only the five original colours have ghost / meeting art
+        self.ghost_left = images.get(prefix + 'imgs_ghost_left')
+        self.ghost_right = images.get(prefix + 'imgs_ghost_right')
+        self.emergency_meeting = images.get(prefix + 'emergency_meeting')
+        self.emergency_meeting_report = images.get(prefix + 'emergency_meeting_report')
+
+
+PLAYER_SPRITES = {colour: PlayerSprites(colour) for colour in PLAYER_COLOURS}
