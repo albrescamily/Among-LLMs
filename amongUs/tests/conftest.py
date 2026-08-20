@@ -6,6 +6,10 @@ run headless (no window, no sound card).
 
 A display is still created because pygame refuses to convert_alpha() a surface
 without one, and the chat scales the player sprites into avatars.
+
+The game modules live in amongUs/src/ and load their artwork through
+paths.asset(), which resolves against amongUs/, so the tests do not need to
+run from any particular directory.
 """
 
 import os
@@ -18,10 +22,8 @@ from os import path
 
 import pytest
 
-# the game modules live in the repository root, not in tests/
-sys.path.insert(0, path.dirname(path.dirname(path.abspath(__file__))))
-# assets are loaded with paths relative to the repository root
-os.chdir(path.dirname(path.dirname(path.abspath(__file__))))
+# the game modules live in src/, not in tests/
+sys.path.insert(0, path.join(path.dirname(path.dirname(path.abspath(__file__))), 'src'))
 
 import pygame as pg
 

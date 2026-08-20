@@ -1,6 +1,8 @@
 import pygame as pg
 import pygame.font
 
+from paths import asset
+
 from settings import *
 from settings import *
 
@@ -14,28 +16,28 @@ class Board:
         self.width = width
         self.height = height
         self.game = game
-        self.intro_bg = pg.image.load("Assets/Images/Menu/back.png").convert_alpha()
-        self.intro_bg2 = pg.image.load("Assets/Images/Menu/back2.png").convert_alpha()
-        self.intro_title = pg.image.load("Assets/Images/Menu/title.png").convert_alpha()
-        self.intro_menu1 = pg.image.load("Assets/Images/Menu/freeplay.png").convert_alpha()
-        self.intro_menu2 = pg.image.load("Assets/Images/Menu/online.png").convert_alpha()
-        self.intro_menu3 = pg.image.load("Assets/Images/Menu/help.png").convert_alpha()
-        self.intro_menu4 = pg.image.load("Assets/Images/Menu/credits.png").convert_alpha()
-        self.intro_menu5 = pg.image.load("Assets/Images/Menu/quit.png").convert_alpha()
-        self.intro_color1 = pg.image.load("Assets/Images/Menu/blue.png").convert_alpha()
-        self.intro_color2 = pg.image.load("Assets/Images/Menu/green.png").convert_alpha()
-        self.intro_color3 = pg.image.load("Assets/Images/Menu/yellow.png").convert_alpha()
-        self.intro_color4 = pg.image.load("Assets/Images/Menu/red.png").convert_alpha()
-        self.intro_color5 = pg.image.load("Assets/Images/Menu/orange.png").convert_alpha()
-        self.intro_choosecolour = pg.image.load("Assets/Images/Menu/choosecolour.png").convert_alpha()
-        self.intro_return = pg.image.load("Assets/Images/Menu/return.png").convert_alpha()
-        self.intro_entername = pg.image.load("Assets/Images/Menu/entername.png").convert_alpha()
-        self.intro_enteraddress = pg.image.load("Assets/Images/Menu/enteraddress.png").convert_alpha()
-        self.intro_input = pg.image.load("Assets/Images/Menu/input.png").convert_alpha()
+        self.intro_bg = pg.image.load(asset("Assets/Images/Menu/back.png")).convert_alpha()
+        self.intro_bg2 = pg.image.load(asset("Assets/Images/Menu/back2.png")).convert_alpha()
+        self.intro_title = pg.image.load(asset("Assets/Images/Menu/title.png")).convert_alpha()
+        self.intro_menu1 = pg.image.load(asset("Assets/Images/Menu/freeplay.png")).convert_alpha()
+        self.intro_menu2 = pg.image.load(asset("Assets/Images/Menu/online.png")).convert_alpha()
+        self.intro_menu3 = pg.image.load(asset("Assets/Images/Menu/help.png")).convert_alpha()
+        self.intro_menu4 = pg.image.load(asset("Assets/Images/Menu/credits.png")).convert_alpha()
+        self.intro_menu5 = pg.image.load(asset("Assets/Images/Menu/quit.png")).convert_alpha()
+        self.intro_color1 = pg.image.load(asset("Assets/Images/Menu/blue.png")).convert_alpha()
+        self.intro_color2 = pg.image.load(asset("Assets/Images/Menu/green.png")).convert_alpha()
+        self.intro_color3 = pg.image.load(asset("Assets/Images/Menu/yellow.png")).convert_alpha()
+        self.intro_color4 = pg.image.load(asset("Assets/Images/Menu/red.png")).convert_alpha()
+        self.intro_color5 = pg.image.load(asset("Assets/Images/Menu/orange.png")).convert_alpha()
+        self.intro_choosecolour = pg.image.load(asset("Assets/Images/Menu/choosecolour.png")).convert_alpha()
+        self.intro_return = pg.image.load(asset("Assets/Images/Menu/return.png")).convert_alpha()
+        self.intro_entername = pg.image.load(asset("Assets/Images/Menu/entername.png")).convert_alpha()
+        self.intro_enteraddress = pg.image.load(asset("Assets/Images/Menu/enteraddress.png")).convert_alpha()
+        self.intro_input = pg.image.load(asset("Assets/Images/Menu/input.png")).convert_alpha()
         self.intro_help = []
         for i in range(0, 9):
-            self.intro_help.append(pygame.image.load('Assets/Images/help/'+'help'+str(i+1)+'.png'))
-        self.intro_credits = pg.image.load("Assets/Images/credits/credits.png")
+            self.intro_help.append(pygame.image.load(asset('Assets/Images/help/')+'help'+str(i+1)+'.png'))
+        self.intro_credits = pg.image.load(asset("Assets/Images/credits/credits.png"))
         
         self.menu_font = pg.font.Font(FONT, 35)
         self.bonus_font = pg.font.Font(FONT, 30)
@@ -89,7 +91,7 @@ class Board:
 
     # Draw Gameover Menu
     def draw_game_over(self, scoreboard: list, message: str, *args):
-        background = pg.image.load("Assets/Images/Alerts/victory.PNG")
+        background = pg.image.load(asset("Assets/Images/Alerts/victory.PNG"))
         #self.surface.fill(background)
         self.surface.blit(background,(0,0))
         self.draw_text(self.surface, message, self.width / 2, self.height * 0.2, self.game_over_font)
@@ -103,7 +105,7 @@ class Board:
         pg.display.update()
         
     def draw_game_over_imposter(self, scoreboard: list, message: str, *args):
-        background = pg.image.load("Assets/Images/Alerts/defeat.PNG")
+        background = pg.image.load(asset("Assets/Images/Alerts/defeat.PNG"))
         #self.surface.fill(background)
         self.surface.blit(background,(0,0))
         self.draw_text(self.surface, message, self.width / 2, self.height * 0.2, self.game_over_font)

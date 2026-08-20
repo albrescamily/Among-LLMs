@@ -6,6 +6,7 @@ import math
 from os import path
 import pygame.font
 import tasks
+from paths import ROOT, asset
 from settings import *
 from sprites import *
 from tilemap import *
@@ -40,7 +41,7 @@ class Game:
         # pg.key.set_repeat(100, 100)
         self.missions_done = 0  # Access this variable, increment everytime a mission is completed
         # root directory is game_folder
-        self.game_folder = path.dirname(__file__)
+        self.game_folder = ROOT
         # 2nd parameter is folder location
         self.img_folder = path.join(self.game_folder, 'Assets/Images')
         self.walls_img_folder = path.join(self.game_folder, 'Assets/Images/Walls')
@@ -343,74 +344,74 @@ class Game:
 
         """ TASK & ITEM IMAGES & PLAYER PROPERTIES LOADING - CLOSE HERE"""
         # Some task and Items Images and player properties
-        self.kill_icon = pg.image.load("Assets/Images/UI/kill_icon.png").convert_alpha()
-        self.kill_icon_dim = pg.image.load("Assets/Images/UI/kill_icon_dim.png").convert_alpha()
-        self.sabotage_icon = pg.image.load("Assets/Images/UI/sabotage_icon.png").convert_alpha()
-        self.sabotage_icon_dim = pg.image.load("Assets/Images/UI/sabotage_icon_dim.png").convert_alpha()
-        self.emergency_icon = pg.image.load("Assets/Images/UI/emergency_icon.png").convert_alpha()
+        self.kill_icon = pg.image.load(asset("Assets/Images/UI/kill_icon.png")).convert_alpha()
+        self.kill_icon_dim = pg.image.load(asset("Assets/Images/UI/kill_icon_dim.png")).convert_alpha()
+        self.sabotage_icon = pg.image.load(asset("Assets/Images/UI/sabotage_icon.png")).convert_alpha()
+        self.sabotage_icon_dim = pg.image.load(asset("Assets/Images/UI/sabotage_icon_dim.png")).convert_alpha()
+        self.emergency_icon = pg.image.load(asset("Assets/Images/UI/emergency_icon.png")).convert_alpha()
         self.emergency_icon = pg.transform.smoothscale(self.emergency_icon, (95, 81)).convert_alpha()
-        self.emergency_icon_dim = pg.image.load("Assets/Images/UI/emergency_icon_dim.png").convert_alpha()
+        self.emergency_icon_dim = pg.image.load(asset("Assets/Images/UI/emergency_icon_dim.png")).convert_alpha()
         self.emergency_icon_dim = pg.transform.smoothscale(self.emergency_icon_dim, (95, 81)).convert_alpha()
-        self.light_bulb_icon = pg.image.load("Assets/Images/UI/light_bulb_icon.png").convert_alpha()
+        self.light_bulb_icon = pg.image.load(asset("Assets/Images/UI/light_bulb_icon.png")).convert_alpha()
         self.light_bulb_icon = pg.transform.smoothscale(self.light_bulb_icon, (75, 90)).convert_alpha()
-        self.light_bulb_icon_dim = pg.image.load("Assets/Images/UI/light_bulb_icon_dim.png").convert_alpha()
+        self.light_bulb_icon_dim = pg.image.load(asset("Assets/Images/UI/light_bulb_icon_dim.png")).convert_alpha()
         self.light_bulb_icon_dim = pg.transform.smoothscale(self.light_bulb_icon_dim, (75, 90)).convert_alpha()
 
-        self.invsible_player_image = pg.image.load("Assets\Images\Player\invisble3.png").convert_alpha()
+        self.invsible_player_image = pg.image.load(asset('Assets/Images/Player/invisble3.png')).convert_alpha()
         self.invsible_player_image = pygame.transform.scale(self.invsible_player_image, (64, 86)).convert_alpha()
-        self.imposter_among_us_img = pygame.image.load('Assets\Images\Menu\imposteramongus.png').convert_alpha()
+        self.imposter_among_us_img = pygame.image.load(asset('Assets/Images/Menu/imposteramongus.png')).convert_alpha()
         self.kill_victim_anim_img = []
         for i in range(1, 19):
-            self.kill_victim_anim_img.append(pygame.image.load('Assets/Images/Alerts/' + 'kill' + str(i) + '.png').convert_alpha())
+            self.kill_victim_anim_img.append(pygame.image.load(asset('Assets/Images/Alerts/') + 'kill' + str(i) + '.png').convert_alpha())
         self.cafe_comp_img = pygame.image.load(
-            'Assets\Images\Tasks\Become Imposter\cafe_computer_base.png').convert_alpha()
-        self.cafe_comp_check_img = pygame.image.load('Assets\Images\Tasks\Become Imposter\check.png').convert_alpha()
-        self.chat_img = pygame.image.load('Assets\Images\Meeting\chat.png').convert_alpha()
-        self.vote_img = pygame.image.load('Assets\Images\Meeting\e_vote_base.png').convert_alpha()
-        self.vote_tick_img = pygame.image.load('Assets\Images\Meeting\select_vote.png').convert_alpha()
-        self.chat_img_dead = pygame.image.load('Assets\Images\Meeting\chat_dead.png').convert_alpha()
-        self.vote_img_dead = pygame.image.load('Assets\Images\Meeting\e_vote_base_dead.png').convert_alpha()
-        self.eject_screen_img = pygame.image.load('Assets\Images\Alerts\eject.png').convert_alpha()
+            asset('Assets/Images/Tasks/Become Imposter/cafe_computer_base.png')).convert_alpha()
+        self.cafe_comp_check_img = pygame.image.load(asset('Assets/Images/Tasks/Become Imposter/check.png')).convert_alpha()
+        self.chat_img = pygame.image.load(asset('Assets/Images/Meeting/chat.png')).convert_alpha()
+        self.vote_img = pygame.image.load(asset('Assets/Images/Meeting/e_vote_base.png')).convert_alpha()
+        self.vote_tick_img = pygame.image.load(asset('Assets/Images/Meeting/select_vote.png')).convert_alpha()
+        self.chat_img_dead = pygame.image.load(asset('Assets/Images/Meeting/chat_dead.png')).convert_alpha()
+        self.vote_img_dead = pygame.image.load(asset('Assets/Images/Meeting/e_vote_base_dead.png')).convert_alpha()
+        self.eject_screen_img = pygame.image.load(asset('Assets/Images/Alerts/eject.png')).convert_alpha()
         self.navigation_screen_img = pygame.image.load(
-            'Assets\Images\Tasks\Stabilize Steering\stabilizer_base.png').convert_alpha()
+            asset('Assets/Images/Tasks/Stabilize Steering/stabilizer_base.png')).convert_alpha()
         self.full_garbage_screen_img = pygame.image.load(
-            'Assets\Images\Tasks\Empty Garbage\garbage_base_full.png').convert_alpha()
+            asset('Assets/Images/Tasks/Empty Garbage/garbage_base_full.png')).convert_alpha()
         self.empty_garbage_screen_img = pygame.image.load(
-            'Assets\Images\Tasks\Empty Garbage\garbage_base_empty.png').convert_alpha()
+            asset('Assets/Images/Tasks/Empty Garbage/garbage_base_empty.png')).convert_alpha()
         self.reboot_wifi_screen_img = pygame.image.load(
-            'Assets\Images\Tasks\Reboot Wifi\panel_wifi_bg.png').convert_alpha()
-        self.wifi_on_img = pygame.image.load('Assets\Images\Tasks\Reboot Wifi\wifi_on.png').convert_alpha()
+            asset('Assets/Images/Tasks/Reboot Wifi/panel_wifi_bg.png')).convert_alpha()
+        self.wifi_on_img = pygame.image.load(asset('Assets/Images/Tasks/Reboot Wifi/wifi_on.png')).convert_alpha()
         self.wifi_liver_down_img = pygame.image.load(
-            'Assets\Images\Tasks\Reboot Wifi\panel_wifi-lever.png').convert_alpha()
+            asset('Assets/Images/Tasks/Reboot Wifi/panel_wifi-lever.png')).convert_alpha()
         self.electricity_wire_img = pygame.image.load(
-            'Assets\Images\Tasks\Fix Wiring\electricity_wire_base1.png').convert_alpha()
-        self.electricity_wire_red_img = pygame.image.load('Assets/Images/Tasks/Fix Wiring/red_wire.png').convert_alpha()
+            asset('Assets/Images/Tasks/Fix Wiring/electricity_wire_base1.png')).convert_alpha()
+        self.electricity_wire_red_img = pygame.image.load(asset('Assets/Images/Tasks/Fix Wiring/red_wire.png')).convert_alpha()
         self.electricity_wire_blue_img = pygame.image.load(
-            'Assets/Images/Tasks/Fix Wiring/blue_wire.png').convert_alpha()
+            asset('Assets/Images/Tasks/Fix Wiring/blue_wire.png')).convert_alpha()
         self.electricity_wire_yellow_img = pygame.image.load(
-            'Assets/Images/Tasks/Fix Wiring/yellow_wire.png').convert_alpha()
+            asset('Assets/Images/Tasks/Fix Wiring/yellow_wire.png')).convert_alpha()
         self.electricity_wire_pink_img = pygame.image.load(
-            'Assets/Images/Tasks/Fix Wiring/pink_wire.png').convert_alpha()
+            asset('Assets/Images/Tasks/Fix Wiring/pink_wire.png')).convert_alpha()
         self.divert_power_to_reactor_window_img = pygame.image.load(
-            'Assets/Images/Tasks/Divert Power/electricity_Divert_Base.png').convert_alpha()
+            asset('Assets/Images/Tasks/Divert Power/electricity_Divert_Base.png')).convert_alpha()
         self.divert_power_to_reactor_liverUp_window_img = pygame.image.load(
-            'Assets/Images/Tasks/Divert Power/electricity_divert_btn.png').convert_alpha()
+            asset('Assets/Images/Tasks/Divert Power/electricity_divert_btn.png')).convert_alpha()
         self.power_diverted_to_reactor_window_img = pygame.image.load(
-            'Assets/Images/Tasks/Divert Power/electricity_Divert_Base2.png').convert_alpha()
+            asset('Assets/Images/Tasks/Divert Power/electricity_Divert_Base2.png')).convert_alpha()
         self.align_engine_output_window_img = pygame.image.load(
-            'Assets/Images/Tasks/Align Engine Output/engineAlign_base.png').convert_alpha()
+            asset('Assets/Images/Tasks/Align Engine Output/engineAlign_base.png')).convert_alpha()
         self.align_engine_output_window2_img = pygame.image.load(
-            'Assets/Images/Tasks/Align Engine Output/engineAlign_base2.png').convert_alpha()
+            asset('Assets/Images/Tasks/Align Engine Output/engineAlign_base2.png')).convert_alpha()
         self.align_engine_output_window3_img = pygame.image.load(
-            'Assets/Images/Tasks/Align Engine Output/engineAlign_base3.png').convert_alpha()
+            asset('Assets/Images/Tasks/Align Engine Output/engineAlign_base3.png')).convert_alpha()
         self.align_engine_output_window4_img = pygame.image.load(
-            'Assets/Images/Tasks/Align Engine Output/engineAlign_base4.png').convert_alpha()
+            asset('Assets/Images/Tasks/Align Engine Output/engineAlign_base4.png')).convert_alpha()
         self.align_engine_liver_img = pygame.image.load(
-            'Assets/Images/Tasks/Align Engine Output/engine_liver.png').convert_alpha()
+            asset('Assets/Images/Tasks/Align Engine Output/engine_liver.png')).convert_alpha()
         self.gas_can_img = pygame.image.load(
-            'Assets/Images/Tasks/Fuel Engines/gas_can.png').convert_alpha()
+            asset('Assets/Images/Tasks/Fuel Engines/gas_can.png')).convert_alpha()
         self.fuel_engine_window_img = pygame.image.load(
-            'Assets/Images/Tasks/Fuel Engines/fuel_engines_base.png').convert_alpha()
+            asset('Assets/Images/Tasks/Fuel Engines/fuel_engines_base.png')).convert_alpha()
         self.fuel_engine_filled_black_bg = pg.Surface((340, 495))
         self.fuel_engine_filled_black_bg.fill((0, 0, 0))
         """ TASK & ITEM IMAGES & PLAYER PROPERTIES LOADING - CLOSE HERE"""
@@ -421,124 +422,124 @@ class Game:
         """ DIFFERENT BUTTONS FOR DIFFERENT TASKS - OPEN HERE"""
 
         self.emerg_red_checkbox = Button(self, None, None, 35, 35, WIDTH / 2 - 95, 223, "chkbox_red_btn",
-                                         Transparent_Black, Transparent_Black, "Assets/Images/Meeting/checkbox.png", 35,
+                                         Transparent_Black, Transparent_Black, asset("Assets/Images/Meeting/checkbox.png"), 35,
                                          35, 255)
         self.emerg_orange_checkbox = Button(self, None, None, 35, 35, WIDTH / 1.5 - 30, 223, "chkbox_orange_btn",
-                                            Transparent_Black, Transparent_Black, "Assets/Images/Meeting/checkbox.png",
+                                            Transparent_Black, Transparent_Black, asset("Assets/Images/Meeting/checkbox.png"),
                                             35, 35, 255)
         self.emerg_green_checkbox = Button(self, None, None, 35, 35, WIDTH / 2 - 95, 276, "chkbox_green_btn",
-                                           Transparent_Black, Transparent_Black, "Assets/Images/Meeting/checkbox.png",
+                                           Transparent_Black, Transparent_Black, asset("Assets/Images/Meeting/checkbox.png"),
                                            35, 35, 255)
         self.emerg_yellow_checkbox = Button(self, None, None, 35, 35, WIDTH / 1.5 - 30, 276, "chkbox_yellow_btn",
-                                            Transparent_Black, Transparent_Black, "Assets/Images/Meeting/checkbox.png",
+                                            Transparent_Black, Transparent_Black, asset("Assets/Images/Meeting/checkbox.png"),
                                             35, 35, 255)
         self.emerg_blue_checkbox = Button(self, None, None, 35, 35, WIDTH / 2 - 95, 329, "chkbox_blue_btn",
-                                          Transparent_Black, Transparent_Black, "Assets/Images/Meeting/checkbox.png",
+                                          Transparent_Black, Transparent_Black, asset("Assets/Images/Meeting/checkbox.png"),
                                           35, 35, 255)
         self.open_cafe_comp_check_btn = Button(self, None, None, 189, 191, WIDTH / 3 + 110, 200, "cafe_comp_check_btn",
                                                Transparent_Black,
                                                Transparent_Black,
-                                               "Assets/Images/Tasks/Become Imposter/cafe_computer_check.png", 189, 191,
+                                               asset("Assets/Images/Tasks/Become Imposter/cafe_computer_check.png"), 189, 191,
                                                255)
 
         self.open_cafe_comp_close_btn = Button(self, None, None, 65, 65, WIDTH / 1.5 + 80, 40, "cafe_comp_close_btn",
                                                Transparent_Black,
                                                Transparent_Black,
-                                               "Assets/Images/Tasks/Become Imposter/close.png", 65, 65,
+                                               asset("Assets/Images/Tasks/Become Imposter/close.png"), 65, 65,
                                                255)
         self.garbage_liver_Up = Button(self, None, None, 64, 64, WIDTH / 1.5 - 80, HEIGHT / 2 - 80, "grbg_up_btn",
                                        Transparent_Black,
                                        Transparent_Black,
-                                       "Assets/Images/Tasks/Empty Garbage/liver_up.png", 64, 64,
+                                       asset("Assets/Images/Tasks/Empty Garbage/liver_up.png"), 64, 64,
                                        255)
         self.garbage_liver_Down = Button(self, None, None, 64, 64, WIDTH / 1.5 - 80, HEIGHT / 2 - 50,
                                          "grbg_down_btn", Transparent_Black,
                                          Transparent_Black,
-                                         "Assets/Images/Tasks/Empty Garbage/liver_down.png", 64, 64,
+                                         asset("Assets/Images/Tasks/Empty Garbage/liver_down.png"), 64, 64,
                                          255)
         self.empty_garbage_close_btn = Button(self, None, None, 65, 65, WIDTH / 1.5 + 80, 40, "grbg_close_btn",
                                               Transparent_Black, Transparent_Black,
-                                              "Assets/Images/Tasks/Empty Garbage/close.png", 65, 65,
+                                              asset("Assets/Images/Tasks/Empty Garbage/close.png"), 65, 65,
                                               255)
         self.reboot_wifi_liver = Button(self, None, None, 63, 45, WIDTH / 2 + 61, 187, "rbt_wifi_liver_btn",
                                         Transparent_Black, Transparent_Black,
-                                        "Assets/Images/Tasks/Reboot Wifi/panel_wifi-lever.png", 63, 45, 255)
+                                        asset("Assets/Images/Tasks/Reboot Wifi/panel_wifi-lever.png"), 63, 45, 255)
         self.reboot_wifi_close_btn = Button(self, None, None, 65, 65, WIDTH / 1.5 + 80, 40, "rbt_wifi_liver_btn",
                                             Transparent_Black, Transparent_Black,
-                                            "Assets/Images/Tasks/Reboot Wifi/close.png", 65, 65, 255)
+                                            asset("Assets/Images/Tasks/Reboot Wifi/close.png"), 65, 65, 255)
         self.electricity_wire_close_btn = Button(self, None, None, 65, 65, WIDTH / 1.5 + 80, 40,
                                                  "elec_wire_close_btn",
                                                  Transparent_Black, Transparent_Black,
-                                                 "Assets/Images/Tasks/Fix Wiring/close.png", 65, 65,
+                                                 asset("Assets/Images/Tasks/Fix Wiring/close.png"), 65, 65,
                                                  255)
         self.electricity_wire_red_btn = Button(self, None, None, 91, 26, WIDTH / 1.5 - 63, 185, "elec_wire_red_btn",
                                                Transparent_Black, Transparent_Black,
-                                               "Assets/Images/Tasks/Fix Wiring/electricity_wire_btn.png", 91, 26,
+                                               asset("Assets/Images/Tasks/Fix Wiring/electricity_wire_btn.png"), 91, 26,
                                                255)
         self.electricity_wire_blue_btn = Button(self, None, None, 91, 26, WIDTH / 1.5 - 63, 290,
                                                 "elec_wire_blue_btn",
                                                 Transparent_Black, Transparent_Black,
-                                                "Assets/Images/Tasks/Fix Wiring/electricity_wire_btn.png", 91, 26,
+                                                asset("Assets/Images/Tasks/Fix Wiring/electricity_wire_btn.png"), 91, 26,
                                                 255)
         self.electricity_wire_yellow_btn = Button(self, None, None, 91, 26, WIDTH / 1.5 - 63, 400,
                                                   "elec_wire_yellow_btn",
                                                   Transparent_Black, Transparent_Black,
-                                                  "Assets/Images/Tasks/Fix Wiring/electricity_wire_btn.png", 91, 26,
+                                                  asset("Assets/Images/Tasks/Fix Wiring/electricity_wire_btn.png"), 91, 26,
                                                   255)
         self.electricity_wire_pink_btn = Button(self, None, None, 91, 26, WIDTH / 1.5 - 63, 505,
                                                 "elec_wire_pink_btn",
                                                 Transparent_Black, Transparent_Black,
-                                                "Assets/Images/Tasks/Fix Wiring/electricity_wire_btn.png", 91, 26,
+                                                asset("Assets/Images/Tasks/Fix Wiring/electricity_wire_btn.png"), 91, 26,
                                                 255)
         self.divert_power_to_reactor_livers_btn = Button(self, None, None, 423, 36, WIDTH / 3 - 7, 500,
                                                          "dvrt_pwr_lvrs_btn",
                                                          Transparent_Black, Transparent_Black,
-                                                         "Assets/Images/Tasks/Divert Power/electricity_divert_btn.png",
+                                                         asset("Assets/Images/Tasks/Divert Power/electricity_divert_btn.png"),
                                                          423, 36,
                                                          255)
         self.divert_power_to_reactor_close_btn = Button(self, None, None, 65, 65, WIDTH / 1.5 + 80, 40,
                                                         "dvrt_pwr_close_btn",
                                                         Transparent_Black, Transparent_Black,
-                                                        "Assets/Images/Tasks/Divert Power/close.png", 65, 65,
+                                                        asset("Assets/Images/Tasks/Divert Power/close.png"), 65, 65,
                                                         255)
         self.view_security_monitor_close_btn = Button(self, None, None, 65, 65, WIDTH / 1.5 + 140, 30,
                                                       "elec_wire_close_btn",
                                                       Transparent_Black, Transparent_Black,
-                                                      "Assets/Images/UI/close.png", 65, 65,
+                                                      asset("Assets/Images/UI/close.png"), 65, 65,
                                                       255)
         self.align_engine_liver_pos_btn1 = Button(self, None, None, 9, 8, WIDTH / 2 + 156, 213, "liver_pos1_btn",
                                                   Transparent_Black,
                                                   Transparent_Black,
-                                                  "Assets/Images/Tasks/Align Engine Output/alignment_position.png",
+                                                  asset("Assets/Images/Tasks/Align Engine Output/alignment_position.png"),
                                                   9, 8, 255)
         self.align_engine_liver_pos_btn2 = Button(self, None, None, 9, 8, WIDTH / 2 + 144, 302, "liver_pos1_btn",
                                                   Transparent_Black,
                                                   Transparent_Black,
-                                                  "Assets/Images/Tasks/Align Engine Output/alignment_position.png",
+                                                  asset("Assets/Images/Tasks/Align Engine Output/alignment_position.png"),
                                                   9, 8, 255)
         self.align_engine_output_close_btn = Button(self, None, None, 65, 65, WIDTH / 1.5 + 80, 40,
                                                     "alg_engn_op_close_btn",
                                                     Transparent_Black,
                                                     Transparent_Black,
-                                                    "Assets/Images/Tasks/Align Engine Output/close.png", 65, 65,
+                                                    asset("Assets/Images/Tasks/Align Engine Output/close.png"), 65, 65,
                                                     255)
         self.fuel_engine_fill_btn = Button(self, None, None, 76, 77, WIDTH / 1.5 - 45, 467,
                                            "alg_engn_op_close_btn",
                                            Transparent_Black,
                                            Transparent_Black,
-                                           "Assets/Images/Tasks/Fuel Engines/engineFuel_Button.png", 76, 77,
+                                           asset("Assets/Images/Tasks/Fuel Engines/engineFuel_Button.png"), 76, 77,
                                            255)
         self.fuel_engine_close_btn = Button(self, None, None, 65, 65, WIDTH / 1.5 - 10, 70,
                                                     "alg_engn_op_close_btn",
                                                     Transparent_Black,
                                                     Transparent_Black,
-                                                    "Assets/Images/Tasks/Fuel Engines/close.png", 65, 65,
+                                                    asset("Assets/Images/Tasks/Fuel Engines/close.png"), 65, 65,
                                                     255)
         self.fuel_engine_close_btn2 = Button(self, None, None, 65, 65, WIDTH / 1.5 - 10, 70,
                                                     "alg_engn_op_close_btn",
                                                     Transparent_Black,
                                                     Transparent_Black,
-                                                    "Assets/Images/Tasks/Fuel Engines/close.png", 65, 65,
+                                                    asset("Assets/Images/Tasks/Fuel Engines/close.png"), 65, 65,
                                                     255)
 
 
@@ -589,11 +590,11 @@ class Game:
         self.screen_height = 600
 
         # Player image
-        self.starship_image = pg.image.load("Assets/Images/Tasks/Clear Asteroids/starship.png").convert_alpha()
+        self.starship_image = pg.image.load(asset("Assets/Images/Tasks/Clear Asteroids/starship.png")).convert_alpha()
         self.starship_image = pg.transform.smoothscale(self.starship_image, (96, 96)).convert_alpha()
-        self.starship_image2 = pg.image.load("Assets/Images/Tasks/Clear Asteroids/starship2.png").convert_alpha()
+        self.starship_image2 = pg.image.load(asset("Assets/Images/Tasks/Clear Asteroids/starship2.png")).convert_alpha()
         self.starship_image2 = pg.transform.smoothscale(self.starship_image2, (96, 96)).convert_alpha()
-        self.starship_image3 = pg.image.load("Assets/Images/Tasks/Clear Asteroids/starship3.png").convert_alpha()
+        self.starship_image3 = pg.image.load(asset("Assets/Images/Tasks/Clear Asteroids/starship3.png")).convert_alpha()
         self.starship_image3 = pg.transform.smoothscale(self.starship_image3, (96, 96)).convert_alpha()
         self.starship_image_alignment = "middle"
         self.starship_posX = 370
@@ -622,7 +623,7 @@ class Game:
         # Bullet
         # ready - you cant see the bullet on the screen
         # fire - the bullet moves towards enemy
-        self.bullet_image = pg.image.load("Assets/Images/Tasks/Clear Asteroids/laser.png").convert_alpha()
+        self.bullet_image = pg.image.load(asset("Assets/Images/Tasks/Clear Asteroids/laser.png")).convert_alpha()
         self.bulletX = 0
         self.bulletY = 550
         # self.bulletX_change = 20
@@ -630,26 +631,26 @@ class Game:
         self.bullet_state = "ready"
 
         # Background image
-        self.clear_asteroid_background = pg.image.load("Assets/Images/Tasks/Clear Asteroids/space3.png").convert_alpha()
+        self.clear_asteroid_background = pg.image.load(asset("Assets/Images/Tasks/Clear Asteroids/space3.png")).convert_alpha()
 
         self.bgX = 0
         self.bgY = 0
 
         # Background music
-        self.asteroid_bg = mixer.Sound("Assets/Sounds/Clear Asteroids/AMB_Space.wav")
+        self.asteroid_bg = mixer.Sound(asset("Assets/Sounds/Clear Asteroids/AMB_Space.wav"))
         # Bullet Sound
-        self.bullet_sound = mixer.Sound("Assets/Sounds/Clear Asteroids/fire3.mp3")
+        self.bullet_sound = mixer.Sound(asset("Assets/Sounds/Clear Asteroids/fire3.mp3"))
         # Collision Sound
-        self.collision_sound = mixer.Sound("Assets/Sounds/Clear Asteroids/explosion2.mp3")
+        self.collision_sound = mixer.Sound(asset("Assets/Sounds/Clear Asteroids/explosion2.mp3"))
 
         # Score Board
-        self.score_box_img = pg.image.load("Assets/Images/Tasks/Clear Asteroids/score_box.png").convert_alpha()
+        self.score_box_img = pg.image.load(asset("Assets/Images/Tasks/Clear Asteroids/score_box.png")).convert_alpha()
         self.score_box_img = pg.transform.smoothscale(self.score_box_img, (250, 60)).convert_alpha()
         self.score_value = 30
-        self.font = pg.font.Font("Assets/fonts/Hunger Games.ttf", 24)
+        self.font = pg.font.Font(asset("Assets/fonts/Hunger Games.ttf"), 24)
 
         # Game Over Text
-        self.game_over_font = pg.font.Font("Assets/fonts/Hunger Games.ttf", 64)
+        self.game_over_font = pg.font.Font(asset("Assets/fonts/Hunger Games.ttf"), 64)
         # CLEAR ASTEROID TASK LOADING -------------------------------------------
 
 
@@ -2087,7 +2088,7 @@ class Game:
         # Mini Map button
         # We show mini map only to alive players not ghosts
         self.map_btn = Button(self, None, None, 56, 56, WIDTH - 80, 20, "mp_btn", Transparent_Black,
-                              Transparent_Black, "Assets/Images/UI/map_button.png", 56, 56, 255)
+                              Transparent_Black, asset("Assets/Images/UI/map_button.png"), 56, 56, 255)
         if self.player.alive_status:
             self.map_btn.draw_Image(self.screen)
 
@@ -2134,19 +2135,19 @@ class Game:
         self.stabilize_target_btn1 = Button(self, None, None, 56, 56, WIDTH / 2, 60, "stbl_nav_btn",
                                             Transparent_Black,
                                             Transparent_Black,
-                                            "Assets/Images/Tasks/Stabilize Steering/nav_stabilize_target.png", 128,
+                                            asset("Assets/Images/Tasks/Stabilize Steering/nav_stabilize_target.png"), 128,
                                             128,
                                             255)
         self.stabilize_target_center_btn = Button(self, None, None, 10, 10, self.i, self.j, "target_center_btn",
                                                   Transparent_Black,
                                                   Transparent_Black,
-                                                  "Assets/Images/Tasks/Stabilize Steering/target_center.png", 10,
+                                                  asset("Assets/Images/Tasks/Stabilize Steering/target_center.png"), 10,
                                                   10,
                                                   255)
         self.stabilize_close_btn = Button(self, None, None, 65, 65, WIDTH / 1.5 + 80, 40, "stbl_close_btn",
                                           Transparent_Black,
                                           Transparent_Black,
-                                          "Assets/Images/Tasks/Stabilize Steering/close.png", 65, 65,
+                                          asset("Assets/Images/Tasks/Stabilize Steering/close.png"), 65, 65,
                                           255)
 
         if self.stabilize_steering_button_status and self.stabilize_steering_window_status and self.isdoingTask:
@@ -2164,7 +2165,7 @@ class Game:
             self.stabilize_target_btn1_status = False
             self.stabilize_target_btn2 = Button(self, None, None, 56, 56, i, j, "stbl_nav_btn", Transparent_Black,
                                                 Transparent_Black,
-                                                "Assets/Images/Tasks/Stabilize Steering/nav_stabilize_target.png",
+                                                asset("Assets/Images/Tasks/Stabilize Steering/nav_stabilize_target.png"),
                                                 128, 128, 255)
             self.stabilize_target_btn2.draw_Image(self.navigation_screen_img)
             self.stabilize_task_play_count -= 1

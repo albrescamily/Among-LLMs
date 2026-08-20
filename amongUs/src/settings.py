@@ -1,5 +1,7 @@
 import pygame
 
+from paths import asset
+
 # define some colors (R, G, B)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -25,7 +27,7 @@ NO_OF_BOTS = 9
 TILESIZE = 32
 GRIDWIDTH = WIDTH / TILESIZE
 GRIDHEIGHT = HEIGHT / TILESIZE
-FONT = 'Assets/Fonts/Rubik-ExtraBold.TTF'
+FONT = asset('Assets/Fonts/Rubik-ExtraBold.TTF')
 
 # Meeting settings
 MEETING_SPLASH_TIME = 1500    # "Discuss!" splash shown when a meeting starts
@@ -176,10 +178,10 @@ ITEM_IMAGES = {'health': 'health_pack.png',
 
                }
 
-CLEAR_ASTEROIDS_IMAGES = ['Assets/Images/Tasks/Clear Asteroids/asteroid1.png',
-                          'Assets/Images/Tasks/Clear Asteroids/asteroid2.png',
-                          'Assets/Images/Tasks/Clear Asteroids/asteroid3.png',
-                          'Assets/Images/Tasks/Clear Asteroids/asteroid4.png'
+CLEAR_ASTEROIDS_IMAGES = [asset('Assets/Images/Tasks/Clear Asteroids/asteroid1.png'),
+                          asset('Assets/Images/Tasks/Clear Asteroids/asteroid2.png'),
+                          asset('Assets/Images/Tasks/Clear Asteroids/asteroid3.png'),
+                          asset('Assets/Images/Tasks/Clear Asteroids/asteroid4.png')
 
                           ]
 
@@ -210,7 +212,7 @@ RIGHT_MOUSE_BUTTON = 3
 red_player_imgs_left = []
 # loops 1 to N-1
 for i in range(1, 18):
-    red_player_imgs_left.append(pygame.image.load('Assets/Images/Player/Red/red_left_walk/'+'step'+str(i)+'.png'))
+    red_player_imgs_left.append(pygame.image.load(asset('Assets/Images/Player/Red/red_left_walk/')+'step'+str(i)+'.png'))
 # loops 1 to N-1
 for i in range(0, 17):
     red_player_imgs_left[i] = pygame.transform.smoothscale(red_player_imgs_left[i], (64, 86))
@@ -219,7 +221,7 @@ for i in range(0, 17):
 red_player_imgs_right = []
 # loops 1 to 17
 for i in range(1, 18):
-    red_player_imgs_right.append(pygame.image.load('Assets/Images/Player/Red/red_right_walk/'+'step'+str(i)+'.png'))
+    red_player_imgs_right.append(pygame.image.load(asset('Assets/Images/Player/Red/red_right_walk/')+'step'+str(i)+'.png'))
 # loops 1 to 16
 for i in range(0, 17):
     red_player_imgs_right[i] = pygame.transform.smoothscale(red_player_imgs_right[i], (64, 86))
@@ -228,7 +230,7 @@ for i in range(0, 17):
 # Player down movement
 red_player_imgs_down = []
 for i in range(1, 19):
-    red_player_imgs_down.append(pygame.image.load('Assets/Images/Player/Red/red_down_walk/'+'step'+str(i)+'.png'))
+    red_player_imgs_down.append(pygame.image.load(asset('Assets/Images/Player/Red/red_down_walk/')+'step'+str(i)+'.png'))
 # loops 1 to 16
 for i in range(0, 18):
     red_player_imgs_down[i] = pygame.transform.smoothscale(red_player_imgs_down[i], (64, 86))
@@ -237,28 +239,28 @@ for i in range(0, 18):
 red_player_imgs_up = []
 # loops 1 to 16
 for i in range(1, 18):
-    red_player_imgs_up.append(pygame.image.load('Assets/Images/Player/Red/red_up_walk/'+'step'+str(i)+'.png'))
+    red_player_imgs_up.append(pygame.image.load(asset('Assets/Images/Player/Red/red_up_walk/')+'step'+str(i)+'.png'))
 # loops 1 to 16
 for i in range(0, 17):
     red_player_imgs_up[i] = pygame.transform.smoothscale(red_player_imgs_up[i], (64, 86))
 
-red_player_imgs_dead = pygame.image.load('Assets/Images/Player/Dead/Deadred.png')
+red_player_imgs_dead = pygame.image.load(asset('Assets/Images/Player/Dead/Deadred.png'))
 
-red_player_imgs_ghost_left = pygame.image.load('Assets/Images/Player/Red/red_ghost/step1_left.png')
+red_player_imgs_ghost_left = pygame.image.load(asset('Assets/Images/Player/Red/red_ghost/step1_left.png'))
 red_player_imgs_ghost_left = pygame.transform.smoothscale(red_player_imgs_ghost_left, (64, 86))
 
-red_player_imgs_ghost_right = pygame.image.load('Assets/Images/Player/Red/red_ghost/step1_right.png')
+red_player_imgs_ghost_right = pygame.image.load(asset('Assets/Images/Player/Red/red_ghost/step1_right.png'))
 red_player_imgs_ghost_right = pygame.transform.smoothscale(red_player_imgs_ghost_right, (64, 86))
 
-red_player_emergency_meeting = pygame.image.load('Assets/Images/Alerts/emergency_meeting_red.png')
-red_player_emergency_meeting_report = pygame.image.load('Assets/Images/Alerts/report_dead_body_red.png')
+red_player_emergency_meeting = pygame.image.load(asset('Assets/Images/Alerts/emergency_meeting_red.png'))
+red_player_emergency_meeting_report = pygame.image.load(asset('Assets/Images/Alerts/report_dead_body_red.png'))
 
 # Blue Player Movements-----------------
 # Player left movement
 blue_player_imgs_left = []
 # loops 1 to N-1
 for i in range(1, 18):
-    blue_player_imgs_left.append(pygame.image.load('Assets/Images/Player/Blue/blue_left_walk/'+'step'+str(i)+'.png'))
+    blue_player_imgs_left.append(pygame.image.load(asset('Assets/Images/Player/Blue/blue_left_walk/')+'step'+str(i)+'.png'))
 # loops 1 to N-1
 for i in range(0, 17):
     blue_player_imgs_left[i] = pygame.transform.smoothscale(blue_player_imgs_left[i], (64, 86))
@@ -268,7 +270,7 @@ for i in range(0, 17):
 blue_player_imgs_right = []
 # loops 1 to 17
 for i in range(1, 18):
-    blue_player_imgs_right.append(pygame.image.load('Assets/Images/Player/Blue/blue_right_walk/'+'step'+str(i)+'.png'))
+    blue_player_imgs_right.append(pygame.image.load(asset('Assets/Images/Player/Blue/blue_right_walk/')+'step'+str(i)+'.png'))
 # loops 1 to 16
 for i in range(0, 17):
     blue_player_imgs_right[i] = pygame.transform.smoothscale(blue_player_imgs_right[i], (64, 86))
@@ -277,7 +279,7 @@ for i in range(0, 17):
 # Player down movement
 blue_player_imgs_down = []
 for i in range(1, 19):
-    blue_player_imgs_down.append(pygame.image.load('Assets/Images/Player/Blue/blue_down_walk/'+'step'+str(i)+'.png'))
+    blue_player_imgs_down.append(pygame.image.load(asset('Assets/Images/Player/Blue/blue_down_walk/')+'step'+str(i)+'.png'))
 # loops 1 to 16
 for i in range(0, 18):
     blue_player_imgs_down[i] = pygame.transform.smoothscale(blue_player_imgs_down[i], (64, 86))
@@ -286,28 +288,28 @@ for i in range(0, 18):
 blue_player_imgs_up = []
 # loops 1 to 16
 for i in range(1, 18):
-    blue_player_imgs_up.append(pygame.image.load('Assets/Images/Player/Blue/blue_up_walk/'+'step'+str(i)+'.png'))
+    blue_player_imgs_up.append(pygame.image.load(asset('Assets/Images/Player/Blue/blue_up_walk/')+'step'+str(i)+'.png'))
 # loops 1 to 16
 for i in range(0, 17):
     blue_player_imgs_up[i] = pygame.transform.smoothscale(blue_player_imgs_up[i], (64, 86))
 
-blue_player_imgs_dead = pygame.image.load('Assets/Images/Player/Dead/Deadblue.png')
+blue_player_imgs_dead = pygame.image.load(asset('Assets/Images/Player/Dead/Deadblue.png'))
 
-blue_player_imgs_ghost_left = pygame.image.load('Assets/Images/Player/Blue/blue_ghost/step1_left.png')
+blue_player_imgs_ghost_left = pygame.image.load(asset('Assets/Images/Player/Blue/blue_ghost/step1_left.png'))
 blue_player_imgs_ghost_left = pygame.transform.smoothscale(blue_player_imgs_ghost_left, (64, 86))
 
-blue_player_imgs_ghost_right = pygame.image.load('Assets/Images/Player/Blue/blue_ghost/step1_right.png')
+blue_player_imgs_ghost_right = pygame.image.load(asset('Assets/Images/Player/Blue/blue_ghost/step1_right.png'))
 blue_player_imgs_ghost_right = pygame.transform.smoothscale(blue_player_imgs_ghost_right, (64, 86))
 
-blue_player_emergency_meeting = pygame.image.load('Assets/Images/Alerts/emergency_meeting_blue.png')
-blue_player_emergency_meeting_report = pygame.image.load('Assets/Images/Alerts/report_dead_body_blue.png')
+blue_player_emergency_meeting = pygame.image.load(asset('Assets/Images/Alerts/emergency_meeting_blue.png'))
+blue_player_emergency_meeting_report = pygame.image.load(asset('Assets/Images/Alerts/report_dead_body_blue.png'))
 
 # Green Player Movements-----------------
 # Player left movement
 green_player_imgs_left = []
 # loops 1 to N-1
 for i in range(1, 18):
-    green_player_imgs_left.append(pygame.image.load('Assets/Images/Player/Green/green_left_walk/'+'step'+str(i)+'.png'))
+    green_player_imgs_left.append(pygame.image.load(asset('Assets/Images/Player/Green/green_left_walk/')+'step'+str(i)+'.png'))
 # loops 1 to N-1
 for i in range(0, 17):
     green_player_imgs_left[i] = pygame.transform.smoothscale(green_player_imgs_left[i], (64, 86))
@@ -317,7 +319,7 @@ for i in range(0, 17):
 green_player_imgs_right = []
 # loops 1 to 17
 for i in range(1, 18):
-    green_player_imgs_right.append(pygame.image.load('Assets/Images/Player/Green/green_right_walk/'+'step'+str(i)+'.png'))
+    green_player_imgs_right.append(pygame.image.load(asset('Assets/Images/Player/Green/green_right_walk/')+'step'+str(i)+'.png'))
 # loops 1 to 16
 for i in range(0, 17):
     green_player_imgs_right[i] = pygame.transform.smoothscale(green_player_imgs_right[i], (64, 86))
@@ -326,7 +328,7 @@ for i in range(0, 17):
 # Player down movement
 green_player_imgs_down = []
 for i in range(1, 19):
-    green_player_imgs_down.append(pygame.image.load('Assets/Images/Player/Green/green_down_walk/'+'step'+str(i)+'.png'))
+    green_player_imgs_down.append(pygame.image.load(asset('Assets/Images/Player/Green/green_down_walk/')+'step'+str(i)+'.png'))
 # loops 1 to 16
 for i in range(0, 18):
     green_player_imgs_down[i] = pygame.transform.smoothscale(green_player_imgs_down[i], (64, 86))
@@ -335,28 +337,28 @@ for i in range(0, 18):
 green_player_imgs_up = []
 # loops 1 to 16
 for i in range(1, 18):
-    green_player_imgs_up.append(pygame.image.load('Assets/Images/Player/Green/green_up_walk/'+'step'+str(i)+'.png'))
+    green_player_imgs_up.append(pygame.image.load(asset('Assets/Images/Player/Green/green_up_walk/')+'step'+str(i)+'.png'))
 # loops 1 to 16
 for i in range(0, 17):
     green_player_imgs_up[i] = pygame.transform.smoothscale(green_player_imgs_up[i], (64, 86))
 
-green_player_imgs_dead = pygame.image.load('Assets/Images/Player/Dead/Deadgreen.png')
+green_player_imgs_dead = pygame.image.load(asset('Assets/Images/Player/Dead/Deadgreen.png'))
 
-green_player_imgs_ghost_left = pygame.image.load('Assets/Images/Player/Green/green_ghost/step1_left.png')
+green_player_imgs_ghost_left = pygame.image.load(asset('Assets/Images/Player/Green/green_ghost/step1_left.png'))
 green_player_imgs_ghost_left = pygame.transform.smoothscale(green_player_imgs_ghost_left, (64, 86))
 
-green_player_imgs_ghost_right = pygame.image.load('Assets/Images/Player/Green/green_ghost/step1_right.png')
+green_player_imgs_ghost_right = pygame.image.load(asset('Assets/Images/Player/Green/green_ghost/step1_right.png'))
 green_player_imgs_ghost_right = pygame.transform.smoothscale(green_player_imgs_ghost_right, (64, 86))
 
-green_player_emergency_meeting = pygame.image.load('Assets/Images/Alerts/emergency_meeting_green.png')
-green_player_emergency_meeting_report = pygame.image.load('Assets/Images/Alerts/report_dead_body_green.png')
+green_player_emergency_meeting = pygame.image.load(asset('Assets/Images/Alerts/emergency_meeting_green.png'))
+green_player_emergency_meeting_report = pygame.image.load(asset('Assets/Images/Alerts/report_dead_body_green.png'))
 
 # Orange Player Movements-----------------
 # Player left movement
 orange_player_imgs_left = []
 # loops 1 to N-1
 for i in range(1, 18):
-    orange_player_imgs_left.append(pygame.image.load('Assets/Images/Player/Orange/orange_left_walk/'+'step'+str(i)+'.png'))
+    orange_player_imgs_left.append(pygame.image.load(asset('Assets/Images/Player/Orange/orange_left_walk/')+'step'+str(i)+'.png'))
 # loops 1 to N-1
 for i in range(0, 17):
     orange_player_imgs_left[i] = pygame.transform.smoothscale(orange_player_imgs_left[i], (64, 86))
@@ -366,7 +368,7 @@ for i in range(0, 17):
 orange_player_imgs_right = []
 # loops 1 to 17
 for i in range(1, 18):
-    orange_player_imgs_right.append(pygame.image.load('Assets/Images/Player/Orange/orange_right_walk/'+'step'+str(i)+'.png'))
+    orange_player_imgs_right.append(pygame.image.load(asset('Assets/Images/Player/Orange/orange_right_walk/')+'step'+str(i)+'.png'))
 # loops 1 to 16
 for i in range(0, 17):
     orange_player_imgs_right[i] = pygame.transform.smoothscale(orange_player_imgs_right[i], (64, 86))
@@ -375,7 +377,7 @@ for i in range(0, 17):
 # Player down movement
 orange_player_imgs_down = []
 for i in range(1, 19):
-    orange_player_imgs_down.append(pygame.image.load('Assets/Images/Player/Orange/orange_down_walk/'+'step'+str(i)+'.png'))
+    orange_player_imgs_down.append(pygame.image.load(asset('Assets/Images/Player/Orange/orange_down_walk/')+'step'+str(i)+'.png'))
 # loops 1 to 16
 for i in range(0, 18):
     orange_player_imgs_down[i] = pygame.transform.smoothscale(orange_player_imgs_down[i], (64, 86))
@@ -384,28 +386,28 @@ for i in range(0, 18):
 orange_player_imgs_up = []
 # loops 1 to 16
 for i in range(1, 18):
-    orange_player_imgs_up.append(pygame.image.load('Assets/Images/Player/Orange/orange_up_walk/'+'step'+str(i)+'.png'))
+    orange_player_imgs_up.append(pygame.image.load(asset('Assets/Images/Player/Orange/orange_up_walk/')+'step'+str(i)+'.png'))
 # loops 1 to 16
 for i in range(0, 17):
     orange_player_imgs_up[i] = pygame.transform.smoothscale(orange_player_imgs_up[i], (64, 86))
 
-orange_player_imgs_dead = pygame.image.load('Assets/Images/Player/Dead/Deadorange.png')
+orange_player_imgs_dead = pygame.image.load(asset('Assets/Images/Player/Dead/Deadorange.png'))
 
-orange_player_imgs_ghost_left = pygame.image.load('Assets/Images/Player/Orange/orange_ghost/step1_left.png')
+orange_player_imgs_ghost_left = pygame.image.load(asset('Assets/Images/Player/Orange/orange_ghost/step1_left.png'))
 orange_player_imgs_ghost_left = pygame.transform.smoothscale(orange_player_imgs_ghost_left, (64, 86))
 
-orange_player_imgs_ghost_right = pygame.image.load('Assets/Images/Player/Orange/orange_ghost/step1_right.png')
+orange_player_imgs_ghost_right = pygame.image.load(asset('Assets/Images/Player/Orange/orange_ghost/step1_right.png'))
 orange_player_imgs_ghost_right = pygame.transform.smoothscale(orange_player_imgs_ghost_right, (64, 86))
 
-orange_player_emergency_meeting = pygame.image.load('Assets/Images/Alerts/emergency_meeting_orange.png')
-orange_player_emergency_meeting_report = pygame.image.load('Assets/Images/Alerts/report_dead_body_orange.png')
+orange_player_emergency_meeting = pygame.image.load(asset('Assets/Images/Alerts/emergency_meeting_orange.png'))
+orange_player_emergency_meeting_report = pygame.image.load(asset('Assets/Images/Alerts/report_dead_body_orange.png'))
 
 # Yellow Player Movements-----------------
 # Player left movement
 yellow_player_imgs_left = []
 # loops 1 to N-1
 for i in range(1, 18):
-    yellow_player_imgs_left.append(pygame.image.load('Assets/Images/Player/Yellow/yellow_left_walk/'+'step'+str(i)+'.png'))
+    yellow_player_imgs_left.append(pygame.image.load(asset('Assets/Images/Player/Yellow/yellow_left_walk/')+'step'+str(i)+'.png'))
 # loops 1 to N-1
 for i in range(0, 17):
     yellow_player_imgs_left[i] = pygame.transform.smoothscale(yellow_player_imgs_left[i], (64, 86))
@@ -415,7 +417,7 @@ for i in range(0, 17):
 yellow_player_imgs_right = []
 # loops 1 to 17
 for i in range(1, 18):
-    yellow_player_imgs_right.append(pygame.image.load('Assets/Images/Player/Yellow/yellow_right_walk/'+'step'+str(i)+'.png'))
+    yellow_player_imgs_right.append(pygame.image.load(asset('Assets/Images/Player/Yellow/yellow_right_walk/')+'step'+str(i)+'.png'))
 # loops 1 to 16
 for i in range(0, 17):
     yellow_player_imgs_right[i] = pygame.transform.smoothscale(yellow_player_imgs_right[i], (64, 86))
@@ -424,7 +426,7 @@ for i in range(0, 17):
 # Player down movement
 yellow_player_imgs_down = []
 for i in range(1, 19):
-    yellow_player_imgs_down.append(pygame.image.load('Assets/Images/Player/Yellow/yellow_down_walk/'+'step'+str(i)+'.png'))
+    yellow_player_imgs_down.append(pygame.image.load(asset('Assets/Images/Player/Yellow/yellow_down_walk/')+'step'+str(i)+'.png'))
 # loops 1 to 16
 for i in range(0, 18):
     yellow_player_imgs_down[i] = pygame.transform.smoothscale(yellow_player_imgs_down[i], (64, 86))
@@ -433,146 +435,146 @@ for i in range(0, 18):
 yellow_player_imgs_up = []
 # loops 1 to 16
 for i in range(1, 18):
-    yellow_player_imgs_up.append(pygame.image.load('Assets/Images/Player/Yellow/yellow_up_walk/'+'step'+str(i)+'.png'))
+    yellow_player_imgs_up.append(pygame.image.load(asset('Assets/Images/Player/Yellow/yellow_up_walk/')+'step'+str(i)+'.png'))
 # loops 1 to 16
 for i in range(0, 17):
     yellow_player_imgs_up[i] = pygame.transform.smoothscale(yellow_player_imgs_up[i], (64, 86))
     
-yellow_player_imgs_dead = pygame.image.load('Assets/Images/Player/Dead/Deadyellow.png')
+yellow_player_imgs_dead = pygame.image.load(asset('Assets/Images/Player/Dead/Deadyellow.png'))
 
-yellow_player_imgs_ghost_left = pygame.image.load('Assets/Images/Player/Yellow/yellow_ghost/step1_left.png')
+yellow_player_imgs_ghost_left = pygame.image.load(asset('Assets/Images/Player/Yellow/yellow_ghost/step1_left.png'))
 yellow_player_imgs_ghost_left = pygame.transform.smoothscale(yellow_player_imgs_ghost_left, (64, 86))
 
-yellow_player_imgs_ghost_right = pygame.image.load('Assets/Images/Player/Yellow/yellow_ghost/step1_right.png')
+yellow_player_imgs_ghost_right = pygame.image.load(asset('Assets/Images/Player/Yellow/yellow_ghost/step1_right.png'))
 yellow_player_imgs_ghost_right = pygame.transform.smoothscale(yellow_player_imgs_ghost_right, (64, 86))
 
-yellow_player_emergency_meeting = pygame.image.load('Assets/Images/Alerts/emergency_meeting_yellow.png')
-yellow_player_emergency_meeting_report = pygame.image.load('Assets/Images/Alerts/report_dead_body_yellow.png')
+yellow_player_emergency_meeting = pygame.image.load(asset('Assets/Images/Alerts/emergency_meeting_yellow.png'))
+yellow_player_emergency_meeting_report = pygame.image.load(asset('Assets/Images/Alerts/report_dead_body_yellow.png'))
 
 
 # Black Player Movements-----------------
 # Player left movement
 black_player_imgs_left = []
-black_player_imgs_left.append(pygame.image.load('Assets/Images/Player/Black/black_left_walk/step1.png'))
+black_player_imgs_left.append(pygame.image.load(asset('Assets/Images/Player/Black/black_left_walk/step1.png')))
 black_player_imgs_left[0] = pygame.transform.smoothscale(black_player_imgs_left[0], (64, 86))
 
 
 # Player right movement
 black_player_imgs_right = []
-black_player_imgs_right.append(pygame.image.load('Assets/Images/Player/Black/black_right_walk/step1.png'))
+black_player_imgs_right.append(pygame.image.load(asset('Assets/Images/Player/Black/black_right_walk/step1.png')))
 black_player_imgs_right[0] = pygame.transform.smoothscale(black_player_imgs_right[0], (64, 86))
 
 # Player down movement
 black_player_imgs_down = []
-black_player_imgs_down.append(pygame.image.load('Assets/Images/Player/Black/black_down_walk/step1.png'))
+black_player_imgs_down.append(pygame.image.load(asset('Assets/Images/Player/Black/black_down_walk/step1.png')))
 black_player_imgs_down[0] = pygame.transform.smoothscale(black_player_imgs_down[0], (64, 86))
 
 # Player Up movement
 black_player_imgs_up = []
-black_player_imgs_up.append(pygame.image.load('Assets/Images/Player/Black/black_up_walk/step1.png'))
+black_player_imgs_up.append(pygame.image.load(asset('Assets/Images/Player/Black/black_up_walk/step1.png')))
 black_player_imgs_up[0] = pygame.transform.smoothscale(black_player_imgs_up[0], (64, 86))
     
-black_player_imgs_dead = pygame.image.load('Assets/Images/Player/Dead/Deadblack.png')
+black_player_imgs_dead = pygame.image.load(asset('Assets/Images/Player/Dead/Deadblack.png'))
 
 
 # Brown Player Movements-----------------
 # Player left movement
 brown_player_imgs_left = []
-brown_player_imgs_left.append(pygame.image.load('Assets/Images/Player/Brown/brown_left_walk/step1.png'))
+brown_player_imgs_left.append(pygame.image.load(asset('Assets/Images/Player/Brown/brown_left_walk/step1.png')))
 brown_player_imgs_left[0] = pygame.transform.smoothscale(brown_player_imgs_left[0], (64, 86))
 
 
 # Player right movement
 brown_player_imgs_right = []
-brown_player_imgs_right.append(pygame.image.load('Assets/Images/Player/Brown/brown_right_walk/step1.png'))
+brown_player_imgs_right.append(pygame.image.load(asset('Assets/Images/Player/Brown/brown_right_walk/step1.png')))
 brown_player_imgs_right[0] = pygame.transform.smoothscale(brown_player_imgs_right[0], (64, 86))
 
 # Player down movement
 brown_player_imgs_down = []
-brown_player_imgs_down.append(pygame.image.load('Assets/Images/Player/Brown/brown_down_walk/step1.png'))
+brown_player_imgs_down.append(pygame.image.load(asset('Assets/Images/Player/Brown/brown_down_walk/step1.png')))
 brown_player_imgs_down[0] = pygame.transform.smoothscale(brown_player_imgs_down[0], (64, 86))
 
 # Player Up movement
 brown_player_imgs_up = []
-brown_player_imgs_up.append(pygame.image.load('Assets/Images/Player/Brown/brown_up_walk/step1.png'))
+brown_player_imgs_up.append(pygame.image.load(asset('Assets/Images/Player/Brown/brown_up_walk/step1.png')))
 brown_player_imgs_up[0] = pygame.transform.smoothscale(brown_player_imgs_up[0], (64, 86))
     
-brown_player_imgs_dead = pygame.image.load('Assets/Images/Player/Dead/Deadbrown.png')
+brown_player_imgs_dead = pygame.image.load(asset('Assets/Images/Player/Dead/Deadbrown.png'))
 
 
 # Pink Player Movements-----------------
 # Player left movement
 pink_player_imgs_left = []
-pink_player_imgs_left.append(pygame.image.load('Assets/Images/Player/Pink/pink_left_walk/step1.png'))
+pink_player_imgs_left.append(pygame.image.load(asset('Assets/Images/Player/Pink/pink_left_walk/step1.png')))
 pink_player_imgs_left[0] = pygame.transform.smoothscale(pink_player_imgs_left[0], (64, 86))
 
 
 # Player right movement
 pink_player_imgs_right = []
-pink_player_imgs_right.append(pygame.image.load('Assets/Images/Player/Pink/pink_right_walk/step1.png'))
+pink_player_imgs_right.append(pygame.image.load(asset('Assets/Images/Player/Pink/pink_right_walk/step1.png')))
 pink_player_imgs_right[0] = pygame.transform.smoothscale(pink_player_imgs_right[0], (64, 86))
 
 # Player down movement
 pink_player_imgs_down = []
-pink_player_imgs_down.append(pygame.image.load('Assets/Images/Player/Pink/pink_down_walk/step1.png'))
+pink_player_imgs_down.append(pygame.image.load(asset('Assets/Images/Player/Pink/pink_down_walk/step1.png')))
 pink_player_imgs_down[0] = pygame.transform.smoothscale(pink_player_imgs_down[0], (64, 86))
 
 # Player Up movement
 pink_player_imgs_up = []
-pink_player_imgs_up.append(pygame.image.load('Assets/Images/Player/Pink/pink_up_walk/step1.png'))
+pink_player_imgs_up.append(pygame.image.load(asset('Assets/Images/Player/Pink/pink_up_walk/step1.png')))
 pink_player_imgs_up[0] = pygame.transform.smoothscale(pink_player_imgs_up[0], (64, 86))
     
-pink_player_imgs_dead = pygame.image.load('Assets/Images/Player/Dead/Deadpink.png')
+pink_player_imgs_dead = pygame.image.load(asset('Assets/Images/Player/Dead/Deadpink.png'))
 
 
 # Purple Player Movements-----------------
 # Player left movement
 purple_player_imgs_left = []
-purple_player_imgs_left.append(pygame.image.load('Assets/Images/Player/Purple/Purple_left_walk/step1.png'))
+purple_player_imgs_left.append(pygame.image.load(asset('Assets/Images/Player/Purple/Purple_left_walk/step1.png')))
 purple_player_imgs_left[0] = pygame.transform.smoothscale(purple_player_imgs_left[0], (64, 86))
 
 
 # Player right movement
 purple_player_imgs_right = []
-purple_player_imgs_right.append(pygame.image.load('Assets/Images/Player/Purple/Purple_right_walk/step1.png'))
+purple_player_imgs_right.append(pygame.image.load(asset('Assets/Images/Player/Purple/Purple_right_walk/step1.png')))
 purple_player_imgs_right[0] = pygame.transform.smoothscale(purple_player_imgs_right[0], (64, 86))
 
 # Player down movement
 purple_player_imgs_down = []
-purple_player_imgs_down.append(pygame.image.load('Assets/Images/Player/Purple/Purple_down_walk/step1.png'))
+purple_player_imgs_down.append(pygame.image.load(asset('Assets/Images/Player/Purple/Purple_down_walk/step1.png')))
 purple_player_imgs_down[0] = pygame.transform.smoothscale(purple_player_imgs_down[0], (64, 86))
 
 # Player Up movement
 purple_player_imgs_up = []
-purple_player_imgs_up.append(pygame.image.load('Assets/Images/Player/Purple/Purple_up_walk/step1.png'))
+purple_player_imgs_up.append(pygame.image.load(asset('Assets/Images/Player/Purple/Purple_up_walk/step1.png')))
 purple_player_imgs_up[0] = pygame.transform.smoothscale(purple_player_imgs_up[0], (64, 86))
     
-purple_player_imgs_dead = pygame.image.load('Assets/Images/Player/Dead/DeadPurple.png')
+purple_player_imgs_dead = pygame.image.load(asset('Assets/Images/Player/Dead/DeadPurple.png'))
 
 
 # White Player Movements-----------------
 # Player left movement
 white_player_imgs_left = []
-white_player_imgs_left.append(pygame.image.load('Assets/Images/Player/White/White_left_walk/step1.png'))
+white_player_imgs_left.append(pygame.image.load(asset('Assets/Images/Player/White/White_left_walk/step1.png')))
 white_player_imgs_left[0] = pygame.transform.smoothscale(white_player_imgs_left[0], (64, 86))
 
 
 # Player right movement
 white_player_imgs_right = []
-white_player_imgs_right.append(pygame.image.load('Assets/Images/Player/White/White_right_walk/step1.png'))
+white_player_imgs_right.append(pygame.image.load(asset('Assets/Images/Player/White/White_right_walk/step1.png')))
 white_player_imgs_right[0] = pygame.transform.smoothscale(white_player_imgs_right[0], (64, 86))
 
 # Player down movement
 white_player_imgs_down = []
-white_player_imgs_down.append(pygame.image.load('Assets/Images/Player/White/White_down_walk/step1.png'))
+white_player_imgs_down.append(pygame.image.load(asset('Assets/Images/Player/White/White_down_walk/step1.png')))
 white_player_imgs_down[0] = pygame.transform.smoothscale(white_player_imgs_down[0], (64, 86))
 
 # Player Up movement
 white_player_imgs_up = []
-white_player_imgs_up.append(pygame.image.load('Assets/Images/Player/White/White_up_walk/step1.png'))
+white_player_imgs_up.append(pygame.image.load(asset('Assets/Images/Player/White/White_up_walk/step1.png')))
 white_player_imgs_up[0] = pygame.transform.smoothscale(white_player_imgs_up[0], (64, 86))
     
-white_player_imgs_dead = pygame.image.load('Assets/Images/Player/Dead/DeadWhite.png')
+white_player_imgs_dead = pygame.image.load(asset('Assets/Images/Player/Dead/DeadWhite.png'))
 
 # PLAYER SPRITE REGISTRY ------------------------------
 # One lookup table for every colour, so game code can ask for

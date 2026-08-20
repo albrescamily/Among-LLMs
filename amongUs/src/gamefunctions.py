@@ -1,4 +1,6 @@
 import pygame as pg
+
+from paths import asset
 from settings import *
 
 
@@ -27,56 +29,56 @@ class GameFunctions:
     # This function load all images that will be used for glowing objects
     def load_image_data(self):
         # GLOW OBJECT IMAGES LOADING HERE
-        self.cafeteria_comp_img = pg.image.load("Assets/Images/Items/cafeteria_comp.png").convert_alpha()
+        self.cafeteria_comp_img = pg.image.load(asset("Assets/Images/Items/cafeteria_comp.png")).convert_alpha()
         self.cafeteria_comp_highlighted_img = pg.image.load(
-            "Assets/Images/Items/cafeteria_comp_highlight.png").convert_alpha()
-        self.emergency_button_img = pg.image.load("Assets/Images/Items/emergency_button.png").convert_alpha()
+            asset("Assets/Images/Items/cafeteria_comp_highlight.png")).convert_alpha()
+        self.emergency_button_img = pg.image.load(asset("Assets/Images/Items/emergency_button.png")).convert_alpha()
         self.emergency_button_highlighted_img = pg.image.load(
-            "Assets/Images/Items/emergency_button_highlight.png").convert_alpha()
-        self.nav_img = pg.image.load("Assets/Images/Items/nav.png").convert_alpha()
-        self.nav_highlighted_img = pg.image.load("Assets/Images/Items/nav_highlight.png").convert_alpha()
-        self.reactor_btn_img = pg.image.load("Assets/Images/Items/reactor_btn.png").convert_alpha()
-        self.reactor_highlight_btn_img = pg.image.load("Assets/Images/Items/reactor_btn_highlight.png").convert_alpha()
-        self.lower_engine_img = pg.image.load("Assets/Images/Items/lower_engine.png").convert_alpha()
+            asset("Assets/Images/Items/emergency_button_highlight.png")).convert_alpha()
+        self.nav_img = pg.image.load(asset("Assets/Images/Items/nav.png")).convert_alpha()
+        self.nav_highlighted_img = pg.image.load(asset("Assets/Images/Items/nav_highlight.png")).convert_alpha()
+        self.reactor_btn_img = pg.image.load(asset("Assets/Images/Items/reactor_btn.png")).convert_alpha()
+        self.reactor_highlight_btn_img = pg.image.load(asset("Assets/Images/Items/reactor_btn_highlight.png")).convert_alpha()
+        self.lower_engine_img = pg.image.load(asset("Assets/Images/Items/lower_engine.png")).convert_alpha()
         self.lower_highlight_engine_img = pg.image.load(
-            "Assets/Images/Items/lower_engine_highlight.png").convert_alpha()
-        self.upper_engine_img = pg.image.load("Assets/Images/Items/upper_engine.png").convert_alpha()
+            asset("Assets/Images/Items/lower_engine_highlight.png")).convert_alpha()
+        self.upper_engine_img = pg.image.load(asset("Assets/Images/Items/upper_engine.png")).convert_alpha()
         self.upper_engine_highlight_img = pg.image.load(
-            "Assets/Images/Items/upper_engine_highlight.png").convert_alpha()
-        self.navigation_img = pg.image.load("Assets/Images/Items/navigation.png").convert_alpha()
-        self.navigation_highlight_img = pg.image.load("Assets/Images/Items/navigation_highlight.png").convert_alpha()
-        self.generator_btn_img = pg.image.load("Assets/Images/Items/generator.png").convert_alpha()
-        self.generator_highlight_btn_img = pg.image.load("Assets/Images/Items/generator_highlight.png").convert_alpha()
-        self.admin_control_btn1_img = pg.image.load("Assets/Images/Items/admin_control1.png").convert_alpha()
+            asset("Assets/Images/Items/upper_engine_highlight.png")).convert_alpha()
+        self.navigation_img = pg.image.load(asset("Assets/Images/Items/navigation.png")).convert_alpha()
+        self.navigation_highlight_img = pg.image.load(asset("Assets/Images/Items/navigation_highlight.png")).convert_alpha()
+        self.generator_btn_img = pg.image.load(asset("Assets/Images/Items/generator.png")).convert_alpha()
+        self.generator_highlight_btn_img = pg.image.load(asset("Assets/Images/Items/generator_highlight.png")).convert_alpha()
+        self.admin_control_btn1_img = pg.image.load(asset("Assets/Images/Items/admin_control1.png")).convert_alpha()
         self.admin_control_highlight_btn1_img = pg.image.load(
-            "Assets/Images/Items/admin_control1_highlight.png").convert_alpha()
-        self.admin_control_btn2_img = pg.image.load("Assets/Images/Items/admin_control2.png").convert_alpha()
+            asset("Assets/Images/Items/admin_control1_highlight.png")).convert_alpha()
+        self.admin_control_btn2_img = pg.image.load(asset("Assets/Images/Items/admin_control2.png")).convert_alpha()
         self.admin_control_highlight_btn2_img = pg.image.load(
-            "Assets/Images/Items/admin_control2_highlight.png").convert_alpha()
-        self.garbage_liver_img = pg.image.load("Assets/Images/Items/garbage_liver.png").convert_alpha()
+            asset("Assets/Images/Items/admin_control2_highlight.png")).convert_alpha()
+        self.garbage_liver_img = pg.image.load(asset("Assets/Images/Items/garbage_liver.png")).convert_alpha()
         self.garbage_liver_highlight_img = pg.image.load(
-            "Assets/Images/Items/garbage_liver_highlight.png").convert_alpha()
-        self.wifi_highlight_img = pg.image.load("Assets/Images/Items/wifi_highlight.png").convert_alpha()
-        self.wifi_img = pg.image.load("Assets/Images/Items/wifi.png").convert_alpha()
-        self.wifi_connected_img = pg.image.load("Assets/Images/Items/wifi_connected.png").convert_alpha()
+            asset("Assets/Images/Items/garbage_liver_highlight.png")).convert_alpha()
+        self.wifi_highlight_img = pg.image.load(asset("Assets/Images/Items/wifi_highlight.png")).convert_alpha()
+        self.wifi_img = pg.image.load(asset("Assets/Images/Items/wifi.png")).convert_alpha()
+        self.wifi_connected_img = pg.image.load(asset("Assets/Images/Items/wifi_connected.png")).convert_alpha()
         self.electricity_wire_switch_highlight_img = pg.image.load(
-            "Assets/Images/Items/electricity_wires_highlight.png").convert_alpha()
-        self.electricity_wire_switch_img = pg.image.load("Assets/Images/Items/electricity_wires.png").convert_alpha()
+            asset("Assets/Images/Items/electricity_wires_highlight.png")).convert_alpha()
+        self.electricity_wire_switch_img = pg.image.load(asset("Assets/Images/Items/electricity_wires.png")).convert_alpha()
         self.electricity_wire_switch_connected_img = pg.image.load(
-            "Assets/Images/Items/electricity_wires_connected.png").convert_alpha()
-        self.view_security_monitor_img = pg.image.load("Assets/Images/Items/security_monitor.png").convert_alpha()
+            asset("Assets/Images/Items/electricity_wires_connected.png")).convert_alpha()
+        self.view_security_monitor_img = pg.image.load(asset("Assets/Images/Items/security_monitor.png")).convert_alpha()
         self.view_security_monitor_highlight_img = pg.image.load(
-            "Assets/Images/Items/security_monitor_highlight.png").convert_alpha()
+            asset("Assets/Images/Items/security_monitor_highlight.png")).convert_alpha()
         self.divert_power_to_reactor_highlight_img = pg.image.load(
-            "Assets/Images/Items/power_divert_highlight.png").convert_alpha()
-        self.divert_power_to_reactor_img = pg.image.load("Assets/Images/Items/power_divert.png").convert_alpha()
+            asset("Assets/Images/Items/power_divert_highlight.png")).convert_alpha()
+        self.divert_power_to_reactor_img = pg.image.load(asset("Assets/Images/Items/power_divert.png")).convert_alpha()
         self.divert_power_to_reactor_diverted_img = pg.image.load(
-            "Assets/Images/Items/power_diverted.png").convert_alpha()
-        self.gas_can_img = pg.image.load("Assets/Images/Items/gas_can.png").convert_alpha()
-        self.gas_can_highlight_img = pg.image.load("Assets/Images/Items/gas_can_highlighted.png").convert_alpha()
-        self.fuel_engine_hoze_img = pg.image.load("Assets/Images/Items/fuel_engine.png").convert_alpha()
+            asset("Assets/Images/Items/power_diverted.png")).convert_alpha()
+        self.gas_can_img = pg.image.load(asset("Assets/Images/Items/gas_can.png")).convert_alpha()
+        self.gas_can_highlight_img = pg.image.load(asset("Assets/Images/Items/gas_can_highlighted.png")).convert_alpha()
+        self.fuel_engine_hoze_img = pg.image.load(asset("Assets/Images/Items/fuel_engine.png")).convert_alpha()
         self.fuel_engine_hoze_highlight_img = pg.image.load(
-            "Assets/Images/Items/fuel_engine_highlighted.png").convert_alpha()
+            asset("Assets/Images/Items/fuel_engine_highlighted.png")).convert_alpha()
 
     def load_ambient_sounds(self):
         """Cafeteria Ambient Sound"""
