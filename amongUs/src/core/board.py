@@ -1,4 +1,4 @@
-﻿import pygame as pg
+import pygame as pg
 import pygame.font
 
 from core.paths import asset

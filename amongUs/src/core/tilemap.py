@@ -1,4 +1,4 @@
-﻿import pygame as pg
+import pygame as pg
 from core.settings import *
 import pytmx
 

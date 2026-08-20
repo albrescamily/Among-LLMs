@@ -1,4 +1,4 @@
-﻿"""Ciclo 1 - the message log and the scheduling queue."""
+"""Ciclo 1 - the message log and the scheduling queue."""
 
 import pytest
 

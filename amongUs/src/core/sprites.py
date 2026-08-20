@@ -1,4 +1,4 @@
-﻿import time
+import time
 import pygame as pg
 from os import path
 import sys

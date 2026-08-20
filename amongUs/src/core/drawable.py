@@ -1,4 +1,4 @@
-﻿from core.settings import *
+from core.settings import *
 import pygame as pg
 
 class Drawable:

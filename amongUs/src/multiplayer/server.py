@@ -1,4 +1,4 @@
-﻿import socket
+import socket
 import asyncore
 import random
 import pickle

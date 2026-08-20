@@ -1,4 +1,4 @@
-﻿"""Ciclo 5 - drawing must never blow up, and must not re-render every frame."""
+"""Ciclo 5 - drawing must never blow up, and must not re-render every frame."""
 
 import pygame as pg
 

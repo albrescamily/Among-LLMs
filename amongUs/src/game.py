@@ -1,4 +1,4 @@
-﻿import random
+import random
 from time import sleep
 import pygame as pg
 import sys
@@ -14,14 +14,13 @@ from pygame import mixer
 from core.menu import Menu
 from core.board import Board
 from core.chat import MeetingChat, BOT_NAMES
-from multiplayer import protocol
-from multiplayer import state_sync
-from multiplayer import world_sync
-from multiplayer.net_client import NetClient
 from core.gamefunctions import GameFunctions
-from core.audio import stop_all_audio
-from core.loop import tick
 from core.tasks import *
+
+# The two run loops live with their mode; Game keeps a delegate for each so the
+# menu still just calls game.runfreeplay() / game.runmultiplayer().
+from singleplayer import freeplay
+from multiplayer import session
 import time, datetime
 import time
 from pygame.locals import *
@@ -986,149 +985,12 @@ class Game:
     # THIS METHOD RUNS THE GAME AND ITS MAIN FUNCTIONS IN LOOP
 
     def runfreeplay(self):
-        # Game main loop - set self.playing = False to end the game
-        # bg music
-        mixer.music.play(-1)
-        mixer.music.set_volume(0.7)
+        freeplay.run(self)
 
-        self.player = Player(self, random.choice(self.player_pos), 0, True, self.player_colour)
-
-        self.playing = True
-        self.player.imposter = True
-
-        for b in self.bots:
-            if b.bot_colour == self.player_colour:
-                b.kill()
-                break
-
-        self.imposter_among_us_status = False
-
-        self.timer_start = pygame.time.get_ticks()
-        self.killcooldown_start = pygame.time.get_ticks()
-        self.sabotagecooldown_start = pygame.time.get_ticks()
-        self.sabotagecriticaltimer_start = pygame.time.get_ticks()
-        self.ventcooldown_start = pygame.time.get_ticks()
-        self.meetingcooldown_start = pygame.time.get_ticks()
-        self.start_ticks = pg.time.get_ticks()
-        self.time_left = 20
-
-        while self.playing:
-            tick(self)
-            self.seconds = (pg.time.get_ticks() - self.start_ticks) / 1000
-            self.sabotage_timer_visible_status = True
-
-            # If missions are completed then win or loss display
-            # For crew mate
-            if self.missions_done == 8:
-                stop_all_audio(self)
-                self.effect_sounds["victory_crew"].play()
-                self.menu.game_over(self.score_list, '')
-                return
-            # For imposter
-            # if imposter kills all the bots or reactor meltdown sabotage timer equals to 0 then imposter wins
-            elif self.bot_count == 0 or (self.sabotagecritical == True and (self.sabotagecriticaltimer - self.sabotagecriticaltimer_start) > 20000):
-                stop_all_audio(self)
-                self.effect_sounds["victory_imposter"].play()
-                self.menu.game_over_imposter(self.score_list, '')
-                return
-            elif self.game_left:
-                stop_all_audio(self)
-                self.effect_sounds["game_left"].play()
-                return
 
     def runmultiplayer(self):
-        # Game main loop - set self.playing = False to end the game
-        # bg music
-        global ge
-        mixer.music.play(-1)
-        mixer.music.set_volume(0.7)
+        session.run(self)
 
-        # remove bots
-        for b in self.bots:
-            b.kill()
-        self.bot_count = 0
-
-        self.killcooldown_start = pygame.time.get_ticks()
-        self.sabotagecooldown_start = pygame.time.get_ticks()
-        self.sabotagecriticaltimer_start = pygame.time.get_ticks()
-        self.ventcooldown_start = pygame.time.get_ticks()
-        self.meetingcooldown_start = pygame.time.get_ticks()
-        self.timer_start = pygame.time.get_ticks()
-
-
-        net = NetClient(self.serveraddress).connect()
-
-        # temp var to store dynamically generated id
-        player_id = 0
-
-        # dictionary that stores all connected players as objects, including local player. uses player id as key
-        self.player = Player(self, random.choice(self.player_pos), 0, True, self.player_colour)
-        self.Players = {}
-
-
-        self.playing = True
-        while self.playing:
-            tick(self)
-
-            if (self.timer - self.timer_start) > 3000:
-                self.imposter_among_us_status = False
-
-            # update player tasks count for server
-            self.player.tasks_completed = self.missions_done
-
-            # whatever the server has sent since the last frame
-            for gameEvent in net.poll():
-                if gameEvent[0] == 'id update':
-                    # the id the server generated for us
-                    player_id = gameEvent[1]
-                if gameEvent[0] == 'player locations':
-                    gameEvent.pop(0)        # drop the tag, the rest is rows
-                    for p in gameEvent:
-                        world_sync.apply_row(self, p, player_id)
-
-            # now after receiving data from the server, time to send data to the server
-            # update local player object in the list
-            self.Players[self.player.player_id] = self.player
-            net.send(state_sync.build_state_packet(self, player_id))
-
-            # check for game end condition
-            if len(self.Players) > 1:
-                # For crew mate
-                for p in self.Players.values():
-                    if p.tasks_completed < 8 and p.imposter == False:
-                        break
-                else:
-                    stop_all_audio(self)
-                    self.effect_sounds["victory_crew"].play()
-                    self.menu.game_over(self.score_list, '')
-                    return
-                # When imposter is ejecting
-                for p in self.Players.values():
-                    if p.alive_status == False and p.imposter == True and self.emergency == False:
-                        stop_all_audio(self)
-                        self.effect_sounds["victory_crew"].play()
-                        # self.effect_sounds["victory_imposter"].play()
-                        self.menu.game_over(self.score_list, '')
-                        return
-
-                # When imposter kills all players
-                for p in self.Players.values():
-                    if p.alive_status == True and p.imposter == False:
-                        break
-                else:
-                    pass
-                    if self.emergency == False and self.kill_victim_anim == False:
-                        stop_all_audio(self)
-                        self.effect_sounds["victory_imposter"].play()
-                        self.menu.game_over_imposter(self.score_list, '')
-                        return
-                # For imposter - Critical Sabotage
-                if self.sabotagecritical == True and (
-                        self.sabotagecriticaltimer - self.sabotagecriticaltimer_start) > 20000:
-                    stop_all_audio(self)
-                    self.effect_sounds["victory_imposter"].play()
-                    self.menu.game_over_imposter(self.score_list, '')
-                    return
 
 
 

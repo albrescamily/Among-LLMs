@@ -1,4 +1,4 @@
-﻿from os import path
+from os import path
 from core.drawable import Drawable
 import pygame as pg
 import sys

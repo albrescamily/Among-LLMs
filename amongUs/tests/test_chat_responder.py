@@ -1,4 +1,4 @@
-﻿"""Ciclo 4 - the responder hook, where an LLM plugs in."""
+"""Ciclo 4 - the responder hook, where an LLM plugs in."""
 
 from core.chat import DEMO_LINES, MeetingChat
 

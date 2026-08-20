@@ -1,4 +1,4 @@
-﻿"""Every module imports cleanly, on its own, from a cold interpreter.
+"""Every module imports cleanly, on its own, from a cold interpreter.
 
 There is no coverage of game, menu, board, tasks, sprites or tilemap, so the
 package moves need *some* guard. This is the cheap one: if a module can be
@@ -43,6 +43,9 @@ MODULES = [
     "multiplayer.net_client",
     "multiplayer.state_sync",
     "multiplayer.world_sync",
+    "multiplayer.session",
+    # single player only
+    "singleplayer.freeplay",
     # the god object, still at the root
     "game",
     # main is deliberately absent: it is a bare `while True:` loop.

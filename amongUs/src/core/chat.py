@@ -1,4 +1,4 @@
-﻿"""Meeting chat.
+"""Meeting chat.
 
 The discussion window that shows up while an emergency meeting (or a body
 report) is running: the message log, the scrollbar, the text input, the

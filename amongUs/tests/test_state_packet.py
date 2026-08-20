@@ -1,4 +1,4 @@
-﻿"""The client packet has to line up with what the server reads.
+"""The client packet has to line up with what the server reads.
 
 Everything is addressed by position, so a field in the wrong slot silently
 corrupts another one. These tests pin the layout against protocol.py, which is

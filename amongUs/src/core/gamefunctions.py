@@ -1,4 +1,4 @@
-﻿import pygame as pg
+import pygame as pg
 
 from core.paths import asset
 from core.settings import *

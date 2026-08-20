@@ -1,4 +1,4 @@
-﻿"""Shared test setup.
+"""Shared test setup.
 
 The game is a pygame app, so the tests need a video/audio driver. Both are set
 to SDL's dummy backends before pygame is imported, which lets the whole suite

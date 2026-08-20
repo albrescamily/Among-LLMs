@@ -1,4 +1,4 @@
-﻿"""Ciclo 2 - typing, editing and sending."""
+"""Ciclo 2 - typing, editing and sending."""
 
 import pygame as pg
 import pytest

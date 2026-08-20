@@ -1,4 +1,4 @@
-﻿"""Ciclo 6 - every bot gets a nickname to show in the chat."""
+"""Ciclo 6 - every bot gets a nickname to show in the chat."""
 
 import pygame as pg
 import pytest

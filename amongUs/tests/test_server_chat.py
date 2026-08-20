@@ -1,4 +1,4 @@
-﻿"""The server has to carry the chat fields through to the other players.
+"""The server has to carry the chat fields through to the other players.
 
 It keeps one snapshot per player and rebroadcasts all of them on every update,
 so the chat line has to survive that round trip untouched.
