@@ -19,6 +19,7 @@ os.environ.setdefault("SDL_AUDIODRIVER", "dummy")
 
 import sys
 from os import path
+from types import SimpleNamespace
 
 import pytest
 
@@ -98,3 +99,150 @@ def make_chat():
 def chat(make_chat):
     """An open chat, which is the state every interaction test needs."""
     return make_chat()
+
+
+class Recorder:
+    """A sound that remembers it was asked to play, and a timer that isn't one."""
+
+    def __init__(self):
+        self.plays = 0
+        self.stops = 0
+
+    def play(self, *args, **kwargs):
+        self.plays += 1
+
+    def stop(self, *args, **kwargs):
+        self.stops += 1
+
+
+class FakeRemotePlayer:
+    """A peer already known to us, for the rows that only update one."""
+
+    def __init__(self, colour="Blue"):
+        self.player_id = 7
+        self.player_colour = colour
+        self.alive_status = True
+        self.pos = pg.math.Vector2(0, 0)
+        self.sync_img = ""
+        self.sync_img_index = ""
+        self.image = None
+        self.image_dead = SENTINEL_DEAD
+        self.left_img_index = self.right_img_index = 0
+        self.up_img_index = self.down_img_index = 0
+        self.tasks_completed = 0
+        self.imposter = False
+        self.voted = None
+        self.got_votes = 0
+        self.emergency_meeting_img_sync = None
+        self.emergency_meeting_img_sync_report = None
+        self.victim_id_report = 0
+        self.got_reported = False
+        # the walk cycles the eval'd animation strings index into
+        self.player_imgs_left = [SENTINEL_LEFT] * 10
+        self.player_imgs_right = [SENTINEL_RIGHT] * 10
+        self.player_imgs_up = [SENTINEL_UP] * 10
+        self.player_imgs_down = [SENTINEL_DOWN] * 10
+
+
+SENTINEL_LEFT = "left-frame"
+SENTINEL_RIGHT = "right-frame"
+SENTINEL_UP = "up-frame"
+SENTINEL_DOWN = "down-frame"
+SENTINEL_DEAD = "dead-frame"
+
+
+class ChatRecorder:
+    """Stands in for MeetingChat, remembering what the wire handed it.
+
+    Every row carries the sender's last chat line, so the handler calls this on
+    essentially every frame -- which makes it the easiest place to catch the
+    chat field indexes drifting.
+    """
+
+    def __init__(self):
+        self.received = []
+
+    def receive_remote(self, player_id, seq, author, colour, text):
+        self.received.append((player_id, seq, author, colour, text))
+
+
+def remote_game(meeting_chat=None, **overrides):
+    """Just enough Game for _apply_remote_row to run against.
+
+    It reads about forty attributes off the game and writes about thirty back,
+    which is a lot -- but every one of them is a plain value, so a namespace
+    does the job and a real Game (every image, every sound) does not.
+    """
+    local = SimpleNamespace(
+        player_id=1, player_colour="Red", alive_status=True,
+        pos=pg.math.Vector2(50, 60), pos_corpse=pg.math.Vector2(0, 0),
+        image=None, image_dead="local-dead", victim_id=0, victim_id_report=0,
+        got_reported=False, got_votes=0, imposter=False,
+        player_imgs_down=["local-down"], eject_img="local-eject",
+        emergency_meeting_img_sync_report="local-report-img",
+    )
+
+    state = dict(
+        player=local, Players={},
+        meeting_chat=meeting_chat if meeting_chat is not None else ChatRecorder(),
+        all_sprites=pg.sprite.LayeredUpdates(), players_server=pg.sprite.Group(),
+        server_players_connected=0, server_player_alive=0,
+        effect_sounds={name: Recorder() for name in
+                       ('dead_body_found', 'emergency_alarm')},
+        kill_victim_anim=False, isdoingTask=False, emergency=False,
+        emerg_meeting_report_status=0, emerg_meeting_button_status=0,
+        emergency_sync=0, emergency_img_sync=None,
+        emergency_img_sync_report=None, emergency_timer_icon_status=True,
+        night_sync=0, night=False, night_reactor_sync=0, night_reactor=False,
+        sabotagecritical=False, sabotagecooldown=0, sabotagecooldown_start=0,
+        sabotagecriticaltimer_start=0,
+        reactor_timer_visible_client_status=False,
+        light_bulb_timer_icon_status=False,
+        time_left_to_light=0, time_left_to_boom_cooldown=0,
+        time_left_to_end_meeting=0, time_left_to_end_meeting_cooldown=0,
+        meeting_timer_cooldown_visible_status=True,
+        eject_sync=0, eject=False, eject_img=None, eject_colour=None,
+        voters=[], player_highest_id=0, invisible_play_count=0,
+        invsible_player_image="invisible", timer_start=0,
+        # pygame needs real event ids to hand to set_timer
+        meeting_timer_event=pg.USEREVENT + 1,
+        meeting_timer_cooldown_event=pg.USEREVENT + 2,
+        light_timer_event=pg.USEREVENT + 3,
+        reactor_timer_cooldown_event=pg.USEREVENT + 4,
+        reactor_timer_event_client=pg.USEREVENT + 5,
+    )
+    state.update(overrides)
+    return SimpleNamespace(**state)
+
+
+@pytest.fixture
+def quiet_row():
+    """A broadcast row that updates a peer and triggers nothing else.
+
+    Every conditional block downstream of the field update is switched off, so
+    a test can turn exactly one of them back on and know what caused what.
+    """
+    def factory(player_id=7, **fields):
+        row = [player_id,                       # 0  who this row is about
+               100, 200,                        # 1,2 position
+               True,                            # 3  alive
+               "self.Players[p[0]].player_imgs_down", "[0]",   # 4,5 sprite
+               1, 2, 3, 4,                      # 6-9 walk-cycle indexes
+               "Blue",                          # 10 colour
+               5,                               # 11 tasks completed
+               0, 0,                            # 12,13 lights / reactor sync
+               999,                             # 14 victim id (not us)
+               False,                           # 15 imposter
+               0,                               # 16 emergency sync
+               "not-a-colour",                  # 17 voted
+               0,                               # 18 votes received
+               None, None,                      # 19,20 meeting images
+               999,                             # 21 reported victim (not us)
+               False,                           # 22 got reported
+               0, None,                         # 23,24 eject sync / image
+               0, "", ""]                       # 25-27 chat seq/author/text
+        for index, value in fields.items():
+            row[int(index)] = value
+        return row
+
+    return factory
