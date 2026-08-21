@@ -18,6 +18,7 @@ from core.gamefunctions import GameFunctions
 from core import kills
 from core import meeting
 from core import task_triggers
+from core import hud
 from core.tasks import *
 
 # The two run loops live with their mode; Game keeps a delegate for each so the
@@ -2185,69 +2186,8 @@ class Game:
         pg.draw.rect(screen_surface, WHITE, outline_rect, 2)
 
     def draw_missions_box(self):
-        self.GAME_FONT = pygame.font.Font(FONT, 18)
-        self.mission_box = pg.Surface((415, 235)).convert_alpha()
-        self.mission_box.fill((0, 0, 0, 96))
-        self.screen.blit(self.mission_box, (10, 45))
-        if not self.night:
-            self.text = self.GAME_FONT.render(self.tasks.turn_on_the_lights_task_title, True, GREEN)
-            self.screen.blit(self.text, (20, 50))
-        else:
-            self.text = self.GAME_FONT.render(self.tasks.turn_on_the_lights_task_title, True, WHITE)
-            self.screen.blit(self.text, (20, 50))
-        if self.reboot_wifi_task_play_count != 1:
-            self.text = self.GAME_FONT.render(self.tasks.reboot_the_wifi_task_title, True, GREEN)
-            self.screen.blit(self.text, (20, 75))
-        else:
-            self.text = self.GAME_FONT.render(self.tasks.reboot_the_wifi_task_title, True, WHITE)
-            self.screen.blit(self.text, (20, 75))
-        if self.garbage_liver_Up_sel_count != 1:
-            self.text = self.GAME_FONT.render(self.tasks.empty_the_garbage_task_title, True, GREEN)
-            self.screen.blit(self.text, (20, 100))
-        else:
-            self.text = self.GAME_FONT.render(self.tasks.empty_the_garbage_task_title, True, WHITE)
-            self.screen.blit(self.text, (20, 100))
-        if self.stabilize_task_play_count != 1:
-            self.text = self.GAME_FONT.render(self.tasks.stabilize_nav_task_title, True, GREEN)
-            self.screen.blit(self.text, (20, 125))
-        else:
-            self.text = self.GAME_FONT.render(self.tasks.stabilize_nav_task_title, True, WHITE)
-            self.screen.blit(self.text, (20, 125))
-        if self.electricity_wire_task_play_count != 1:
-            self.text = self.GAME_FONT.render(self.tasks.fix_electircity_wires_task_title, True, GREEN)
-            self.screen.blit(self.text, (20, 150))
-        else:
-            self.text = self.GAME_FONT.render(self.tasks.fix_electircity_wires_task_title, True, WHITE)
-            self.screen.blit(self.text, (20, 150))
-        if self.divert_power_to_reactor_task_play_count != 1:
-            self.text = self.GAME_FONT.render(self.tasks.divert_power_to_reactor_task_title, True, GREEN)
-            self.screen.blit(self.text, (20, 175))
-        else:
-            self.text = self.GAME_FONT.render(self.tasks.divert_power_to_reactor_task_title, True, WHITE)
-            self.screen.blit(self.text, (20, 175))
-        if self.align_engine_output_task_play_count != 1:
-            self.text = self.GAME_FONT.render(self.tasks.align_engine_output_task_title, True, GREEN)
-            self.screen.blit(self.text, (20, 200))
-        else:
-            self.text = self.GAME_FONT.render(self.tasks.align_engine_output_task_title, True, WHITE)
-            self.screen.blit(self.text, (20, 200))
+        hud.draw_missions_box(self)
 
-        if self.fuel_engine_task_play_count != 1:
-            self.text = self.GAME_FONT.render(self.tasks.fuel_engine_task_title, True, GREEN)
-            self.screen.blit(self.text, (20, 225))
-        else:
-            self.text = self.GAME_FONT.render(self.tasks.fuel_engine_task_title, True, WHITE)
-            self.screen.blit(self.text, (20, 225))
-
-        if self.clear_asteroid_task_play_count != 1:
-            self.text = self.GAME_FONT.render(self.tasks.clear_asteroids_task_title, True, GREEN)
-            self.screen.blit(self.text, (20, 250))
-        else:
-            self.text = self.GAME_FONT.render(self.tasks.clear_asteroids_task_title, True, WHITE)
-            self.screen.blit(self.text, (20, 250))
-
-
-        # HUD Progress Bar - player kills count
 
     def draw_progress_bar_imposter(self, screen_surface, x, y, players_killed):
         color = RED
