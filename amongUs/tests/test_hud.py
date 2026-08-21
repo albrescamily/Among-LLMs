@@ -10,7 +10,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from core.hud import MISSION_ROWS, mission_row_colours
+from core.hud import MISSION_ROWS, mission_row_colours, task_button_visible
 from core.settings import GREEN, WHITE
 
 
@@ -88,6 +88,36 @@ def test_the_rows_are_evenly_spaced_down_the_box():
 
     assert ys == sorted(ys)
     assert len(set(ys)) == len(ys)
+
+
+@pytest.mark.parametrize("show, mode, imposter, expected", [
+    # Written by reading the three copies in draw() before implementing, which
+    # is the only way to notice that the union is not `show and not imposter`:
+    # in Multiplayer the button shows whether or not the flag is set, because
+    # the third copy handled exactly the case the first two missed.
+    (True,  "Freeplay",    False, True),
+    (False, "Freeplay",    False, False),
+    (True,  "Multiplayer", False, True),
+    (False, "Multiplayer", False, True),
+    (True,  "Freeplay",    True,  False),
+    (False, "Freeplay",    True,  False),
+    (True,  "Multiplayer", True,  False),
+    (False, "Multiplayer", True,  False),
+])
+def test_when_the_task_button_shows(show, mode, imposter, expected):
+    game = SimpleNamespace(task_button_show_status=show, gamemode=mode,
+                           player=SimpleNamespace(imposter=imposter))
+
+    assert task_button_visible(game) is expected
+
+
+def test_the_imposter_never_gets_a_task_button():
+    """The one rule all three copies agreed on."""
+    for mode in ("Freeplay", "Multiplayer"):
+        for show in (True, False):
+            game = SimpleNamespace(task_button_show_status=show, gamemode=mode,
+                                   player=SimpleNamespace(imposter=True))
+            assert task_button_visible(game) is False
 
 
 def test_every_title_exists_on_the_task_object():

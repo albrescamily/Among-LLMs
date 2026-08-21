@@ -1099,7 +1099,9 @@ class Game:
         # If reactor is turned on by some crew mate in either game mode then
         # hide and reset the reactor_meltdown_timer, which displayed when imposter sabotages
         # the reactor, and finally stop the reactor_timer_event_client
-        if not self.night_reactor and (self.gamemode == "Multiplayer" or self.gamemode == "Freeplay"):
+        # (the mode check that used to be here was always true: gamemode is
+        #  only ever set to one of those two strings)
+        if not self.night_reactor:
             # if player turns on the reactor to stable it then
             # turn off the red light and hide the meltdown timer and stop
             # the reactor timer event
@@ -1171,23 +1173,10 @@ class Game:
         # Show task buttons only to crew mates
         # If task button show check is true and game mode is Freeplay and player is crewmate then show task button only
       
-        if self.task_button_show_status and self.gamemode == "Freeplay" and not self.player.imposter:
+        if hud.task_button_visible(self):
             self.task_btn = Button(self, "Tasks", 14, 60, 33, 10, 10, "tsk_btn", WHITE, Transparent_Black, None, None,
                                    None, 0)
             self.task_btn.draw_text(self.screen)
-
-        # If task button show check is true and game mode is Multiplayer and player is crewmate then show task button only
-        if self.task_button_show_status and self.gamemode == "Multiplayer" and not self.player.imposter:
-            self.task_btn = Button(self, "Tasks", 14, 60, 33, 10, 10, "tsk_btn", WHITE, Transparent_Black, None, None,
-                                   None, 0)
-            self.task_btn.draw_text(self.screen)
-
-        if self.gamemode == "Multiplayer":
-            if not self.task_button_show_status and not self.player.imposter:
-                self.task_btn = Button(self, "Tasks", 14, 60, 33, 10, 10, "tsk_btn", WHITE, Transparent_Black, None,
-                                       None,
-                                       None, 0)
-                self.task_btn.draw_text(self.screen)
 
         # Mini Map button
         # We show mini map only to alive players not ghosts
@@ -1506,21 +1495,15 @@ class Game:
         """ Bots Left is loaded"""
         # Show bot alive count only to impostors
         # if game mode is Freeplay and player is imposter then show bot-alive
-        if self.bot_count_show_status and self.gamemode == "Freeplay" and self.player.imposter and not self.clear_asteroid_task_window_status:
+        # Freeplay counts bots; multiplayer counts the players on the wire.
+        # The +1 is for whoever created the server -- possibly a bug, kept.
+        if self.bot_count_show_status and self.player.imposter and not self.clear_asteroid_task_window_status:
             self.bot_bg = pg.Surface((105, 33)).convert_alpha()
             self.bot_bg.fill((0, 0, 0))
             self.screen.blit(self.bot_bg, (10, 10))
-            self.board.draw_bots_left(self.bot_count, 14)
-        # if game mode is Multiplayer and player is imposter then show bot-alive
-        if self.bot_count_show_status and self.gamemode == "Multiplayer" and self.player.imposter and not self.clear_asteroid_task_window_status:
-            self.bot_bg = pg.Surface((105, 33)).convert_alpha()
-            self.bot_bg.fill((0, 0, 0))
-            self.screen.blit(self.bot_bg, (10, 10))
-            # player connected +1 for that player who created server, it may be a bug
-            # or something that we are missing, dont know.....
-            # At least 1 player should be alive so that it will imposter
-            # who had killed everybody on ship and won the game
-            self.board.draw_bots_left(self.server_player_alive + 1, 14)
+            left = (self.bot_count if self.gamemode == "Freeplay"
+                    else self.server_player_alive + 1)
+            self.board.draw_bots_left(left, 14)
 
         """ Player Name is loaded"""
         # If player is imposter then its name will be Red in color
@@ -1581,11 +1564,8 @@ class Game:
             self.screen.blit(self.board.draw_reactor_timer_imposter_text(self.time_left_to_boom_cooldown, YELLOW, 30), (WIDTH - 250, HEIGHT - 90))
 
         # Sabotage Reactor Meltdown Timer Client Side Blit in Multiplayer mode - Slight adjustments in Height of timer
-        if self.time_left_to_boom_client != 0 and self.reactor_timer_visible_client_status and self.gamemode == "Multiplayer" and not self.eject and not self.emerg_meeting_button_status:
-            self.screen.blit(self.board.draw_reactor_timer_text(self.time_left_to_boom_client, YELLOW, 18), (WIDTH - 350, HEIGHT - 150))
-
-        # Sabotage Reactor Meltdown Timer Client Side Blit in Freeplay mode - Slight adjustments in Height of timer
-        if self.time_left_to_boom_client != 0 and self.reactor_timer_visible_client_status and self.gamemode == "Freeplay" and not self.eject and not self.emerg_meeting_button_status:
+        # (was written twice, once per game mode, with identical bodies)
+        if self.time_left_to_boom_client != 0 and self.reactor_timer_visible_client_status and not self.eject and not self.emerg_meeting_button_status:
             self.screen.blit(self.board.draw_reactor_timer_text(self.time_left_to_boom_client, YELLOW, 18), (WIDTH - 350, HEIGHT - 150))
 
         " TIMER is loaded---------------------------------------------------- CLOSE HERE"

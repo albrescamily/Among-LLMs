@@ -45,6 +45,20 @@ MISSION_ROWS = (
 )
 
 
+def task_button_visible(game):
+    """Does the crewmate's Tasks button show right now?
+
+    draw() asked this three times, in three overlapping conditions, and the
+    union is not what any one of them looks like: in Multiplayer the button
+    shows whether or not task_button_show_status is set, because the third copy
+    covered exactly the case the first two left out. Only in Freeplay does the
+    flag actually gate it.
+    """
+    if game.player.imposter:
+        return False
+    return bool(game.task_button_show_status) or game.gamemode == "Multiplayer"
+
+
 def mission_row_colours(game):
     """What the checklist says right now: [(text, colour, y), ...].
 
