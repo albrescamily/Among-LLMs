@@ -74,3 +74,41 @@ def test_nothing_debug_is_drawn_with_the_overlay_off(drawn):
 
     assert drawn.lines == []
     assert drawn.rects == []
+
+
+def test_the_debug_grid_is_drawn_once_per_frame(drawn):
+    """It used to be drawn once per sprite.
+
+    Twenty-five sprites meant twenty-five identical grids stacked on top of
+    each other -- invisible, and twenty-five times the work.
+    """
+    render.draw_world(world(sprites=25, debug=True))
+
+    assert len(drawn.lines) == EXPECTED_GRID_LINES
+
+
+def test_the_wall_outlines_are_drawn_once_per_frame(drawn):
+    game = world(sprites=25, walls=4, debug=True)
+
+    render.draw_world(game)
+
+    # 4 walls once each, plus one hit box per sprite -- that one is per-sprite
+    # by nature and stays in the loop
+    assert len(drawn.rects) == 4 + 25
+
+
+def test_the_grid_does_not_depend_on_how_many_sprites_exist(drawn):
+    render.draw_world(world(sprites=1, debug=True))
+    few = len(drawn.lines)
+
+    drawn.lines.clear()
+    render.draw_world(world(sprites=40, debug=True))
+
+    assert len(drawn.lines) == few
+
+
+def test_a_world_with_no_sprites_still_draws_the_debug_overlay(drawn):
+    """It used to draw nothing at all, because the overlay lived in the loop."""
+    render.draw_world(world(sprites=0, debug=True))
+
+    assert len(drawn.lines) == EXPECTED_GRID_LINES
