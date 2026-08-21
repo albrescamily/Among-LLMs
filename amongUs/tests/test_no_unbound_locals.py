@@ -25,6 +25,8 @@ SRC = path.join(path.dirname(path.dirname(path.abspath(__file__))), 'src')
 
 MODULES = [
     "core/audio.py", "core/loop.py", "core/paths.py",
+    "core/kills.py", "core/meeting.py", "core/task_triggers.py", "core/hud.py",
+    "minigames/asteroids.py",
     "singleplayer/freeplay.py",
     "multiplayer/session.py", "multiplayer/state_sync.py",
     "multiplayer/world_sync.py", "multiplayer/net_client.py",

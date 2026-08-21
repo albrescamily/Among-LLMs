@@ -36,6 +36,10 @@ MODULES = [
     "core.menu",
     "core.gamefunctions",
     "core.audio",
+    "core.kills",
+    "core.meeting",
+    "core.task_triggers",
+    "core.hud",
     "core.loop",
     # multiplayer only
     "multiplayer.protocol",
@@ -46,6 +50,8 @@ MODULES = [
     "multiplayer.session",
     # single player only
     "singleplayer.freeplay",
+    # the embedded mini-game
+    "minigames.asteroids",
     # the god object, still at the root
     "game",
     # main is deliberately absent: it is a bare `while True:` loop.

@@ -19,6 +19,7 @@ from core import kills
 from core import meeting
 from core import task_triggers
 from core import hud
+from minigames import asteroids
 from core.tasks import *
 
 # The two run loops live with their mode; Game keeps a delegate for each so the
@@ -560,71 +561,13 @@ class Game:
             if item == 'emerg_btn':
                 self.item_images[item] = pg.transform.scale(self.item_images[item], (250, 250))
 
-        # CLEAR ASTEROID TASK LOADING -----------------------------------------
-        # Asteroid images loading
-        self.asteroid_images = []
-        for image in CLEAR_ASTEROIDS_IMAGES:
-            self.asteroid_images.append(pg.image.load(image).convert_alpha())
-
-
-        # Player image
-        self.starship_image = pg.image.load(asset("Assets/Images/Tasks/Clear Asteroids/starship.png")).convert_alpha()
-        self.starship_image = pg.transform.smoothscale(self.starship_image, (96, 96)).convert_alpha()
-        self.starship_image2 = pg.image.load(asset("Assets/Images/Tasks/Clear Asteroids/starship2.png")).convert_alpha()
-        self.starship_image2 = pg.transform.smoothscale(self.starship_image2, (96, 96)).convert_alpha()
-        self.starship_image3 = pg.image.load(asset("Assets/Images/Tasks/Clear Asteroids/starship3.png")).convert_alpha()
-        self.starship_image3 = pg.transform.smoothscale(self.starship_image3, (96, 96)).convert_alpha()
-        self.starship_image_alignment = "middle"
-        self.starship_posX = 370
-        self.starship_posY = 550
-        self.starship_posX_change = 0
-        self.starship_posY_change = 0
-
-        # Enemy image
-        self.asteroid_image = []
-        self.asteroid_posX = []
-        self.asteroid_posY = []
-        self.asteroid_posY_change = 1
-        self.num_of_asteroids = 10
-        self.increment_in_missions = 1
-        self.asteroid_kill_count = 0
-
-        # randomly select asteroid image from self.asteroid_images array
-        for i in range(self.num_of_asteroids):
-            self.asteroid_image.append(random.choice(self.asteroid_images).convert_alpha())
-            self.asteroid_posX.append(random.randint(50, 1200))
-            self.asteroid_posY.append(random.randint(-200, -100))
-
-        # Bullet
-        # ready - you cant see the bullet on the screen
-        # fire - the bullet moves towards enemy
-        self.bullet_image = pg.image.load(asset("Assets/Images/Tasks/Clear Asteroids/laser.png")).convert_alpha()
-        self.bulletX = 0
-        self.bulletY = 550
-        # self.bulletX_change = 20
-        self.bulletY_change = 30
-        self.bullet_state = "ready"
-
-        # Background image
-        self.clear_asteroid_background = pg.image.load(asset("Assets/Images/Tasks/Clear Asteroids/space3.png")).convert_alpha()
-
-
-        # Background music
-        self.asteroid_bg = mixer.Sound(asset("Assets/Sounds/Clear Asteroids/AMB_Space.wav"))
-        # Bullet Sound
-        self.bullet_sound = mixer.Sound(asset("Assets/Sounds/Clear Asteroids/fire3.mp3"))
-        # Collision Sound
-        self.collision_sound = mixer.Sound(asset("Assets/Sounds/Clear Asteroids/explosion2.mp3"))
+        # The asteroid shooter loads its own assets.
+        asteroids.load(self)
 
         # Score Board
-        self.score_box_img = pg.image.load(asset("Assets/Images/Tasks/Clear Asteroids/score_box.png")).convert_alpha()
-        self.score_box_img = pg.transform.smoothscale(self.score_box_img, (250, 60)).convert_alpha()
-        self.score_value = 30
         self.font = pg.font.Font(asset("Assets/fonts/Hunger Games.ttf"), 24)
-
         # Game Over Text
         self.game_over_font = pg.font.Font(asset("Assets/fonts/Hunger Games.ttf"), 64)
-        # CLEAR ASTEROID TASK LOADING -------------------------------------------
 
 
         # SOUND LOADING __________________________
@@ -758,51 +701,10 @@ class Game:
         self.effect_sounds['start_game'].play()
 
     # CLEAR ASTEROIDS FUNCTIONS
-    def show_score(self, x, y):
-        self.screen.blit(self.score_box_img, (x, y))
-        GAME_FONT = pg.font.Font(FONT, 20)
-        self.score = GAME_FONT.render("Asteroids Left: " + str(self.score_value), True, BLACK)
-        self.screen.blit(self.score, (x+30, y+10))
 
-    def display_starship(self, x, y, alignment):
-        if alignment == "middle":
-            self.screen.blit(self.starship_image, (self.starship_posX, self.starship_posY))
-        if alignment == "left":
-            self.screen.blit(self.starship_image3, (self.starship_posX, self.starship_posY))
-        if alignment == "right":
-            self.screen.blit(self.starship_image2, (self.starship_posX, self.starship_posY))
-    def display_clear_asteroids_window(self):
-        self.screen.blit(self.clear_asteroid_background, (0, 0))
 
-    def display_asteroid(self,x, y, i):
-        self.screen.blit(self.asteroid_image[i], (x, y))
 
-    def fire_bullet(self, x, y):
-        self.bullet_state = "fire"
-        self.screen.blit(self.bullet_image, (x+15,y+10))
 
-    def isCollision(self, asteroid_posX, asteroid_posY, bulletX, bulletY, i):
-        # this is the distance formula
-        asteroid_radius = self.asteroid_image[i].get_rect().center[0]
-        bullet_radius = self.bullet_image.get_rect().center[0]
-        colliding_perimeter = asteroid_radius + bullet_radius
-
-        # Distance formula
-        # 50 is added in order to perfect the horizontal collision
-        # 27 for vertical collision with asteroid
-        # asteroid and bullet
-        distance = math.sqrt((math.pow(asteroid_posX - bulletX + 50, 2)) + (math.pow(asteroid_posY - bulletY + 27, 2)))
-        # this distance is the distance from asteroid center i.e 75 pixels
-        # if bullet is in between this distance then consider it a hit and
-        # destroy the asteroid
-        if distance <= colliding_perimeter and self.bullet_state == "fire":
-            self.asteroid_kill_count += 1
-            return True
-        else:
-            return False
-
-    # THIS METHOD DRAWS EMERGENCY FLASH MESSAGE ON SCREEN
-    """ VOTE """
     def display_meeting_alert(self):
         self.screen.blit(eval(self.emergency_img_sync), (0, 0))
 
@@ -1409,72 +1311,8 @@ class Game:
 
         ''' Yes'''
         # Clear Asteroid Task
-        if self.clear_asteroid_task_window_status and self.isdoingTask:
-            self.task_button_click_status = False
-            self.screen.blit(self.dim_screen, (0, 0))
-            self.display_clear_asteroids_window()
-            if self.clear_asteroid_task_available:
-                self.starship_posX = self.starship_posX + self.starship_posX_change
-                self.starship_posY = self.starship_posY + self.starship_posY_change
-
-                # Set starship movement boundary of screen
-                # horizontal position
-                if self.starship_posX <= 0:
-                    self.starship_posX = 0
-                elif self.starship_posX >= 1185:
-                    self.starship_posX = 1185
-                # vertical position
-                if self.starship_posY <= 0:
-                    self.starship_posY = 0
-                elif self.starship_posY > 550:
-                    self.starship_posY = 550
-
-                # enemy movement
-                for i in range(self.num_of_asteroids):
-                    # Game Over
-                    if self.asteroid_kill_count == 30:
-                        self.effect_sounds['task_completed'].play()
-                        self.clear_asteroid_task_available = False
-                        self.asteroid_bg.fadeout(500)
-                        self.clear_asteroid_task_window_status = False
-                        self.isdoingTask = False
-
-                        if not self.player.imposter:
-                            self.clear_asteroid_task_play_count -= 1
-                            if self.increment_in_missions == 1:
-                                self.missions_done += 1
-                            self.increment_in_missions -= 1
-                        break
-
-                    # Asteroids vertical movement
-                    if not self.paused:
-                        self.asteroid_posY[i] = self.asteroid_posY[i] + self.asteroid_posY_change
-                        if self.asteroid_posY[i] >= 640:
-                            self.asteroid_posX[i] = random.randint(50, 1200)
-                            self.asteroid_posY[i] = random.randint(-200, -150)
-
-                    # Collisions detection
-                    collision = self.isCollision(self.asteroid_posX[i], self.asteroid_posY[i], self.bulletX, self.bulletY, i)
-                    if collision:
-                        self.collision_sound.play()
-                        self.bulletY = 550
-                        self.bullet_state = "ready"
-                        self.score_value = self.score_value - 1
-                        self.asteroid_posX[i] = random.randint(50, 1200)
-                        self.asteroid_posY[i] = random.randint(-200, -150)
-                    self.display_asteroid(self.asteroid_posX[i], self.asteroid_posY[i], i)
-
-                # bullet movement
-                if self.bulletY <= -100:
-                    self.bulletY = 550
-                    self.bullet_state = "ready"
-
-                if self.bullet_state == "fire":
-                    self.fire_bullet(self.bulletX, self.bulletY)
-                    self.bulletY = self.bulletY - self.bulletY_change
-
-                self.display_starship(self.starship_posX, self.starship_posY, self.starship_image_alignment)
-                self.show_score(WIDTH / 2.5, 10)
+        # The asteroid shooter draws and runs itself.
+        asteroids.draw_window(self)
 
         # Clear Asteroid Task Trigger
         keys = pg.key.get_pressed()
@@ -2101,29 +1939,7 @@ class Game:
 
             """ CLEAR ASTEROIDS TASK BUTTONS & EVENTS"""
             # Check if Left /Right /Up /Down key is pressed
-            if self.clear_asteroid_task_available and not self.paused:
-                if event.type == pg.KEYDOWN:
-                    if event.key == pg.K_LEFT:
-                        self.starship_posX_change = -10
-                    if event.key == pg.K_RIGHT:
-                        self.starship_posX_change = 10
-                    #if event.key == pg.K_UP:
-                    #    self.starship_posY_change = -10
-                    #if event.key == pg.K_DOWN:
-                    #    self.starship_posY_change = 10
-
-                    if event.key == pg.K_SPACE and not self.paused:
-                        if self.bullet_state == "ready":
-                            self.bullet_sound.play()
-                            self.bulletX = self.starship_posX + 27
-                            self.bulletY = self.starship_posY - 20
-                            self.fire_bullet(self.bulletX, self.bulletY)
-
-                if event.type == pg.KEYUP:
-                    if event.key == pg.K_LEFT or event.key == pg.K_RIGHT:
-                        self.starship_posX_change = 0
-                    if event.key == pg.K_UP or event.key == pg.K_DOWN:
-                        self.starship_posY_change = 0
+            asteroids.handle_event(self, event)
 
 
 
