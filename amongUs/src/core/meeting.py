@@ -29,11 +29,16 @@ ALERT_MS = 1500
 # How long a meeting lasts once the voting window is up.
 MEETING_MS = 30000
 
-VOTE_TICKS = ("emerg_vote_red_checkbox_tick_status",
-              "emerg_vote_orange_checkbox_tick_status",
-              "emerg_vote_green_checkbox_tick_status",
-              "emerg_vote_yellow_checkbox_tick_status",
-              "emerg_vote_blue_checkbox_tick_status")
+# (the button on the voting screen, the vote it casts, the tick it shows)
+VOTE_CHECKBOXES = (
+    ("emerg_red_checkbox", "Red", "emerg_vote_red_checkbox_tick_status"),
+    ("emerg_orange_checkbox", "Orange", "emerg_vote_orange_checkbox_tick_status"),
+    ("emerg_green_checkbox", "Green", "emerg_vote_green_checkbox_tick_status"),
+    ("emerg_yellow_checkbox", "Yellow", "emerg_vote_yellow_checkbox_tick_status"),
+    ("emerg_blue_checkbox", "Blue", "emerg_vote_blue_checkbox_tick_status"),
+)
+
+VOTE_TICKS = tuple(tick for _button, _colour, tick in VOTE_CHECKBOXES)
 
 MeetingFlow = namedtuple("MeetingFlow", "status alert img_sync clears_task_button")
 
@@ -51,6 +56,30 @@ REPORT_FLOW = MeetingFlow(
     alert="display_meeting_alert_report",
     img_sync="emergency_img_sync_report",
     clears_task_button=False)
+
+
+def handle_vote_click(game, pos):
+    """Cast a vote, if the click landed on a checkbox. True if it did.
+
+    A player votes once: with a vote already cast, the click is swallowed and
+    the ticks are left alone. (The original also carried a commented-out
+    unvote branch for each colour; it never ran and has not been kept.)
+    """
+    hit = None
+    for button, colour, _tick in VOTE_CHECKBOXES:
+        if getattr(game, button).click(pos):
+            hit = colour
+            break
+
+    if hit is not None and game.player.voted is None:
+        game.player.voted = hit
+        for _button, colour, tick in VOTE_CHECKBOXES:
+            setattr(game, tick, colour == hit)
+
+    # NOTE: the sound is on the click, not on the vote -- a miss inside the
+    # voting screen plays it too. That is how it was.
+    game.effect_sounds['vote_sound'].play()
+    return hit is not None
 
 
 def draw_meeting(game, flow):

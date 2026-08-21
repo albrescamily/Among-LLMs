@@ -2069,63 +2069,7 @@ class Game:
             """ EMERGENCY MEETING & VOTING BUTTONS & EVENTS"""
             if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not self.paused and (
                     self.emerg_meeting_button_status or self.emerg_meeting_report_status) and self.emergency == True and self.player.alive_status == True:
-                pos = pg.mouse.get_pos()
-                if self.emerg_red_checkbox.click(pos):
-                    if self.player.voted == None:
-                        self.player.voted = "Red"
-                        self.emerg_vote_red_checkbox_tick_status = True
-                        self.emerg_vote_orange_checkbox_tick_status = False
-                        self.emerg_vote_green_checkbox_tick_status = False
-                        self.emerg_vote_yellow_checkbox_tick_status = False
-                        self.emerg_vote_blue_checkbox_tick_status = False
-                    #else:
-                    #    self.player.voted = None
-                    #    self.emerg_vote_red_checkbox_tick_status = False
-                elif self.emerg_orange_checkbox.click(pos):
-                    if self.player.voted == None:
-                        self.player.voted = "Orange"
-                        self.emerg_vote_red_checkbox_tick_status = False
-                        self.emerg_vote_orange_checkbox_tick_status = True
-                        self.emerg_vote_green_checkbox_tick_status = False
-                        self.emerg_vote_yellow_checkbox_tick_status = False
-                        self.emerg_vote_blue_checkbox_tick_status = False
-                    #else:
-                    #    self.player.voted = None
-                    #    self.emerg_vote_orange_checkbox_tick_status = False
-                elif self.emerg_green_checkbox.click(pos):
-                    if self.player.voted == None:
-                        self.player.voted = "Green"
-                        self.emerg_vote_red_checkbox_tick_status = False
-                        self.emerg_vote_orange_checkbox_tick_status = False
-                        self.emerg_vote_green_checkbox_tick_status = True
-                        self.emerg_vote_yellow_checkbox_tick_status = False
-                        self.emerg_vote_blue_checkbox_tick_status = False
-                    #else:
-                    #    self.player.voted = None
-                    #    self.emerg_vote_green_checkbox_tick_status = False
-                elif self.emerg_yellow_checkbox.click(pos):
-                    if self.player.voted == None:
-                        self.player.voted = "Yellow"
-                        self.emerg_vote_red_checkbox_tick_status = False
-                        self.emerg_vote_orange_checkbox_tick_status = False
-                        self.emerg_vote_green_checkbox_tick_status = False
-                        self.emerg_vote_yellow_checkbox_tick_status = True
-                        self.emerg_vote_blue_checkbox_tick_status = False
-                    #else:
-                    #    self.player.voted = None
-                    #    self.emerg_vote_yellow_checkbox_tick_status = False
-                elif self.emerg_blue_checkbox.click(pos):
-                    if self.player.voted == None:
-                        self.player.voted = "Blue"
-                        self.emerg_vote_red_checkbox_tick_status = False
-                        self.emerg_vote_orange_checkbox_tick_status = False
-                        self.emerg_vote_green_checkbox_tick_status = False
-                        self.emerg_vote_yellow_checkbox_tick_status = False
-                        self.emerg_vote_blue_checkbox_tick_status = True
-                    #else:
-                    #    self.player.voted = None
-                    #    self.emerg_vote_blue_checkbox_tick_status = False
-                self.effect_sounds['vote_sound'].play()
+                meeting.handle_vote_click(self, pg.mouse.get_pos())
 
             """ ELECTRIC WIRES TASK BUTTONS & EVENTS"""
             if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not self.paused and self.electricity_wire_window_status:
