@@ -43,8 +43,6 @@ class Game:
         self.game_folder = ROOT
         # 2nd parameter is folder location
         self.img_folder = path.join(self.game_folder, 'Assets/Images')
-        self.walls_img_folder = path.join(self.game_folder, 'Assets/Images/Walls')
-        self.player_img_folder = path.join(self.game_folder, 'Assets/Images/Player')
         self.Environment_folder = path.join(self.game_folder, 'Assets/Images/Environment')
         self.map_folder = path.join(self.game_folder, 'Assets/Maps')
         self.items_img_folder = path.join(self.game_folder, 'Assets/Images/Items')
@@ -52,7 +50,6 @@ class Game:
         self.sound_folder = path.join(self.game_folder, 'Assets/Sounds')
         self.font_folder = path.join(self.game_folder, 'Assets/Fonts')
         self.playing = False
-        self.sound_playing = False
         self.game_left = False
         self.screen.get_height()
         self.invisible_play_count = 0
@@ -88,12 +85,6 @@ class Game:
 
 
 
-        self.sabotage_timer_visible_status = False
-        self.kill_timer_visible_status = False
-        self.reactor_timer_cooldown_visible_status = False
-        self.reactor_timer_visible_client_status = False
-        self.meeting_timer_visible_status = False
-        self.meeting_timer_cooldown_visible_status = False
 
         self.gamemode = None
         self.sabotagecritical = False
@@ -125,13 +116,7 @@ class Game:
         self.mini_map_img = pg.transform.smoothscale(self.mini_map_img,
                                                      (int(3 * (5792 / 15)), int(3 * (3168 / 15)))).convert_alpha()
         # Admin Room Mini Map
-        self.admin_mini_map = pg.Surface([5792 / 15, 3168 / 15], pg.SRCALPHA, 32).convert_alpha()
-        self.admin_mini_map = pg.transform.scale(self.admin_mini_map,
-                                                 (int(3 * (5792 / 15)), int(3 * (3168 / 15)))).convert_alpha()
-        self.admin_mini_map_img = pg.image.load(path.join(self.map_folder, 'mini_map3.png')).convert_alpha()
         # 57292 = width of main map image, 3168 = height of main map image
-        self.admin_mini_map_img = pg.transform.smoothscale(self.admin_mini_map_img,
-                                                           (int(3 * (5792 / 15)), int(3 * (3168 / 15)))).convert_alpha()
 
         # UI ELEMENTS----------------------------
         # Mini Map Button
@@ -147,7 +132,6 @@ class Game:
         self.pause_quit_button_status = False
         self.emerg_meeting_button_status = False
         self.emerg_meeting_report_status = False
-        self.skip_meeting_button_status = False
         self.imposter_among_us_status = True
         self.kill_victim_anim = False
         self.kill_victim_anim_index = -1
@@ -179,7 +163,6 @@ class Game:
         self.reboot_wifi_window_status = False
         self.reboot_wifi_liver_up_status = False
         self.reboot_wifi_liver_down_status = False
-        self.reboot_wifi_close_btn_status = False
         self.rebooted_wifi_window_status = False
         self.reboot_wifi_liver_sel_count = 1
         self.reboot_wifi_sound_play_count = 1
@@ -204,7 +187,6 @@ class Game:
         self.divert_power_to_reactor_livers_btn_status = False
         self.divert_power_to_reactor_liversUP_status = False
         self.divert_power_to_reactor_close_btn_status = False
-        self.divert_power_to_reactor_livers_btn_sel_count = 1
         self.divert_power_to_reactor_liversUP_sel_count = 1
         self.divert_power_to_reactor_task_play_count = 1
         self.divert_power_to_reactor_sound_play_count = 1
@@ -232,7 +214,6 @@ class Game:
         self.fuel_engine_task_play_count = 1
         self.fuel_engine_fill_btn_sel_count = 1
         self.fuel_engine_sound_play_count = 1
-        self.fuel_engine_sound_play_count2 = 1
         self.fuel_level = 310
 
         # Clear asteroid task
@@ -244,14 +225,12 @@ class Game:
 
         # View Admin and Security Room Monitor Task
         self.view_admin_security_monitor_window_status = False
-        self.view_admin_security_monitor_close_btn_status = False
         self.view_admin_security_monitor_sound_play_count = 1
         # Open Cafeteria Computer
         self.open_cafe_comp_window_status = False
         self.open_cafe_comp_check_btn_status = False
         self.open_cafe_comp_check_pic_status = True
         self.open_cafe_comp_close_btn_status = False
-        self.open_cafe_comp_imposter_select_status = False
         self.open_cafe_comp_sound_play_count = 1
         # Kill timer Icon status
         self.kill_timer_icon_status = True
@@ -545,7 +524,6 @@ class Game:
         """ DIFFERENT BUTTONS FOR DIFFERENT TASKS - CLOSE HERE"""
 
         # Load Fonts
-        self.font = FONT
 
         # Light Effects__________________________
         self.fog = pg.Surface((WIDTH, HEIGHT))
@@ -563,7 +541,6 @@ class Game:
         # Round circle of light when light is off
         self.light_rect = self.light_mask.get_rect()
         # Round circle of light when light is red
-        self.light_rect_reactor = self.light_mask_reactor.get_rect()
         # special flags = pygame flags to draw pixels on other pixels
         self.screen.blit(self.fog, (0, 0), special_flags=pg.BLEND_MULT)
         self.screen.blit(self.fog_reactor, (0, 0), special_flags=pg.BLEND_MULT)
@@ -585,8 +562,6 @@ class Game:
         for image in CLEAR_ASTEROIDS_IMAGES:
             self.asteroid_images.append(pg.image.load(image).convert_alpha())
 
-        self.screen_width = 700
-        self.screen_height = 600
 
         # Player image
         self.starship_image = pg.image.load(asset("Assets/Images/Tasks/Clear Asteroids/starship.png")).convert_alpha()
@@ -605,13 +580,10 @@ class Game:
         self.asteroid_image = []
         self.asteroid_posX = []
         self.asteroid_posY = []
-        self.asteroid_posX_change = 0.5
         self.asteroid_posY_change = 1
         self.num_of_asteroids = 10
-        self.total_num_of_asteroids = 30
         self.increment_in_missions = 1
         self.asteroid_kill_count = 0
-        self.asteroid_mov = "right"
 
         # randomly select asteroid image from self.asteroid_images array
         for i in range(self.num_of_asteroids):
@@ -632,8 +604,6 @@ class Game:
         # Background image
         self.clear_asteroid_background = pg.image.load(asset("Assets/Images/Tasks/Clear Asteroids/space3.png")).convert_alpha()
 
-        self.bgX = 0
-        self.bgY = 0
 
         # Background music
         self.asteroid_bg = mixer.Sound(asset("Assets/Sounds/Clear Asteroids/AMB_Space.wav"))
@@ -949,9 +919,6 @@ class Game:
     def display_vote_tick(self, x, y):
         self.screen.blit(self.vote_tick_img, (x, y))
 
-    def display_deadbody_alert(self):
-        pass
-
     def display_kill_victim_anim(self):
         self.screen.blit(self.kill_victim_anim_img[self.kill_victim_anim_index], (0, 0))
 
@@ -959,24 +926,6 @@ class Game:
         self.screen.blit(self.eject_screen_img, (0, 0))
         self.board.draw_ejected_text(self.eject_colour)
         self.screen.blit(eval(self.eject_img), (x, HEIGHT / 3))
-
-    def draw_health(self):
-        self.name_block = pg.Surface((20, 7))
-        width = int(self.player.rect.width)
-        self.health_bar = pg.Rect(0, 0, width, 7)
-        font = pg.font.Font(FONT, 14)
-        textsurface = font.render("tango", False, BLACK)
-        # rect = text.get_rect()
-        pg.draw.rect(self.player.image, WHITE, self.health_bar)
-        # pg.draw.rect(text, WHITE, rect)
-        # self.screen.blit(textsurface, (self.player.pos.x + 10, self.player.pos.y -10))
-
-
-    def draw_text(self, text, font_name, size, color, x, y, align="topleft"):
-        font = pg.font.Font(font_name, size)
-        text_surface = font.render(text, True, color)
-        text_rect = text_surface.get_rect(**{align: (x, y)})
-        self.map_img.blit(text_surface, text_rect)
 
     def display_imposter_among_us(self):
         self.imposter_among_us_img = pg.transform.smoothscale(self.imposter_among_us_img, (WIDTH, HEIGHT))
@@ -1017,7 +966,6 @@ class Game:
 
         hits = pg.sprite.spritecollide(self.player, self.items, False)
         """Player hits Item--------------------------"""
-        #self.tasks.turn_on_the_lights()
 
         # Make player invisible on key press E (HIDE IN VENT)
         for hit in hits:
@@ -1273,11 +1221,6 @@ class Game:
 
 
 
-    def draw_grid(self):
-        for x in range(0, WIDTH, TILESIZE):
-            pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
-        for y in range(0, HEIGHT, TILESIZE):
-            pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
 
     # THIS METHOD DRAWS BLACK FOG ON SCREEN
     def render_fog(self):
@@ -1301,7 +1244,6 @@ class Game:
 
         """ Player Camera is loaded 1st"""
         self.screen.blit(self.map_img, self.camera.apply_rect(self.map_rect))
-        # self.draw_grid()
 
         """ Sprites / Players / objects/ Items are loaded 2nd """
         # draw all sprites/sprite group on screen
@@ -1871,7 +1813,6 @@ class Game:
                 else:
                     self.gas_can_not_picked_text_visible_status = True
                     self.isdoingTask = True
-                    self.fuel_engine_sound_play_count2 -= 1
         ''' Yes'''
 
 
@@ -1928,7 +1869,6 @@ class Game:
                         self.bulletY = 550
                         self.bullet_state = "ready"
                         self.score_value = self.score_value - 1
-                        self.total_num_of_asteroids -= 1
                         self.asteroid_posX[i] = random.randint(50, 1200)
                         self.asteroid_posY[i] = random.randint(-200, -150)
                     self.display_asteroid(self.asteroid_posX[i], self.asteroid_posY[i], i)
@@ -2077,7 +2017,6 @@ class Game:
         if (x.distance_to(z) <= VIEW_SECURITY_MONITOR_RADIUS and not self.mini_map_button_status) or (y.distance_to(z) <= VIEW_ADMIN_MAP_CONTROL_RADIUS and not self.mini_map_button_status):
             if keys[pg.K_SPACE] and self.view_admin_security_monitor_sound_play_count == 1 and self.player.alive_status:
                 self.effect_sounds['selected'].play()
-                self.view_security_monitor_close_btn_status = True
                 self.view_admin_security_monitor_window_status = True
                 # If task window is open then close it when admin mini map opens
                 self.task_button_click_status = False
@@ -2370,7 +2309,6 @@ class Game:
                     self.stabilize_target_btn1_status = False
                     self.target_center_sel_count -= 1
                     self.missions_done += 1
-                    print(self.missions_done)
             if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not self.paused and self.stabilize_steering_window_status:
                 pos = pg.mouse.get_pos()
                 if self.stabilize_close_btn.click(pos):
@@ -2397,7 +2335,6 @@ class Game:
                     self.garbage_liver_Up_sel_count -= 1
                     self.empty_garbage_task_play_count -= 1
                     self.missions_done += 1
-                    print(self.missions_done)
             if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not self.paused and self.empty_garbage_window_status:
                 pos = pg.mouse.get_pos()
                 if self.empty_garbage_close_btn.click(pos):
@@ -2417,14 +2354,12 @@ class Game:
                 if self.reboot_wifi_liver.click(pos):
                     self.effect_sounds['task_completed'].play()
                     self.effect_sounds['rebooted_wifi_BG'].play(-1)
-                    self.reboot_wifi_close_btn_status = False
                     self.reboot_wifi_liver_up_status = False
                     self.reboot_wifi_liver_down_status = True
                     self.rebooted_wifi_window_status = True
                     self.reboot_wifi_liver_sel_count -= 1
                     self.reboot_wifi_task_play_count -= 1
                     self.missions_done += 1
-                    print(self.missions_done)
             if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not self.paused and self.reboot_wifi_window_status:
                 pos = pg.mouse.get_pos()
                 if self.reboot_wifi_close_btn.click(pos):
@@ -2528,7 +2463,6 @@ class Game:
                     self.missions_done += 1
                     self.electricity_wire_task_play_count -= 1
                     self.electricity_wires_fixed_count += 1
-                    print(self.electricity_wires_fixed_count)
 
             if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not self.paused and self.electricity_wire_window_status:
                 pos = pg.mouse.get_pos()
@@ -2637,7 +2571,6 @@ class Game:
                 if self.fuel_engine_close_btn2.click(pos):
                     self.gas_can_not_picked_text_visible_status = False
                     self.isdoingTask = False
-                    self.fuel_engine_sound_play_count2 += 1
 
             """ CLEAR ASTEROIDS TASK BUTTONS & EVENTS"""
             # Check if Left /Right /Up /Down key is pressed
@@ -2800,8 +2733,3 @@ class Game:
         # 4th parameter is the thickness of border of rectangle
         pg.draw.rect(screen_surface, WHITE, outline_rect, 2)
 
-    def draw_missions_box_imposter(self):
-        self.GAME_FONT = pygame.font.SysFont('Arial', 24)
-        self.mission_box = pg.Surface((412, 140)).convert_alpha()
-        self.mission_box.fill((0, 0, 0, 96))
-        self.screen.blit(self.mission_box, (10, 45))

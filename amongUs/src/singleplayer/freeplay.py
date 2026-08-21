@@ -56,7 +56,6 @@ def run(game):
     while game.playing:
         tick(game)
         game.seconds = (pg.time.get_ticks() - game.start_ticks) / 1000
-        game.sabotage_timer_visible_status = True
 
         # If missions are completed then win or loss display
         # For crew mate

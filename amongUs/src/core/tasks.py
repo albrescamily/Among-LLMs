@@ -27,26 +27,6 @@ class Task():
         self.clear_asteroids_task_title_visibility_status = False
 
 
-    def turn_on_the_lights(self):
-        hits = pg.sprite.spritecollide(self.game.player, self.game.items, False)
-        # hit is the object being collided with player
-        # hit name is the object name in tiled map
-        # Turn on the light through button
-        for hit in hits:
-            if hit.type == 'health' and self.game.night == True:
-                self.game.night = False
-                hit.kill()
-                self.game.effect_sounds['task_completed'].play()
-        for hit in hits:
-            if hit.type == 'weapon' and self.game.night == True:
-                self.game.night = False
-                self.game.effect_sounds['task_completed'].play()
-                hit.kill()
-        for hit in hits:
-            if hit.type == 'weapon' and self.game.night == True:
-                self.game.night = False
-                self.game.effect_sounds['task_completed'].play()
-                hit.kill()
 
 
 
