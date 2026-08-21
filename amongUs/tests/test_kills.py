@@ -133,6 +133,33 @@ def test_the_rule_is_identical_for_every_bot(bot_type):
     assert game.bot_killed == 1
 
 
+@pytest.mark.parametrize("bot_type", BOT_TYPES)
+def test_every_kill_shows_the_kill_timer_icon(bot_type):
+    """It used to show for bot1 only.
+
+    The ten copied blocks set kill_timer_icon_status in the first one and not in
+    the other nine, so whether the cooldown icon appeared depended on which bot
+    you happened to kill. bot1 is not special -- it is whichever tmx object got
+    that name -- so this is a copy-paste that stopped after the first block
+    rather than a rule.
+    """
+    game, bot = kill_game(), fake_bot(bot_type)
+
+    bot_kill(game, bot, keys_with(pg.K_RETURN))
+
+    assert game.kill_timer_icon_status is True
+
+
+@pytest.mark.parametrize("bot_type", BOT_TYPES)
+def test_every_refused_kill_hides_the_kill_timer_icon(bot_type):
+    game, bot = kill_game(since_last_kill=COOLDOWN_MS - 1), fake_bot(bot_type)
+    game.kill_timer_icon_status = True
+
+    bot_kill(game, bot, keys_with(pg.K_RETURN))
+
+    assert game.kill_timer_icon_status is False
+
+
 def test_apply_bot_kills_only_touches_bots_that_are_touching_the_player(monkeypatch):
     game = kill_game()
     near, far = fake_bot("bot1"), fake_bot("bot2")

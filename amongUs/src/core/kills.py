@@ -17,13 +17,7 @@ BOT_TYPES = frozenset("bot%d" % n for n in range(1, 11))
 
 
 def bot_kill(game, bot, keys):
-    """Try to kill one bot. True if it died.
-
-    NOTE: the kill-timer HUD icon is set for bot1 only. That is how the ten
-    copies read -- the two lines are missing from the other nine -- and it is
-    preserved here rather than quietly unified, so that this commit changes no
-    behaviour at all.
-    """
+    """Try to kill one bot. True if it died."""
     if not keys[pg.K_RETURN]:
         return False
     if bot.play_kill_count >= 1 or not bot.alive_status:
@@ -32,8 +26,7 @@ def bot_kill(game, bot, keys):
         return False
 
     if (game.killcooldown - game.killcooldown_start) <= COOLDOWN_MS:
-        if bot.type == "bot1":
-            game.kill_timer_icon_status = False
+        game.kill_timer_icon_status = False
         game.effect_sounds['imposter_kill_cooldown_sound'].play()
         return False
 
@@ -43,8 +36,7 @@ def bot_kill(game, bot, keys):
     bot.play_kill_count += 1
     game.bot_killed += 1
     game.bot_count -= 1
-    if bot.type == "bot1":
-        game.kill_timer_icon_status = True
+    game.kill_timer_icon_status = True
 
     # Show the cooldown counting back down from 15, a second at a time.
     game.time_left_to_kill = 15
