@@ -16,6 +16,7 @@ from core.board import Board
 from core.chat import MeetingChat, BOT_NAMES
 from core.gamefunctions import GameFunctions
 from core import kills
+from core import meeting
 from core.tasks import *
 
 # The two run loops live with their mode; Game keeps a delegate for each so the
@@ -1105,139 +1106,9 @@ class Game:
             pg.time.set_timer(self.reactor_timer_event_client, 0)
 
 
-        if self.emerg_meeting_button_status:
-            self.task_button_click_status = False
-            if self.emergency_meeting_index == 0 and (self.timer - self.timer_start) < 1500:
-                self.screen.blit(self.dim_screen, (0, 0))
-                self.display_meeting_alert()  # this layer is beneath the screen
-            elif self.emergency_meeting_index == 1 and (self.timer - self.timer_start) < MEETING_CHAT_TIME:
-                self.screen.blit(self.dim_screen, (0, 0))
-                if (self.timer - self.timer_start) < MEETING_SPLASH_TIME:
-                    self.display_chat()  # "Discuss!" splash
-                else:
-                    # open() is a no-op once the chat is already up
-                    self.meeting_chat.open(MEETING_CHAT_TIME - MEETING_SPLASH_TIME)
-                    self.meeting_chat.draw(self.screen)
-            elif self.emergency_meeting_index == 2 and (self.timer - self.timer_start) < 30000:
-                self.screen.blit(self.dim_screen, (0, 0))
-                self.display_vote()  # this layer is beneath the screen
-
-                # If voting screen appears then show timer only
-                # however th timer will be running previously when
-                # player calls the meeting
-                self.meeting_timer_visible_status = True
-            else:
-                # When player calls and finish meeting for the 1st time code works
-                # fine but when player calls meeting for the 2nd time, meeting timer
-                # shows before voting window arrives. Trick is to False the meeting_timer_visible_status
-                # when player has not called the meeting.So, If player has not called meeting then
-                # hide the meeting timer if it is showing
-                self.meeting_timer_visible_status = False
-
-                # discussion is over, drop the chat before the voting window
-                self.meeting_chat.close()
-
-                self.emergency_meeting_index += 1
-                self.timer_start = pygame.time.get_ticks()
-
-            if (self.timer - self.timer_start) > 30000:
-                # If meeting timer runs out so end the meeting
-                # then reset and hide the meeting timer
-                self.time_left_to_end_meeting = 30
-                self.meeting_timer_visible_status = False
-                pg.time.set_timer(self.meeting_timer_event, 0)
-
-            if self.emergency_meeting_index > 2:
-                self.emergency_meeting_index = 0
-                self.emerg_meeting_button_status = 0
-                self.emergency = False
-
-                # show meeting cooldown timer only when voting window disappears
-                # and meeting is closed
-                self.meeting_timer_cooldown_visible_status = True
-
-                self.meetingcooldown_start = self.meetingcooldown
-                self.player.pos = vec(random.choice(self.player_pos))
-                if self.player.alive_status == True:
-                    self.player.image = self.player.player_imgs_down[0]
-                    self.player.sync_img = "self.Players[p[0]].player_imgs_down"
-                    self.player.sync_img_index = "[0]"
-                self.emergency_img_sync = None
-                self.player.got_votes = 0
-                self.player.voted = None
-                self.emerg_vote_red_checkbox_tick_status = False
-                self.emerg_vote_orange_checkbox_tick_status = False
-                self.emerg_vote_green_checkbox_tick_status = False
-                self.emerg_vote_yellow_checkbox_tick_status = False
-                self.emerg_vote_blue_checkbox_tick_status = False
-                self.voters = []
-
-        if self.emerg_meeting_report_status:
-            if self.emergency_meeting_index == 0 and (self.timer - self.timer_start) < 1500:
-                self.screen.blit(self.dim_screen, (0, 0))
-                self.display_meeting_alert_report()  # this layer is beneath the screen
-            elif self.emergency_meeting_index == 1 and (self.timer - self.timer_start) < MEETING_CHAT_TIME:
-                self.screen.blit(self.dim_screen, (0, 0))
-                if (self.timer - self.timer_start) < MEETING_SPLASH_TIME:
-                    self.display_chat()  # "Discuss!" splash
-                else:
-                    # open() is a no-op once the chat is already up
-                    self.meeting_chat.open(MEETING_CHAT_TIME - MEETING_SPLASH_TIME)
-                    self.meeting_chat.draw(self.screen)
-            elif self.emergency_meeting_index == 2 and (self.timer - self.timer_start) < 30000:
-                self.screen.blit(self.dim_screen, (0, 0))
-                self.display_vote()  # this layer is beneath the screen
-
-                # If voting screen appears then show timer only
-                # however th timer will be running previously when
-                # player calls the meeting
-                self.meeting_timer_visible_status = True
-
-            else:
-                # When player calls and finish meeting for the 1st time code works
-                # fine but when player calls meeting for the 2nd time, meeting timer
-                # shows before voting window arrives. Trick is to False the meeting_timer_visible_status
-                # when player has not called the meeting.So, If player has not called meeting then
-                # hide the meeting timer if it is showing
-                self.meeting_timer_visible_status = False
-
-                # discussion is over, drop the chat before the voting window
-                self.meeting_chat.close()
-
-                self.emergency_meeting_index += 1
-                self.timer_start = pygame.time.get_ticks()
-
-            if (self.timer - self.timer_start) > 30000:
-                # If meeting timer runs out so end the meeting
-                # then reset and hide the meeting timer
-                self.time_left_to_end_meeting = 30
-                self.meeting_timer_visible_status = False
-                pg.time.set_timer(self.meeting_timer_event, 0)
-
-            if self.emergency_meeting_index > 2:
-                self.emergency_meeting_index = 0
-                self.emerg_meeting_report_status = 0
-                self.emergency = False
-
-                # When voting window disappears then show meeting cooldown timer only
-                # means meeting is now closed
-                self.meeting_timer_cooldown_visible_status = True
-
-                self.meetingcooldown_start = self.meetingcooldown
-                self.player.pos = vec(random.choice(self.player_pos))
-                if self.player.alive_status == True:
-                    self.player.image = self.player.player_imgs_down[0]
-                    self.player.sync_img = "self.Players[p[0]].player_imgs_down"
-                    self.player.sync_img_index = "[0]"
-                self.emergency_img_sync_report = None
-                self.player.got_votes = 0
-                self.player.voted = None
-                self.emerg_vote_red_checkbox_tick_status = False
-                self.emerg_vote_orange_checkbox_tick_status = False
-                self.emerg_vote_green_checkbox_tick_status = False
-                self.emerg_vote_yellow_checkbox_tick_status = False
-                self.emerg_vote_blue_checkbox_tick_status = False
-                self.voters = []
+        # Two ways in, one state machine; see core/meeting.py.
+        meeting.draw_meeting(self, meeting.BUTTON_FLOW)
+        meeting.draw_meeting(self, meeting.REPORT_FLOW)
 
         if self.eject == True:
             if (self.timer - self.timer_start) < 5000:
