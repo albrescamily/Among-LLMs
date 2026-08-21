@@ -16,6 +16,7 @@ This test is what makes forgetting that impossible.
 """
 
 import ast
+import importlib
 import builtins
 from os import path
 
@@ -25,7 +26,7 @@ SRC = path.join(path.dirname(path.dirname(path.abspath(__file__))), 'src')
 
 MODULES = [
     "core/audio.py", "core/loop.py", "core/paths.py",
-    "core/kills.py", "core/meeting.py", "core/task_triggers.py", "core/hud.py", "core/render.py",
+    "core/kills.py", "core/meeting.py", "core/task_triggers.py", "core/hud.py", "core/render.py", "core/task_render.py",
     "minigames/asteroids.py",
     "singleplayer/freeplay.py",
     "multiplayer/session.py", "multiplayer/state_sync.py",
@@ -35,11 +36,29 @@ MODULES = [
 BUILTINS = set(dir(builtins))
 
 
+def _star_import_names(module_name):
+    """What `from <module> import *` actually puts in scope.
+
+    Resolved by importing the module rather than guessed, because two of the
+    modules here star-import core.settings and core.sprites for hundreds of
+    surface and constant names. Treating a star import as opaque would mean
+    either skipping those modules entirely -- losing the check where it matters
+    most -- or flagging every constant they use.
+    """
+    module = importlib.import_module(module_name)
+    exported = getattr(module, "__all__", None)
+    if exported is not None:
+        return set(exported)
+    return {name for name in vars(module) if not name.startswith("_")}
+
+
 def _module_level_names(tree):
     """Everything bound at module scope: imports, assignments, defs, classes."""
     names = set()
     for node in ast.walk(tree):
-        if isinstance(node, (ast.Import, ast.ImportFrom)):
+        if isinstance(node, ast.ImportFrom) and any(a.name == "*" for a in node.names):
+            names |= _star_import_names(node.module)
+        elif isinstance(node, (ast.Import, ast.ImportFrom)):
             for alias in node.names:
                 names.add((alias.asname or alias.name).split(".")[0])
         elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):

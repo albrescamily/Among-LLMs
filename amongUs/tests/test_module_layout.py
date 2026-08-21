@@ -41,6 +41,7 @@ MODULES = [
     "core.task_triggers",
     "core.hud",
     "core.render",
+    "core.task_render",
     "core.loop",
     # multiplayer only
     "multiplayer.protocol",
