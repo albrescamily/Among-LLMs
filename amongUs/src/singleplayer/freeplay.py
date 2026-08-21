@@ -16,9 +16,12 @@ from core.loop import tick
 from core.sprites import Player
 
 
-def run(game):
-    """Play a freeplay round, returning when it is won, lost or left."""
-    # Game main loop - set game.playing = False to end the game
+def start_round(game):
+    """Everything that has to happen before the first frame.
+
+    Split out from run() so the tests can reach the same starting state the
+    game does, rather than approximating it.
+    """
     # bg music
     mixer.music.play(-1)
     mixer.music.set_volume(0.7)
@@ -43,6 +46,12 @@ def run(game):
     game.meetingcooldown_start = pygame.time.get_ticks()
     game.start_ticks = pg.time.get_ticks()
     game.time_left = 20
+
+
+def run(game):
+    """Play a freeplay round, returning when it is won, lost or left."""
+    # Game main loop - set game.playing = False to end the game
+    start_round(game)
 
     while game.playing:
         tick(game)

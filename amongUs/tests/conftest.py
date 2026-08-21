@@ -101,6 +101,58 @@ def chat(make_chat):
     return make_chat()
 
 
+def _seed_loop_clocks(game):
+    """The six clocks core/loop.tick() creates, which Game.__init__ does not.
+
+    This is a real gap, not a test convenience: draw(), update() and events()
+    all read game.timer, game.dt and the four cooldown clocks, but nothing
+    assigns them until the first tick. A Game that has never been ticked raises
+    AttributeError on its first draw. Seeding them here makes the frame tests
+    possible and documents the contract.
+    """
+    now = pg.time.get_ticks()
+    game.dt = 0.0
+    for clock in ("killcooldown", "sabotagecooldown", "sabotagecriticaltimer",
+                  "ventcooldown", "meetingcooldown", "timer"):
+        setattr(game, clock, now)
+
+
+@pytest.fixture(scope="session")
+def booted_game(display):
+    """A real Game, mid-freeplay-round, built once for the whole session.
+
+    Constructing a Game loads every image and sound in the project, so it is
+    shared. Tests that mutate flags should take `frame_game` instead, which
+    restores them afterwards.
+    """
+    from game import Game
+    from singleplayer import freeplay
+
+    game = Game()
+    game.gamemode = "Freeplay"
+    game.player_colour = "Red"
+    game.menu.word = "camily"
+    game.new()
+    freeplay.start_round(game)
+    _seed_loop_clocks(game)
+    return game
+
+
+@pytest.fixture
+def frame_game(booted_game):
+    """booted_game with its flags restored afterwards.
+
+    Shallow on purpose: the attribute dict is snapshotted and put back, so flag
+    changes do not leak between tests. Surfaces and sprite groups mutated by a
+    frame stay mutated -- restoring those would mean rebuilding the Game, which
+    is exactly the cost this fixture exists to avoid.
+    """
+    saved = dict(vars(booted_game))
+    yield booted_game
+    vars(booted_game).clear()
+    vars(booted_game).update(saved)
+
+
 @pytest.fixture
 def lan():
     """A running server plus a pump() that lets it process pending I/O.
