@@ -19,6 +19,7 @@ from core import kills
 from core import meeting
 from core import task_triggers
 from core import hud
+from core import render
 from minigames import asteroids
 from core.tasks import *
 
@@ -970,26 +971,8 @@ class Game:
         pg.display.set_caption("Mutiplayer Game {:.2f}".format(FPS))
         # self.screen.fill(BGCOLOR)
 
-        """ Player Camera is loaded 1st"""
-        self.screen.blit(self.map_img, self.camera.apply_rect(self.map_rect))
-
-        """ Sprites / Players / objects/ Items are loaded 2nd """
-        # draw all sprites/sprite group on screen
-        # Draw rectangle along all sprites/ tiles/ walls/ objects to debug
-        for sprite in self.all_sprites:
-            self.screen.blit(sprite.image, self.camera.apply(sprite))
-            # if debug button is ON (shows rectangle borders on sprite)
-            if self.draw_debug:
-                pg.draw.rect(self.screen, YELLOW, self.camera.apply_rect(sprite.hit_rect), 1)
-            if self.draw_debug:
-                for wall in self.walls:
-                    pg.draw.rect(self.screen, YELLOW, self.camera.apply_rect(wall.rect), 1)
-            if self.draw_debug:
-                for x in range(0, WIDTH, TILESIZE):
-                    pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
-            if self.draw_debug:
-                for y in range(0, HEIGHT, TILESIZE):
-                    pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
+        """ The map, then everything standing on it """
+        render.draw_world(self)
 
         """ Fog is loaded 3rd """
         # Light Effect - Night Mode
