@@ -21,6 +21,7 @@ from core import task_triggers
 from core import hud
 from core import render
 from core import task_render
+from core import input_events
 from minigames import asteroids
 from core.tasks import *
 
@@ -1256,47 +1257,10 @@ class Game:
             if self.meeting_chat.is_open and self.meeting_chat.handle_event(event):
                 continue
 
-            # This is a custom user event which calculates time interval for light ON/OFF
-            if event.type == self.light_timer_event and self.light_timer_visible_status:
-                # decrement the timer that need to be displayed on screen
-                self.time_left_to_light -= 1
-                # stop the event if time_left_to_kill equals 0
-                if self.time_left_to_light == 0:
-                    pygame.time.set_timer(self.light_timer_event, 0)
+            # The six one-second countdowns; see core/input_events.py.
+            if input_events.handle_timers(self, event):
+                continue
 
-            # This is a custom user event which calculates time interval to kill a bot
-            if event.type == self.kill_timer_event and self.kill_timer_visible_status:
-                # decrement the timer that need to be displayed on sceen
-                self.time_left_to_kill -= 1
-                # stop the event if time_left_to_kill equals 0
-                if self.time_left_to_kill == 0:
-                    pygame.time.set_timer(self.kill_timer_event, 0)
-
-            # This is a custom user event for reactor sabotage cooldown
-            if event.type == self.reactor_timer_cooldown_event and self.reactor_timer_cooldown_visible_status:
-                self.time_left_to_boom_cooldown -= 1
-                if self.time_left_to_boom_cooldown == 0:
-                    self.sabotage_timer_icon_status = True
-                    pygame.time.set_timer(self.reactor_timer_cooldown_event, 0)
-
-            # This is a custom user event for reactor sabotage Client side
-            if event.type == self.reactor_timer_event_client and self.reactor_timer_visible_client_status:
-                self.time_left_to_boom_client -= 1
-                if self.time_left_to_boom_client == 0:
-                    pygame.time.set_timer(self.reactor_timer_event_client, 0)
-
-            # This is a custom user event for emergency meeting
-            if event.type == self.meeting_timer_event and self.meeting_timer_visible_status:
-                self.time_left_to_end_meeting -= 1
-                if self.time_left_to_end_meeting == 0:
-                    pygame.time.set_timer(self.meeting_timer_event, 0)
-
-            # This is a custom user event for emergency meeting timer cooldown
-            if event.type == self.meeting_timer_cooldown_event and self.meeting_timer_cooldown_visible_status:
-                self.time_left_to_end_meeting_cooldown -= 1
-                if self.time_left_to_end_meeting_cooldown == 0:
-                    self.emergency_timer_icon_status = True
-                    pygame.time.set_timer(self.meeting_timer_cooldown_event, 0)
 
 
             if event.type == pg.KEYDOWN:

@@ -42,6 +42,7 @@ MODULES = [
     "core.hud",
     "core.render",
     "core.task_render",
+    "core.input_events",
     "core.loop",
     # multiplayer only
     "multiplayer.protocol",
