@@ -17,6 +17,7 @@ from core.chat import MeetingChat, BOT_NAMES
 from core.gamefunctions import GameFunctions
 from core import kills
 from core import meeting
+from core import task_triggers
 from core.tasks import *
 
 # The two run loops live with their mode; Game keeps a delegate for each so the
@@ -1272,20 +1273,8 @@ class Game:
             self.stabilize_target_btn2.draw_Image(self.navigation_screen_img)
             self.stabilize_task_play_count -= 1
 
-        # Stabilize the Navigation Task trigger
-        keys = pg.key.get_pressed()
-        x = pygame.Vector2(5610, 1290)
-        y = pygame.Vector2(self.player.pos.x, self.player.pos.y)
-        if x.distance_to(y) <= STABILIZE_NAV_RADIUS:
-            if keys[pg.K_SPACE] and self.stablize_sound_play_count == 1 and self.stabilize_task_play_count == 1 and not self.player.imposter:
-                self.effect_sounds['selected'].play()
-                self.effect_sounds['stabilize_nav_BG'].play(-1)
-                self.stabilize_steering_button_status = True
-                self.stabilize_steering_window_status = True
-                self.stabilize_target_btn1_status = True
-                self.stabilize_close_btn_status = True
-                self.isdoingTask = True
-                self.stablize_sound_play_count -= 1
+        # Every task you can walk up to and open; see core/task_triggers.py.
+        task_triggers.fire_all(self, pg.key.get_pressed())
         ''' Yes'''
 
         ''' Yes'''
@@ -1304,18 +1293,6 @@ class Game:
                 self.empty_garbage_close_btn.draw_Image(self.screen)
 
         # Empty the garbage Task trigger
-        keys = pg.key.get_pressed()
-        x = pygame.Vector2(3940, 321)
-        y = pygame.Vector2(self.player.pos.x, self.player.pos.y)
-        if x.distance_to(y) <= EMPTY_GARBAGE_RADIUS:
-            if keys[pg.K_SPACE] and self.empty_garbage_sound_play_count == 1 and self.empty_garbage_task_play_count == 1 and not self.player.imposter:
-                self.effect_sounds['selected'].play()
-                self.effect_sounds['emtpy_garbage_BG'].play(-1)
-                self.empty_garbage_window_status = True
-                self.garbage_liver_Up_status = True
-                self.empty_garbage_close_btn_status = True
-                self.isdoingTask = True
-                self.empty_garbage_sound_play_count -= 1
         ''' Yes'''
 
         ''' Yes'''
@@ -1333,17 +1310,6 @@ class Game:
                 self.display_rebooted_wifi_window()
 
         # Reboot Wifi Task trigger
-        keys = pg.key.get_pressed()
-        x = pygame.Vector2(3700, 1554)
-        y = pygame.Vector2(self.player.pos.x, self.player.pos.y)
-        if x.distance_to(y) <= REBOOT_WIFI_RADIUS:
-            if keys[pg.K_SPACE] and self.reboot_wifi_sound_play_count == 1 and self.reboot_wifi_task_play_count == 1 and not self.player.imposter:
-                self.effect_sounds['selected'].play()
-                self.effect_sounds['reboot_wifi_BG'].play(-1)
-                self.reboot_wifi_window_status = True
-                self.reboot_wifi_liver_up_status = True
-                self.isdoingTask = True
-                self.reboot_wifi_sound_play_count -= 1
         ''' Yes'''
 
         ''' Yes'''
@@ -1368,17 +1334,6 @@ class Game:
                     self.display_electricity_pink()
 
         # Fix Electricity Wires Task Trigger
-        x = pygame.Vector2(3166, 1846)
-        y = pygame.Vector2(self.player.pos.x, self.player.pos.y)
-        if x.distance_to(y) <= FIX_ELECTRICITY_WIRES_RADIUS:
-            if keys[pg.K_SPACE] and self.electricity_wire_sound_play_count == 1 and self.electricity_wire_task_play_count == 1 and not self.player.imposter:
-                self.effect_sounds['selected'].play()
-                self.effect_sounds['fix_electric_wires_BG'].play(-1)
-                self.electricity_wire_window_status = True
-                self.electricity_wire_close_btn_status = True
-                self.electricity_wire_btns_visible = True
-                self.electricity_wire_sound_play_count -= 1
-                self.isdoingTask = True
 
         ''' Yes'''
         # Divert Power to Reactor Task
@@ -1395,18 +1350,6 @@ class Game:
 
 
         # Divert Power to Reactor Task Trigger
-        x = pygame.Vector2(1031, 1216)
-        y = pygame.Vector2(self.player.pos.x, self.player.pos.y)
-        if x.distance_to(y) <= DIVERT_POWER_TOP_REACTOR_RADIUS:
-            if keys[pg.K_SPACE] and self.divert_power_to_reactor_sound_play_count == 1 and self.divert_power_to_reactor_task_play_count == 1 and not self.player.imposter:
-                self.effect_sounds['selected'].play()
-                self.effect_sounds['fix_electric_wires_BG'].play(-1)
-                self.divert_power_to_reactor_window_status = True
-                self.divert_power_to_reactor_livers_btn_status = True
-                self.divert_power_to_reactor_close_btn_status = True
-                #self.electricity_wire_btns_visible = True
-                self.divert_power_to_reactor_sound_play_count -= 1
-                self.isdoingTask = True
 
         ''' Yes'''
         # Align Engine Output Task
@@ -1434,19 +1377,6 @@ class Game:
                 self.align_engine_output_close_btn.draw_Image(self.screen)
 
         # Align Engine Output Task Trigger
-        c = pygame.Vector2(1117, 837)
-        d = pygame.Vector2(self.player.pos.x, self.player.pos.y)
-        if c.distance_to(d) <= ALIGN_ENGINE_OUTPUT:
-            if keys[pg.K_SPACE] and self.align_engine_output_task_play_count ==1 and self.align_engine_output_sound_play_count == 1 and not self.player.imposter:
-                self.effect_sounds['selected'].play()
-                self.align_engine_output_window_status = True
-                self.align_engine_liver_status = True
-                self.align_engine_liver_pos_btn1_status = True
-                self.align_engine_liver_pos_btn2_status = True
-                self.align_engine_output_window2_status = True
-                self.align_engine_output_close_btn_status = True
-                self.align_engine_output_sound_play_count -= 1
-                self.isdoingTask = True
         ''' Yes'''
 
 
@@ -1481,32 +1411,9 @@ class Game:
             self.screen.blit(self.text, (450, HEIGHT/2 - 30))
             self.fuel_engine_close_btn2.draw_Image(self.screen)
 
-        # Pick Storage Gas Can Task Trigger
-        n = pygame.Vector2(3056, 2443)
-        m = pygame.Vector2(self.player.pos.x, self.player.pos.y)
-        if n.distance_to(m) <= PICK_STORAGE_GAS_CAN_RADIUS:
-            if keys[pg.K_SPACE] and self.fuel_engine_task_play_count == 1 and self.gas_can_picking_count == 1 and self.gas_can_picking_sound_play_count == 1 and self.player.imposter == False:
-                self.effect_sounds['pick_gas_can'].play()
-                self.is_gas_can_picked = True
-                self.gas_can_not_picked_text_visible_status = False
-                self.gas_can_picking_count -= 1
-                self.gas_can_picking_sound_play_count -= 1
-
-        # Fuel Engine Task Trigger
-        c = pygame.Vector2(1226, 2300)
-        d = pygame.Vector2(self.player.pos.x, self.player.pos.y)
-        if c.distance_to(d) <= FUEL_ENGINE:
-            if keys[pg.K_SPACE] and self.fuel_engine_sound_play_count == 1 and self.fuel_engine_task_play_count == 1 and not self.player.imposter:
-                if self.is_gas_can_picked:
-                    self.effect_sounds['selected'].play()
-                    self.fuel_engine_window_status = True
-                    self.fuel_engine_fill_btn_status = True
-                    self.fuel_engine_close_btn_status = True
-                    self.isdoingTask = True
-                    self.fuel_engine_sound_play_count -= 1
-                else:
-                    self.gas_can_not_picked_text_visible_status = True
-                    self.isdoingTask = True
+        # The gas can and the engine it fuels; neither fits the trigger table.
+        task_triggers.gas_can_trigger(self, pg.key.get_pressed())
+        task_triggers.fuel_engine_trigger(self, pg.key.get_pressed())
         ''' Yes'''
 
 
@@ -1580,6 +1487,7 @@ class Game:
                 self.show_score(WIDTH / 2.5, 10)
 
         # Clear Asteroid Task Trigger
+        keys = pg.key.get_pressed()
         c = pygame.Vector2(4513, 450)
         d = pygame.Vector2(self.player.pos.x, self.player.pos.y)
         if d.distance_to(c) <= DETECT_RADIUS and self.clear_asteroid_sound_play_count == 1 and self.clear_asteroid_task_play_count == 1:
