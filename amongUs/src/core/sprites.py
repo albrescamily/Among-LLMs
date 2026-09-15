@@ -15,11 +15,8 @@ class Player(pg.sprite.Sprite):
             self.groups = game.all_sprites
         else:
             self.groups = game.all_sprites, game.players_server
-        #self.groupsplayer = game.players
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        #self.image = game.player_imgs_left[0]
-        # wtf?
         self.player_id = player_id
         self.alive_status = True
         self.player_islocal = player_islocal
@@ -101,12 +98,9 @@ class Player(pg.sprite.Sprite):
             self.emergency_meeting_img_sync = "green_player_emergency_meeting"
             self.emergency_meeting_img_sync_report = "green_player_emergency_meeting_report"
             self.eject_img = "green_player_imgs_right[9]"
-        #self.image = game.player_imgs_left[0]
         self.rect = self.image.get_rect()
         self.hit_rect = self.rect
         self.vel = vec(0, 0)    # velocity init to zero
-        #self.pos = vec(x, y) * TILESIZE
-        #self.emerg_play_count = 1
         self.pos = vec(pos)
         self.pos_corpse = vec(0, 0)
         self.pos_corpse_img = "self.Players[p[0]].image_dead"
@@ -130,19 +124,16 @@ class Player(pg.sprite.Sprite):
             self.vel = vec(0, 0)
             keys = pg.key.get_pressed()
             # key f + L/R/U/D to allow move once hidden
-            #self.game.invisible_play_count = 0
             if (keys[pg.K_LEFT] and not self.game.isdoingTask or keys[pg.K_a] and not self.game.isdoingTask) and self.game.invisible_play_count == 0:
                 self.now = pg.time.get_ticks()
                 self.image = self.player_imgs_left[self.left_img_index]
                 self.sync_img = "self.Players[p[0]].player_imgs_left"
                 self.sync_img_index = "[p[6]]"
                 self.left_img_index += 1
-                # if image is the last image of array then point it to 0 index means first image i.e restart
                 if self.left_img_index >= len(self.player_imgs_left):
                     self.left_img_index = 0
                 self.vel.x = - PLAYER_SPEED
                 # Below statements are used to add interval between each footstep sound
-                # if last footstep time is greater than Current time
                 if self.now - self.last_played > stepping_rate:
                     self.last_played = self.now
                     random.choice(self.game.foot_sounds['footsteps']).play()
@@ -152,7 +143,6 @@ class Player(pg.sprite.Sprite):
                 self.sync_img = "self.Players[p[0]].player_imgs_right"
                 self.sync_img_index = "[p[7]]"
                 self.right_img_index += 1
-                # if image is the last image of array then point it to 0 index means first image i.e restart
                 if self.right_img_index >= len(self.player_imgs_right):
                     self.right_img_index = 0
                 self.vel.x = PLAYER_SPEED
@@ -165,7 +155,6 @@ class Player(pg.sprite.Sprite):
                 self.sync_img = "self.Players[p[0]].player_imgs_up"
                 self.sync_img_index = "[p[8]]"
                 self.up_img_index += 1
-                # if image is the last image of array then point it to 0 index means first image i.e restart
                 if self.up_img_index >= len(self.player_imgs_up):
                     self.up_img_index = 0
                 self.vel.y = - PLAYER_SPEED
@@ -178,7 +167,6 @@ class Player(pg.sprite.Sprite):
                 self.sync_img = "self.Players[p[0]].player_imgs_down"
                 self.sync_img_index = "[p[9]]"
                 self.down_img_index += 1
-                # if image is the last image of array then point it to 0 index means first image i.e restart
                 if self.down_img_index >= len(self.player_imgs_down):
                     self.down_img_index = 0
                 self.vel.y = PLAYER_SPEED
@@ -193,7 +181,6 @@ class Player(pg.sprite.Sprite):
                 # left intentionally zero because upper loop is incremeting also
                 # and if we also +1 in index it will double the speed of animation
                 self.left_img_index += 0
-                # if image is the last image of array then point it to 0 index means first image i.e restart
                 if self.left_img_index >= len(self.player_imgs_left):
                     self.left_img_index = 0
                 if self.now - self.last_played > stepping_rate:
@@ -208,7 +195,6 @@ class Player(pg.sprite.Sprite):
                 # left intentionally zero because upper loop is incremeting also
                 # and if we also +1 in index it will double the speed of animation
                 self.right_img_index += 0
-                # if image is the last image of array then point it to 0 index means first image i.e restart
                 if self.right_img_index >= len(self.player_imgs_right):
                     self.right_img_index = 0
                 self.vel.x = PLAYER_SPEED
@@ -224,8 +210,7 @@ class Player(pg.sprite.Sprite):
             self.vel = vec(0, 0)
             keys = pg.key.get_pressed()
             # key f + L/R/U/D to allow move once hidden
-            #self.game.invisible_play_count = 0
-            
+
             if keys[pg.K_LEFT] or keys[pg.K_a]:
                 self.vel.x = - PLAYER_SPEED
                 self.image = self.image_ghost_left
@@ -239,9 +224,6 @@ class Player(pg.sprite.Sprite):
             
             if keys[pg.K_DOWN] or keys[pg.K_s]:
                 self.vel.y = PLAYER_SPEED
-            
-            #if keys[pg.K_DOWN] and keys[pg.K_RIGHT] or keys[pg.K_s] and keys[pg.K_d] or keys[pg.K_UP] and keys[pg.K_RIGHT] or keys[pg.K_w] and keys[pg.K_d]:
-            #    self.vel.x = PLAYER_SPEED
 
             if self.vel.x != 0 and self.vel.y != 0:
                 self.vel *= 0.7071
@@ -297,12 +279,6 @@ class Bot(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.alive_status = True
-        # self.image = game.player_left_img
-        """if direction == "Left":
-            self.image = game.player_imgs_left[0]
-        else:
-            self.image = game.player_imgs_right[0]"""
-        
         self.bot_direction = bot_direction
         self.bot_colour = bot_colour
         # nickname this bot speaks under in the meeting chat
@@ -415,29 +391,22 @@ class Button:
         self.text_color = text_color
         self.width = width
         self.height = height
-        #self.image = pg.image.load(path.join(self.game.game_folder, img_addr))
         if img_addr is not None:
             self.image = pg.image.load(path.join(self.game.game_folder, img_addr)).convert_alpha()
             self.image = pg.transform.smoothscale(self.image, (a,b)).convert_alpha()
             self.image.set_alpha(opacity)
-
-            #self.image = pg.image.load(img_addr)
         else:
             self.image = self.game.mini_map_button_img
 
         self.rect = self.image.get_rect()
 
     def draw_text(self, win):
-        # Draw button on screen
         pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
-        # font = pygame.font.SysFont("comicsans", self.text_size)
         font = pg.font.Font(FONT, self.text_size)
         text = font.render(self.text, 1, self.text_color)
         win.blit(text, (self.x + round(self.width / 2) - round(text.get_width() / 2),
                                 self.y + round(self.height / 2) - round(text.get_height() / 2)))
     def draw_Image(self, screen):
-        # Draw button on screen
-        #pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
         screen.blit(self.image, (self.x , self.y ))
 
     def click(self, pos):

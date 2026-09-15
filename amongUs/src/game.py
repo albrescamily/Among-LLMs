@@ -37,15 +37,12 @@ from pygame.locals import *
 class Game:
     def __init__(self):
         pg.init()
-        # pg.mixer.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         self.board = Board(WIDTH, HEIGHT, self)
         self.tasks = Task(self)
-        #self.mini_game = MiniGame(self)
         self.gamefuctions = GameFunctions(self)
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
-        # pg.key.set_repeat(100, 100)
         self.missions_done = 0  # Access this variable, increment everytime a mission is completed
         # root directory is game_folder
         self.game_folder = ROOT
@@ -112,7 +109,6 @@ class Game:
         # Vent Locations
         self.vent = [(3898, 791), (5309, 1144), (5309, 1525), (4513, 1525), (4531, 2459), (3694, 1942), (2220, 1711),
                      (1580, 2407), (1887, 1578), (931, 1626), (802, 1151), (1586, 460), (2121, 1249), (4447, 363)]
-        # Botc olours
         self.bot_colours = ["Black", "Blue", "Brown", "Green", "Orange", "Pink", "Purple", "Red", "White", "Yellow"]
 
         # Mini Map-----
@@ -120,16 +116,12 @@ class Game:
         self.mini_map = pg.Surface([5792 / 15, 3168 / 15], pg.SRCALPHA, 32).convert_alpha()
         self.mini_map = pg.transform.scale(self.mini_map, (int(3 * (5792 / 15)), int(3 * (3168 / 15)))).convert_alpha()
         self.mini_map_img = pg.image.load(path.join(self.map_folder, 'mini_map.png')).convert_alpha()
-        # 57292 = width of main map image, 3168 = height of main map image
         self.mini_map_img = pg.transform.smoothscale(self.mini_map_img,
                                                      (int(3 * (5792 / 15)), int(3 * (3168 / 15)))).convert_alpha()
-        # Admin Room Mini Map
-        # 57292 = width of main map image, 3168 = height of main map image
 
         # UI ELEMENTS----------------------------
         # Mini Map Button
         self.mini_map_button_img = pg.image.load(path.join(self.img_folder, MAP_BUTTON))
-        # self.mini_map_button_img = pg.transform.scale(self.mini_map_button_img, (56, 56))
         self.mini_map_button_status = False
 
         # Tasks checks
@@ -257,17 +249,11 @@ class Game:
     # THIS METHOD LOADS EVERYTHING FROM PROJECT DIRECTORIES
     # load map directory - map.txt and create map
     def load_data(self):
-        # root directory is game_folder
-        # game_folder = path.dirname(__file__)
-        # 2nd parameter is folder location
-
         # Load tiled map from specified directory
         self.map = TiledMap(path.join(self.map_folder, 'map.tmx'))
         self.map_img = self.map.make_map()
-        # make make outer rectangle that will display on screen
         self.map_rect = self.map_img.get_rect()
 
-        # Load Dim screen
         # Dimmed Screen used for Pause Menu/ Emergency meeting/ Dead body reporting
         # can be used with any flash animation or text blitting
         self.dim_screen = pg.Surface(self.screen.get_size()).convert_alpha()
@@ -531,8 +517,6 @@ class Game:
 
         """ DIFFERENT BUTTONS FOR DIFFERENT TASKS - CLOSE HERE"""
 
-        # Load Fonts
-
         # Light Effects__________________________
         self.fog = pg.Surface((WIDTH, HEIGHT))
         self.fog.fill(NIGHT_COLOR)
@@ -609,7 +593,6 @@ class Game:
     def new(self):
         # initialize all variables and do all the setup for a new game
         self.all_sprites = pg.sprite.LayeredUpdates()
-        # self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.items = pg.sprite.Group()
         self.bots = pg.sprite.Group()
@@ -624,11 +607,8 @@ class Game:
 
         for tile_object in self.map.tmxdata.objects:
             obj_center = vec(tile_object.x + tile_object.width / 2, tile_object.y + tile_object.height / 2)
-            # if tile_object.name == 'player':
-            # Spawn obstacles
             if tile_object.name == 'walls':
                 Obstacle(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
-                # Spawn tables
             if tile_object.name == 'tables':
                 Obstacle(self, tile_object.x, tile_object.y, tile_object.width, tile_object.height)
             if tile_object.name == 'props':
@@ -689,16 +669,11 @@ class Game:
                 self.bot10 = Bot(self, tile_object.x, tile_object.y, "Up", "bot10", bot_colours_temp_current)
                 bot_colours_temp.remove(bot_colours_temp_current)
 
-            # if tile object - heath exists in our dictionary
-            # " health " is a key in dictionary " ITEM_IMAGES " which points to " health_pack.png "
             if tile_object.name in ['vent']:
-                # Spawn item if tile is vent
                 Item(self, obj_center, tile_object.name)
             if tile_object.name in ['emerg_btn']:
-                # Spawn item if tile is emergency button
                 Item(self, obj_center, tile_object.name)
 
-        # Spawn camera / Create camera instance
         self.camera = Camera(self.map.width, self.map.height)
         self.draw_debug = False
         self.effect_sounds['start_game'].play()
@@ -889,7 +864,6 @@ class Game:
                         self.effect_sounds['vent'].play()
                         self.invisible_play_count = 1
                         self.ventcooldown_start = pygame.time.get_ticks()
-                        # self.invisibility_sound_playing = True
                     elif self.invisible_play_count == 1 and (self.ventcooldown - self.ventcooldown_start) > 500:
                         self.player.image = self.player.player_imgs_down[0]
                         self.player.sync_img = "self.player.player_imgs_down"
@@ -946,7 +920,6 @@ class Game:
         self.mini_map.blit(self.mini_map_img, (0, 0))
         # mini map player position indicator
         self.player_map_square.fill(self.player.player_colour)
-        """self.mini_map.blit(player_map_square, (2*self.player.rect.x / 13, 2*self.player.rect.y / 13))"""
         self.mini_map.blit(self.player_map_square,
                            (int(3 * (self.player.rect.x / 15)), int(3 * (self.player.rect.y / 15))))
 
@@ -971,7 +944,6 @@ class Game:
     def draw(self):
         FPS = self.clock.get_fps()
         pg.display.set_caption("Mutiplayer Game {:.2f}".format(FPS))
-        # self.screen.fill(BGCOLOR)
 
         """ The map, then everything standing on it """
         render.draw_world(self)
@@ -1006,7 +978,6 @@ class Game:
                 self.display_eject_alert(self.eject_pos)  # this layer is beneath the screen
                 self.eject_pos += 5
             else:
-                # self.emergency_meeting_index = 3
                 self.eject = False
                 self.eject_img = None
                 self.eject_colour = None
@@ -1022,7 +993,6 @@ class Game:
                 keys = pg.key.get_pressed()
                 if keys[pg.K_SPACE]:
                     if (self.meetingcooldown - self.meetingcooldown_start) > 15000:
-                        # self.player.emerg_play_count = 0
                         self.emerg_meeting_button_status = 1
                         self.emergency = True
                         self.effect_sounds['emergency_alarm'].play()
@@ -1208,7 +1178,6 @@ class Game:
             # Mini map is loaded on board surface not screen at specific location on button press
             self.screen.blit(self.dim_screen, (0, 0))
             self.board.draw_adds(self.board.surface, 25, 30, self.mini_map)
-            # self.board.draw_adds(self.board.surface, WIDTH - 340, HEIGHT - 160, self.mini_map)
 
         """ Missions_box is loaded 5th"""
         # If player clicks on task button then show missions box

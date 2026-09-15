@@ -85,11 +85,9 @@ def dispatch(game, event):
 
     if event.type == pg.KEYDOWN:
         # Create a toggle key for debugging collision
-        # if key is H and game is not paused
         if event.key == pg.K_h and not game.paused:
             game.draw_debug = not game.draw_debug
         # Create a toggle key for night fog switch
-        # if key is ctrl and game is not paused
         if (event.key == pg.K_LCTRL or event.key == pg.K_RCTRL) and not game.paused and game.emerg_meeting_button_status == 0:
 
             c = pygame.Vector2(2472, 1721)
@@ -207,9 +205,6 @@ def dispatch(game, event):
         if game.pause_btns.click(pos):
             # If player clicks quit game button
             if game.pause_btns.button_type == "pause_quit_btn":
-                # game.effect_sounds['go_back'].play()
-                # game.quit()
-                # game.pause_quit_button_status = True
                 game.menu.game_left(game.score_list, 'You Left The Game')
                 game.game_left = True
 
@@ -244,7 +239,6 @@ def dispatch(game, event):
             game.effect_sounds['go_back'].play()
             game.open_cafe_comp_window_status = False
             game.open_cafe_comp_close_btn_status = False
-            #game.open_cafe_comp_check_pic_status = False
             game.open_cafe_comp_sound_play_count += 1
             game.isdoingTask = False
 
@@ -388,7 +382,6 @@ def dispatch(game, event):
             game.electricity_wires_yellow_sel_count = 1
             game.electricity_wires_pink_sel_count = 1
             game.electricity_wires_fixed_count = 0
-            # game.missions_done += 1
             game.isdoingTask = False
     """ ELECTRIC WIRES TASK BUTTONS CODE CLOSES HERE"""
 

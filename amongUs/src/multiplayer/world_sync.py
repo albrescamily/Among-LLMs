@@ -44,7 +44,6 @@ def apply_row(self, p, player_id):
     if p[0] not in self.Players.keys():
         # jugaad to fix colour inconsistency
         if p[10] != None:
-            # create new player object
             self.Players[p[0]] = Player(self, (p[1], p[2]), p[0], False, p[10])
             self.server_players_connected += 1
             self.server_player_alive += 1
@@ -53,7 +52,6 @@ def apply_row(self, p, player_id):
     # check if player is already in the list and that player is not local player, since we do not want to receive
     # data for our local player, only send it
     elif p[0] in self.Players.keys() and p[0] != self.player.player_id:
-        # update shit
         self.Players[p[0]].pos = vec(p[1], p[2])
         self.Players[p[0]].alive_status = p[3]
         self.Players[p[0]].sync_img = p[4]
@@ -90,7 +88,6 @@ def apply_row(self, p, player_id):
             self.player.pos_corpse.x = self.player.pos.x
             self.player.pos_corpse.y = self.player.pos.y
             self.kill_victim_anim = True
-            #self.isdoingTask = False
 
 
         # If Dead body of Ghost - victim is reported

@@ -93,7 +93,6 @@ def run(game):
                 if p.alive_status == False and p.imposter == True and game.emergency == False:
                     stop_all_audio(game)
                     game.effect_sounds["victory_crew"].play()
-                    # game.effect_sounds["victory_imposter"].play()
                     game.menu.game_over(game.score_list, '')
                     return
 

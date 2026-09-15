@@ -45,7 +45,6 @@ class Board:
         self.game_over_font = pg.font.Font(FONT, 120)
         self.game_left_font = pg.font.Font(FONT, 75)
 
-    # Draw Main Menu - Intro Menu
     def draw_menu(self, *args):
         self.intro_bg = pg.transform.smoothscale(self.intro_bg, (self.width, self.height))
         self.surface.blit(self.intro_bg, (0, 0), (0, 0, self.width, self.height))
@@ -66,7 +65,6 @@ class Board:
             drawable.draw_on(self.surface)
         pg.display.update()
 
-    # Draw Choose Color/Character Menu
     def draw_choose_character(self, *args):
         self.intro_bg2 = pg.transform.smoothscale(self.intro_bg2, (self.width, self.height))
         self.surface.blit(self.intro_bg2, (0, 0), (0, 0, self.width, self.height))
@@ -89,10 +87,8 @@ class Board:
             drawable.draw_on(self.surface)
         pg.display.update()
 
-    # Draw Gameover Menu
     def draw_game_over(self, scoreboard: list, message: str, *args):
         background = pg.image.load(asset("Assets/Images/Alerts/victory.PNG"))
-        #self.surface.fill(background)
         self.surface.blit(background,(0,0))
         self.draw_text(self.surface, message, self.width / 2, self.height * 0.2, self.game_over_font)
         pos = 0.5
@@ -106,7 +102,6 @@ class Board:
         
     def draw_game_over_imposter(self, scoreboard: list, message: str, *args):
         background = pg.image.load(asset("Assets/Images/Alerts/defeat.PNG"))
-        #self.surface.fill(background)
         self.surface.blit(background,(0,0))
         self.draw_text(self.surface, message, self.width / 2, self.height * 0.2, self.game_over_font)
         pos = 0.5
@@ -131,7 +126,6 @@ class Board:
             drawable.draw_on(self.surface)
         pg.display.update()
 
-    #Draw Input Name field Menu
     def draw_input(self, word: str, x: int, y: int):
         self.intro_bg2 = pg.transform.scale(self.intro_bg2, (self.width, self.height))
         self.surface.blit(self.intro_bg2, (0, 0), (0, 0, self.width, self.height))
@@ -159,13 +153,11 @@ class Board:
         return self.surface.blit(text, rect)
         
     def draw_help(self, i):
-        #self.intro_help[i] = pg.transform.smoothscale(self.intro_help[i], (self.width, self.height))
         self.intro_help[i] = pg.transform.scale(self.intro_help[i], (self.width, self.height))
         self.surface.blit(self.intro_help[i], (0, 0), (0, 0, self.width, self.height))
         pg.display.update()
         
     def draw_credits(self):
-        #self.intro_credits = pg.transform.smoothscale(self.intro_credits, (self.width, self.height))
         self.intro_credits = pg.transform.scale(self.intro_credits, (self.width, self.height))
         self.surface.blit(self.intro_credits, (0, 0), (0, 0, self.width, self.height))
         pg.display.update()
