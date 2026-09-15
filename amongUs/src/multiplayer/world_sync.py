@@ -28,6 +28,23 @@ def apply_row(self, p, player_id):
     over the LAN. Out of scope here; test_world_sync now makes replacing it
     with a lookup table a contained change.)
     """
+    # Our own row, echoed back by the server: the elif chain below skips it
+    # (it never applies our own position/state to ourselves), but two fields
+    # on it are server-authoritative now -- imposter and eject -- and this is
+    # the only place we ever see them, so they need their own check here
+    # rather than living in that chain.
+    if p[0] == self.player.player_id and p[0] in self.Players:
+        self.player.imposter = p[15]
+        if (p[3] == False and self.player.alive_status == True
+                and self.eject_sync_seen < p[23]):
+            self.eject_sync_seen = p[23]
+            self.player.alive_status = False
+            self.player.image = self.invsible_player_image
+            self.eject = True
+            self.eject_img = p[24]
+            self.eject_colour = self.player.player_colour
+            self.timer_start = pygame.time.get_ticks()
+
     # case1, when local player is connected and needs to be appended to the dictionary
     # check if player is not already in the dictionary, and if the player id created dynamically 
     # previously in gameEvent 'id update' matches with the id received right now
@@ -241,30 +258,3 @@ def apply_row(self, p, player_id):
             self.eject_img = p[24]
             self.eject_colour = p[10]
             self.timer_start = pygame.time.get_ticks()
-
-        # Votes and Eject
-        if self.player.player_colour == p[17] and self.player.alive_status == True and p[0] not in self.voters:
-            self.player.got_votes += 1
-            self.voters.append(p[0])
-        # If player got equal or more than specified votes then eject him
-        if self.player.got_votes >= 2 and self.player.alive_status == True and (
-                self.emerg_meeting_report_status == 1 or self.emerg_meeting_button_status == 1) and self.emergency == True:
-            self.player.alive_status = False
-            self.player.got_reported == True
-            self.player.image = self.invsible_player_image
-            self.eject_colour = self.player.player_colour
-            self.eject = True
-            self.eject_sync += 1
-            self.eject_img = self.player.eject_img
-            self.timer_start = pygame.time.get_ticks()
-
-        if p[0] > self.player_highest_id:
-            self.player_highest_id = p[0]
-        if self.player.player_id > self.player_highest_id and self.player.imposter == False:
-            print("yes")
-            self.player_highest_id = self.player.player_id
-            self.player.imposter = True
-        elif self.player.player_id < self.player_highest_id and self.player.imposter == True:
-            print("no")
-            self.player.imposter = False
-

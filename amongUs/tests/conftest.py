@@ -296,7 +296,8 @@ def remote_game(meeting_chat=None, **overrides):
         time_left_to_end_meeting=0, time_left_to_end_meeting_cooldown=0,
         meeting_timer_cooldown_visible_status=True,
         eject_sync=0, eject=False, eject_img=None, eject_colour=None,
-        voters=[], player_highest_id=0, invisible_play_count=0,
+        eject_sync_seen=0,
+        voters=[], invisible_play_count=0,
         invsible_player_image="invisible", timer_start=0,
         # pygame needs real event ids to hand to set_timer
         meeting_timer_event=pg.USEREVENT + 1,

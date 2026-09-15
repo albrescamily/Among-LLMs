@@ -203,28 +203,60 @@ def test_cancelling_the_reactor_clears_the_critical_state(quiet_row):
     assert game.time_left_to_boom_cooldown == 15
 
 
-def test_the_highest_player_id_becomes_the_imposter(quiet_row):
-    # With no server-side role assignment, the clients elect by id: we outrank
-    # every peer we have seen, so the role is ours.
-    game = known_peer(peer_id=3, player_highest_id=0)
-    game.player.player_id = 5
+def test_our_own_row_carries_the_server_assigned_imposter_flag(quiet_row):
+    # Role assignment is the server's call now (multiplayer/server.py:
+    # assign_imposter_if_ready) -- our own echoed row just tells us what it
+    # decided, the same way a peer's row tells us theirs.
+    game = remote_game()
+    apply(game, quiet_row(player_id=1, **{"15": False}), player_id=1)
 
-    apply(game, quiet_row(player_id=3), player_id=5)
+    apply(game, quiet_row(player_id=1, **{"15": True}), player_id=1)
 
-    assert game.player_highest_id == 5
     assert game.player.imposter is True
 
 
-def test_a_higher_peer_id_takes_the_imposter_role_away(quiet_row):
-    # ...and a later-joining peer outranks us, so we hand it back.
-    game = known_peer(peer_id=8, player_highest_id=2)
-    game.player.player_id = 2
-    game.player.imposter = True
+def test_being_ejected_switches_us_to_the_corpse_sprite(quiet_row):
+    # The server marks our own minion dead and bumps its eject_sync once a
+    # vote against our colour reaches a majority; our echoed row is the only
+    # place we learn that happened to us specifically (not a kill).
+    game = remote_game()
+    apply(game, quiet_row(player_id=1, **{"3": True, "23": 0}), player_id=1)
 
-    apply(game, quiet_row(player_id=8), player_id=2)
+    apply(game, quiet_row(player_id=1, **{"3": False, "23": 1, "24": "eject-img"}),
+          player_id=1)
 
-    assert game.player_highest_id == 8
-    assert game.player.imposter is False
+    assert game.player.alive_status is False
+    assert game.eject is True
+    assert game.eject_img == "eject-img"
+    assert game.eject_colour == game.player.player_colour
+
+
+def test_a_repeated_eject_row_does_not_re_trigger(quiet_row):
+    # The row keeps broadcasting eject_sync=1 every frame after the fact;
+    # only the first sighting should fire the animation.
+    game = remote_game()
+    apply(game, quiet_row(player_id=1, **{"3": True, "23": 0}), player_id=1)
+    apply(game, quiet_row(player_id=1, **{"3": False, "23": 1, "24": "eject-img"}),
+          player_id=1)
+    game.eject = False       # as if the animation already finished
+
+    apply(game, quiet_row(player_id=1, **{"3": False, "23": 1, "24": "eject-img"}),
+          player_id=1)
+
+    assert game.eject is False
+
+
+def test_being_killed_does_not_also_look_like_an_eject(quiet_row):
+    # A kill sets alive_status False through the p[14] victim-id path below,
+    # with eject_sync untouched -- the eject block must not fire a second
+    # time for the same death.
+    game = known_peer()
+    game.player.player_id = 1
+
+    apply(game, quiet_row(**{"14": 1}))
+
+    assert game.player.alive_status is False
+    assert game.eject is False
 
 
 def test_being_killed_switches_us_to_the_corpse_sprite(quiet_row):

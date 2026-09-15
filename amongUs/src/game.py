@@ -94,11 +94,14 @@ class Game:
         self.gamemode = None
         self.sabotagecritical = False
         self.serveraddress = ""
-        self.player_highest_id = 0
         self.emergency_img_sync = None
         self.emergency_img_sync_report = None
         self.eject = False
         self.eject_sync = 0
+        # highest eject_sync from our own row we have already acted on -- the
+        # server bumps it once per ejection, our own broadcast repeats it
+        # every frame after that, so this is what stops us re-applying it
+        self.eject_sync_seen = 0
         self.eject_img = None
         self.eject_colour = None
         self.eject_pos = 0
