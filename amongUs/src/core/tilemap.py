@@ -1,5 +1,5 @@
 import pygame as pg
-from settings import *
+from core.settings import *
 import pytmx
 
 
@@ -47,7 +47,6 @@ class Camera:
         self.height = height
 
     def apply(self, entity):
-        # Move rectangle according to camera coordinates are
         return entity.rect.move(self.camera.topleft)
 
     def apply_rect(self, rect):
@@ -64,9 +63,8 @@ class Camera:
         # For right boundary
         x = max(-(self.width - WIDTH), x)
         # For top boundary
-        y = min(0, y)  # checks if y < 0
+        y = min(0, y)
         # For bottom boundary
         y = max(-(self.height - HEIGHT), y)
 
-        # Adjust camera rectangle
         self.camera = pg.Rect(x, y, self.width, self.height)

@@ -1,12 +1,10 @@
 from os import path
-from drawable import Drawable
+from core.drawable import Drawable
 import pygame as pg
+from core import display
 import sys
-from settings import *
+from core.settings import *
 from pygame import mixer
-
-#player_colour = None
-
 
 pg.mixer.init()
 class MenuCursor(Drawable, pg.sprite.Sprite):
@@ -44,7 +42,6 @@ class Menu:
 
     # Menu select cursor position
     def game_intro(self):
-        # If music is already not playing then Play main_menu_music in Main Menu
         if not self.music_playing:
             self.game.effect_sounds['main_menu_music'].play(-1)
             self.music_playing = not self.music_playing
@@ -74,23 +71,10 @@ class Menu:
             quit_game()
 
 
-    # menu option position
-    #def game_options(self):
-    #    self.i = 0.31
-    #    self.set_menu_cursor_limit(0.15, 196, 366, OPTIONS_SPRITE_POS_X, self.game.board.draw_options, self.game_intro)
-    #    if 185 < self.pos_y < 187:
-    #        # controls
-    #        pass
-    #    elif 275 < self.pos_y < 277:
-    #        pass
-    #        # audio
-    #    else:
-    #        self.game_intro()
-    
     def game_help(self):
         i = 0
         while True:
-            pg.display.flip()
+            display.present()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     quit_game()
@@ -110,7 +94,7 @@ class Menu:
         
     def game_credits(self):
         while True:
-            pg.display.flip()
+            display.present()
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE or event.key == pg.K_RETURN:
@@ -124,34 +108,33 @@ class Menu:
         self.i = 0.21
         self.set_menu_cursor_limit(0.13, 200, 500, OPTIONS_SPRITE_POS_X, self.game.board.draw_choose_character, self.game_intro)
 
-        if 100 < self.pos_y < 200:  # when option is Red
+        if 100 < self.pos_y < 200:
              self.game.player_colour = "Red"
              self.game_input()
              return
-        elif 200 < self.pos_y < 300:  # when option is Blue
+        elif 200 < self.pos_y < 300:
              self.game.player_colour = "Blue"
              self.game_input()
              return
-        elif 300 < self.pos_y < 350:  # when option is Orange
+        elif 300 < self.pos_y < 350:
             self.game.player_colour = "Orange"
             self.game_input()
             return
-        elif 350 < self.pos_y < 400:  # when option is Yellow
+        elif 350 < self.pos_y < 400:
             self.game.player_colour = "Yellow"
             self.game_input()
             return
-        elif 400 < self.pos_y < 500:  # when option is Green
+        elif 400 < self.pos_y < 500:
             self.game.player_colour = "Green"
             self.game_input()
             return
         else:   # when return option move step back
             self.game_intro()
 
-    # To input player name
     def game_input(self):
         self.word = ""
         while True:
-            pg.display.flip()
+            display.present()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     quit_game()
@@ -163,9 +146,7 @@ class Menu:
                         self.game.effect_sounds['backspace'].play()
                         self.word = self.word[:-1]
                     elif event.key == pg.K_RETURN:
-                        if len(self.word) > 0:   # if name is not nulls
-                            #self.game.missions_done = 1   # Reset mission count on game completion
-                            #self.game.invisible_play_count = 0
+                        if len(self.word) > 0:
                             if self.game.gamemode == "Freeplay":
                                 # stop main menu music before entering game
                                 self.game.effect_sounds['main_menu_music'].stop()
@@ -183,7 +164,7 @@ class Menu:
     def game_input_address(self):
         word_ip = ""
         while True:
-            pg.display.flip()
+            display.present()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     quit_game()
@@ -195,11 +176,9 @@ class Menu:
                         self.game.effect_sounds['backspace'].play()
                         word_ip = word_ip[:-1]
                     elif event.key == pg.K_RETURN:
-                        if len(word_ip) > 0:   # if IP Address is not null
+                        if len(word_ip) > 0:
                             # stop main menu music before entering game
                             self.game.effect_sounds['main_menu_music'].stop()
-                            #self.game.missions_done = 1   # Reset mission count on game completion
-                            #self.game.invisible_play_count = 0
                             self.game.new()
                             self.game.serveraddress = word_ip
                             self.game.runmultiplayer()
@@ -255,7 +234,6 @@ class Menu:
                             self.game.quit()
                         else:
                             return
-                            #self.game_intro()
 
     def set_menu_cursor_limit(self, i_value, top, bottom, pos, draw, previous, size=50):
         while True:

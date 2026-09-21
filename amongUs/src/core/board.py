@@ -1,17 +1,18 @@
 import pygame as pg
+from core import display
 import pygame.font
 
-from paths import asset
+from core.paths import asset
 
-from settings import *
-from settings import *
+from core.settings import *
+from core.settings import *
 
 
 # Board surface on screen to draw menus
 class Board:
 
     def __init__(self, width: int, height: int, game):
-        self.surface = pg.display.set_mode((width, height), 0, 32)
+        self.surface = display.create_canvas()
         pg.display.set_caption('Among Us')
         self.width = width
         self.height = height
@@ -45,7 +46,6 @@ class Board:
         self.game_over_font = pg.font.Font(FONT, 120)
         self.game_left_font = pg.font.Font(FONT, 75)
 
-    # Draw Main Menu - Intro Menu
     def draw_menu(self, *args):
         self.intro_bg = pg.transform.smoothscale(self.intro_bg, (self.width, self.height))
         self.surface.blit(self.intro_bg, (0, 0), (0, 0, self.width, self.height))
@@ -64,9 +64,8 @@ class Board:
 
         for drawable in args:
             drawable.draw_on(self.surface)
-        pg.display.update()
+        display.present()
 
-    # Draw Choose Color/Character Menu
     def draw_choose_character(self, *args):
         self.intro_bg2 = pg.transform.smoothscale(self.intro_bg2, (self.width, self.height))
         self.surface.blit(self.intro_bg2, (0, 0), (0, 0, self.width, self.height))
@@ -87,12 +86,10 @@ class Board:
 
         for drawable in args:
             drawable.draw_on(self.surface)
-        pg.display.update()
+        display.present()
 
-    # Draw Gameover Menu
     def draw_game_over(self, scoreboard: list, message: str, *args):
         background = pg.image.load(asset("Assets/Images/Alerts/victory.PNG"))
-        #self.surface.fill(background)
         self.surface.blit(background,(0,0))
         self.draw_text(self.surface, message, self.width / 2, self.height * 0.2, self.game_over_font)
         pos = 0.5
@@ -102,11 +99,10 @@ class Board:
             pos += 0.08
         for drawable in args:
             drawable.draw_on(self.surface)
-        pg.display.update()
+        display.present()
         
     def draw_game_over_imposter(self, scoreboard: list, message: str, *args):
         background = pg.image.load(asset("Assets/Images/Alerts/defeat.PNG"))
-        #self.surface.fill(background)
         self.surface.blit(background,(0,0))
         self.draw_text(self.surface, message, self.width / 2, self.height * 0.2, self.game_over_font)
         pos = 0.5
@@ -116,7 +112,7 @@ class Board:
             pos += 0.08
         for drawable in args:
             drawable.draw_on(self.surface)
-        pg.display.update()
+        display.present()
 
     def draw_game_left(self, scoreboard: list, message: str, *args):
         background = (0, 0, 0)
@@ -129,9 +125,8 @@ class Board:
             pos += 0.08
         for drawable in args:
             drawable.draw_on(self.surface)
-        pg.display.update()
+        display.present()
 
-    #Draw Input Name field Menu
     def draw_input(self, word: str, x: int, y: int):
         self.intro_bg2 = pg.transform.scale(self.intro_bg2, (self.width, self.height))
         self.surface.blit(self.intro_bg2, (0, 0), (0, 0, self.width, self.height))
@@ -142,7 +137,7 @@ class Board:
         text = self.menu_font.render("{}".format(word), True, MENU_FONT_COLOR)
         rect = text.get_rect()
         rect.center = x, y
-        pg.display.update()
+        display.present()
         return self.surface.blit(text, rect)
     
     def draw_input_address(self, word: str, x: int, y: int):
@@ -155,20 +150,18 @@ class Board:
         text = self.menu_font.render("{}".format(word), True, MENU_FONT_COLOR)
         rect = text.get_rect()
         rect.center = x, y
-        pg.display.update()
+        display.present()
         return self.surface.blit(text, rect)
         
     def draw_help(self, i):
-        #self.intro_help[i] = pg.transform.smoothscale(self.intro_help[i], (self.width, self.height))
         self.intro_help[i] = pg.transform.scale(self.intro_help[i], (self.width, self.height))
         self.surface.blit(self.intro_help[i], (0, 0), (0, 0, self.width, self.height))
-        pg.display.update()
+        display.present()
         
     def draw_credits(self):
-        #self.intro_credits = pg.transform.smoothscale(self.intro_credits, (self.width, self.height))
         self.intro_credits = pg.transform.scale(self.intro_credits, (self.width, self.height))
         self.surface.blit(self.intro_credits, (0, 0), (0, 0, self.width, self.height))
-        pg.display.update()
+        display.present()
 
     def draw_pause(self):
         self.draw_text(self.surface, "Paused", self.width / 2, self.height / 2, self.title_font)

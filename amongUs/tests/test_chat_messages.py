@@ -2,7 +2,7 @@
 
 import pytest
 
-from chat import MeetingChat
+from core.chat import MeetingChat
 
 
 def test_add_message_appends_and_returns_it(chat):

@@ -1,7 +1,7 @@
 import pygame as pg
 
-from paths import asset
-from settings import *
+from core.paths import asset
+from core.settings import *
 
 
 class GameFunctions:
@@ -23,12 +23,9 @@ class GameFunctions:
         self.weapons_room_sound_play_check = True
         self.bg_music_playing = True
 
-        # Load all images that will be used for glowing objects
         self.load_image_data()
 
-    # This function load all images that will be used for glowing objects
     def load_image_data(self):
-        # GLOW OBJECT IMAGES LOADING HERE
         self.cafeteria_comp_img = pg.image.load(asset("Assets/Images/Items/cafeteria_comp.png")).convert_alpha()
         self.cafeteria_comp_highlighted_img = pg.image.load(
             asset("Assets/Images/Items/cafeteria_comp_highlight.png")).convert_alpha()
@@ -88,13 +85,9 @@ class GameFunctions:
             if self.cafeteria_sound_play_check:
                 self.game.ambient_sounds['cafeteria'].play(-1, -1, 500)
                 self.cafeteria_sound_play_check = False
-                # pg.mixer.music.set_volume(0.5)
-                # pg.mixer.music.pause()
         else:
             self.game.ambient_sounds['cafeteria'].fadeout(1000)
             self.cafeteria_sound_play_check = True
-            # pg.mixer.music.unpause()
-            # pg.mixer.music.set_volume(1)
 
         """Medbay Ambient Sound"""
         i = pygame.Vector2(2338, 1147)
@@ -105,7 +98,6 @@ class GameFunctions:
                 self.medbay_sound_play_check = False
         else:
             self.game.ambient_sounds['medbay_room'].fadeout(1000)
-            # self.ambient_sounds['cafeteria'].stop()
             self.medbay_sound_play_check = True
 
         """Security Room Ambient Sound"""
@@ -118,7 +110,6 @@ class GameFunctions:
 
         else:
             self.game.ambient_sounds['security_room'].fadeout(1500)
-            # self.ambient_sounds['cafeteria'].stop()
             self.security_room_sound_play_check = True
 
         """Reactor Room Ambient Sound"""
@@ -130,7 +121,6 @@ class GameFunctions:
                 self.reactor_room_sound_play_check = False
         else:
             self.game.ambient_sounds['reactor_room'].fadeout(1500)
-            # self.ambient_sounds['cafeteria'].stop()
             self.reactor_room_sound_play_check = True
 
         """Upper Engine Room Ambient Sound"""
@@ -142,7 +132,6 @@ class GameFunctions:
                 self.upper_engine_room_sound_play_check = False
         else:
             self.game.ambient_sounds['u_engine_room'].fadeout(1500)
-            # self.ambient_sounds['cafeteria'].stop()
             self.upper_engine_room_sound_play_check = True
 
         """Lower Engine Room Ambient Sound"""
@@ -164,7 +153,6 @@ class GameFunctions:
             # in the room then keep ambient sound stop until he fills the fuel
             if self.game.is_gas_can_picked:
                 self.game.ambient_sounds['l_engine_room'].fadeout(1500)
-                # self.ambient_sounds['cafeteria'].stop()
                 self.lower_engine_room_sound_play_check = True
 
         """Electrical Room Ambient Sound"""
@@ -176,7 +164,6 @@ class GameFunctions:
                 self.electrical_room_sound_play_check = False
         else:
             self.game.ambient_sounds['electrical_room'].fadeout(1500)
-            # self.ambient_sounds['cafeteria'].stop()
             self.electrical_room_sound_play_check = True
 
         """Storage Room Ambient Sound"""
@@ -188,7 +175,6 @@ class GameFunctions:
                 self.storage_room_sound_play_check = False
         else:
             self.game.ambient_sounds['storage_room'].fadeout(1500)
-            # self.ambient_sounds['cafeteria'].stop()
             self.storage_room_sound_play_check = True
 
         """Admin Room Ambient Sound"""
@@ -252,7 +238,6 @@ class GameFunctions:
         """Cafeteria Computer Glow object"""
         c = pygame.Vector2(3060, 385)
         d = pygame.Vector2(self.game.player.pos.x, self.game.player.pos.y)
-        # if player is in range of object to glow, and game mod is freeplay only then, that object will glow
         if d.distance_to(c) <= 400 and self.game.gamemode == "Freeplay":
             self.game.map_img.blit(self.cafeteria_comp_highlighted_img, (3062, 387))
         else:

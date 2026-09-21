@@ -8,8 +8,8 @@ import pickle
 
 import pytest
 
-import protocol
-import server
+from multiplayer import protocol
+from multiplayer import server
 
 
 @pytest.fixture

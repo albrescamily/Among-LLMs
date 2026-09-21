@@ -29,8 +29,9 @@ be tried out right away.
 import random
 
 import pygame as pg
+from core import display
 
-from settings import *
+from core.settings import *
 
 CHAT_MAX_CHARS = 100            # what the counter shows: 0/100
 CHAT_PANEL_W = 660
@@ -303,11 +304,11 @@ class MeetingChat:
                              else -CHAT_SCROLL_STEP)
                 return True
             if event.button == LEFT_MOUSE_BUTTON:
-                if self.send_rect.collidepoint(event.pos):
+                if self.send_rect.collidepoint(display.to_canvas(event.pos)):
                     self.send()
                     return True
                 # swallow clicks on the panel so they do not reach the game
-                return bool(self.panel_rect.collidepoint(event.pos))
+                return bool(self.panel_rect.collidepoint(display.to_canvas(event.pos)))
             return False
 
         return False
@@ -449,7 +450,7 @@ class MeetingChat:
         pg.draw.rect(surface, HEADER_BG, self.header_rect,
                      border_top_left_radius=16, border_top_right_radius=16)
 
-        title = self._font(20).render("DISCUSSÃO", True, TEXT_LIGHT)
+        title = self._font(20).render("DISCUSSÃƒO", True, TEXT_LIGHT)
         surface.blit(title, (self.header_rect.x + 16,
                              self.header_rect.centery - title.get_height() // 2))
         seconds = self.seconds_left()
@@ -467,7 +468,7 @@ class MeetingChat:
         pg.draw.rect(surface, HEADER_BG, view.inflate(8, 8), border_radius=10)
 
         if not self.messages:
-            hint = self._font(15).render("Ninguém falou ainda...", True,
+            hint = self._font(15).render("NinguÃ©m falou ainda...", True,
                                          TEXT_MUTED)
             surface.blit(hint, (view.centerx - hint.get_width() // 2,
                                 view.centery - hint.get_height() // 2))
@@ -530,7 +531,7 @@ class MeetingChat:
                              (x, self.input_rect.bottom - 10), 2)
             surface.set_clip(clip)
         else:
-            hint = font.render("Você está morto - só pode observar", True,
+            hint = font.render("VocÃª estÃ¡ morto - sÃ³ pode observar", True,
                                (110, 114, 126))
             surface.blit(hint, (self.input_rect.x + 12,
                                 self.input_rect.centery - hint.get_height() // 2))

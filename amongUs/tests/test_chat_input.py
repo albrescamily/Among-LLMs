@@ -3,7 +3,7 @@
 import pygame as pg
 import pytest
 
-from chat import CHAT_MAX_CHARS
+from core.chat import CHAT_MAX_CHARS
 
 
 def key(chat, key_code, unicode=""):
@@ -40,10 +40,10 @@ def test_input_stops_at_the_character_limit(chat):
 
 
 def test_accented_characters_are_typed(chat):
-    # o jogo é jogado em português, acento não pode sumir
-    type_text(chat, "você não é impostor")
+    # o jogo Ã© jogado em portuguÃªs, acento nÃ£o pode sumir
+    type_text(chat, "vocÃª nÃ£o Ã© impostor")
 
-    assert chat.input_text == "você não é impostor"
+    assert chat.input_text == "vocÃª nÃ£o Ã© impostor"
 
 
 def test_control_characters_are_not_typed(chat):
@@ -90,13 +90,13 @@ def test_caret_movement_keys(chat):
     key(chat, pg.K_RIGHT)
     assert chat.caret == 5
 
-    key(chat, pg.K_RIGHT)               # já no fim, não passa
+    key(chat, pg.K_RIGHT)               # jÃ¡ no fim, nÃ£o passa
     assert chat.caret == 5
 
     key(chat, pg.K_HOME)
     assert chat.caret == 0
 
-    key(chat, pg.K_LEFT)                # já no início, não passa
+    key(chat, pg.K_LEFT)                # jÃ¡ no inÃ­cio, nÃ£o passa
     assert chat.caret == 0
 
     key(chat, pg.K_END)
@@ -139,14 +139,14 @@ def test_enter_with_only_spaces_posts_nothing(chat):
     key(chat, pg.K_RETURN)
 
     assert chat.messages == []
-    assert chat.input_text == "   "             # o texto continua lá
+    assert chat.input_text == "   "             # o texto continua lÃ¡
 
 
 def test_ghost_cannot_type_or_send(make_chat):
     chat = make_chat(alive=False)
 
     assert chat.can_type is False
-    assert key(chat, pg.K_a, "a") is True       # o evento é engolido mesmo assim
+    assert key(chat, pg.K_a, "a") is True       # o evento Ã© engolido mesmo assim
     type_text(chat, "ciano")
     key(chat, pg.K_RETURN)
 
