@@ -1,4 +1,5 @@
 import pygame as pg
+from core import display
 import pygame.font
 
 from core.paths import asset
@@ -11,7 +12,7 @@ from core.settings import *
 class Board:
 
     def __init__(self, width: int, height: int, game):
-        self.surface = pg.display.set_mode((width, height), 0, 32)
+        self.surface = display.create_canvas()
         pg.display.set_caption('Among Us')
         self.width = width
         self.height = height
@@ -63,7 +64,7 @@ class Board:
 
         for drawable in args:
             drawable.draw_on(self.surface)
-        pg.display.update()
+        display.present()
 
     def draw_choose_character(self, *args):
         self.intro_bg2 = pg.transform.smoothscale(self.intro_bg2, (self.width, self.height))
@@ -85,7 +86,7 @@ class Board:
 
         for drawable in args:
             drawable.draw_on(self.surface)
-        pg.display.update()
+        display.present()
 
     def draw_game_over(self, scoreboard: list, message: str, *args):
         background = pg.image.load(asset("Assets/Images/Alerts/victory.PNG"))
@@ -98,7 +99,7 @@ class Board:
             pos += 0.08
         for drawable in args:
             drawable.draw_on(self.surface)
-        pg.display.update()
+        display.present()
         
     def draw_game_over_imposter(self, scoreboard: list, message: str, *args):
         background = pg.image.load(asset("Assets/Images/Alerts/defeat.PNG"))
@@ -111,7 +112,7 @@ class Board:
             pos += 0.08
         for drawable in args:
             drawable.draw_on(self.surface)
-        pg.display.update()
+        display.present()
 
     def draw_game_left(self, scoreboard: list, message: str, *args):
         background = (0, 0, 0)
@@ -124,7 +125,7 @@ class Board:
             pos += 0.08
         for drawable in args:
             drawable.draw_on(self.surface)
-        pg.display.update()
+        display.present()
 
     def draw_input(self, word: str, x: int, y: int):
         self.intro_bg2 = pg.transform.scale(self.intro_bg2, (self.width, self.height))
@@ -136,7 +137,7 @@ class Board:
         text = self.menu_font.render("{}".format(word), True, MENU_FONT_COLOR)
         rect = text.get_rect()
         rect.center = x, y
-        pg.display.update()
+        display.present()
         return self.surface.blit(text, rect)
     
     def draw_input_address(self, word: str, x: int, y: int):
@@ -149,18 +150,18 @@ class Board:
         text = self.menu_font.render("{}".format(word), True, MENU_FONT_COLOR)
         rect = text.get_rect()
         rect.center = x, y
-        pg.display.update()
+        display.present()
         return self.surface.blit(text, rect)
         
     def draw_help(self, i):
         self.intro_help[i] = pg.transform.scale(self.intro_help[i], (self.width, self.height))
         self.surface.blit(self.intro_help[i], (0, 0), (0, 0, self.width, self.height))
-        pg.display.update()
+        display.present()
         
     def draw_credits(self):
         self.intro_credits = pg.transform.scale(self.intro_credits, (self.width, self.height))
         self.surface.blit(self.intro_credits, (0, 0), (0, 0, self.width, self.height))
-        pg.display.update()
+        display.present()
 
     def draw_pause(self):
         self.draw_text(self.surface, "Paused", self.width / 2, self.height / 2, self.title_font)

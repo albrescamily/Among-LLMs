@@ -23,6 +23,7 @@ from minigames import asteroids
 
 import pygame
 import pygame as pg
+from core import display
 
 # event      the attribute holding this timer's pygame user event
 # counter    what it counts down
@@ -192,7 +193,7 @@ def dispatch(game, event):
     # Open map, play sound, change mini_map_button_status
     # if left mouse button is pressed and game is not paused
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and not game.emerg_meeting_button_status and not game.view_admin_security_monitor_window_status and game.player.alive_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.map_btn.click(pos):
             if game.map_btn.button_type == "mp_btn":
                 game.effect_sounds['map_click2'].play()
@@ -201,7 +202,7 @@ def dispatch(game, event):
                 game.task_button_click_status = False
     # For Pause Menu Buttons
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and game.paused:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.pause_btns.click(pos):
             # If player clicks quit game button
             if game.pause_btns.button_type == "pause_quit_btn":
@@ -210,7 +211,7 @@ def dispatch(game, event):
 
     # Task Button
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.task_button_show_status and not game.view_admin_security_monitor_window_status and not game.mini_map_button_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.task_btn.click(pos):
             if game.task_btn.button_type == "tsk_btn":
                 game.effect_sounds['map_click'].play()
@@ -218,7 +219,7 @@ def dispatch(game, event):
 
     if game.gamemode == "Multiplayer":
         if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and not game.task_button_show_status:
-            pos = pg.mouse.get_pos()
+            pos = display.mouse_pos()
             if game.task_btn.click(pos):
                 if game.task_btn.button_type == "tsk_btn":
                     game.effect_sounds['map_click'].play()
@@ -228,7 +229,7 @@ def dispatch(game, event):
     """ OPEN CAFETERIA COMPUTER BUTTONS & EVENTS """
     # Open Cafe Computer and Toggle Imposter Status
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.open_cafe_comp_window_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.open_cafe_comp_check_btn.click(pos):
             game.open_cafe_comp_check_pic_status = not game.open_cafe_comp_check_pic_status
             game.player.imposter = not game.player.imposter
@@ -246,7 +247,7 @@ def dispatch(game, event):
     """ VIEW SECURITY MINI MAP BUTTON & EVENTS """
     # View Security Monitor Mini Map - Buttons
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.view_admin_security_monitor_window_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.view_security_monitor_close_btn.click(pos):
             game.effect_sounds['go_back'].play()
             game.view_admin_security_monitor_window_status = False
@@ -257,7 +258,7 @@ def dispatch(game, event):
     """ STABILIZE NAVIGAITON TASK BUTTONS & EVENTS """
     # Stabilize Nav Button
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.target_center_sel_count == 1 and game.stabilize_steering_window_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.stabilize_target_center_btn.click(pos):
             game.effect_sounds['task_completed'].play()
             game.target_center_bt_status = True
@@ -265,7 +266,7 @@ def dispatch(game, event):
             game.target_center_sel_count -= 1
             game.missions_done += 1
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.stabilize_steering_window_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.stabilize_close_btn.click(pos):
             game.effect_sounds['go_back'].play()
             game.effect_sounds['stabilize_nav_BG'].stop()
@@ -281,7 +282,7 @@ def dispatch(game, event):
     """ EMPTY GARBAGE TASK BUTTONS & EVENTS """
     # Empty Garbage Button
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.garbage_liver_Up_sel_count == 1 and game.empty_garbage_window_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.garbage_liver_Up.click(pos):
             game.effect_sounds['task_completed'].play()
             game.garbage_liver_Up_status = False
@@ -291,7 +292,7 @@ def dispatch(game, event):
             game.empty_garbage_task_play_count -= 1
             game.missions_done += 1
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.empty_garbage_window_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.empty_garbage_close_btn.click(pos):
             game.effect_sounds['go_back'].play()
             game.effect_sounds['emtpy_garbage_BG'].fadeout(500)
@@ -305,7 +306,7 @@ def dispatch(game, event):
     """ REBOOT WIFI BUTTONS & EVENTS """
     # Reboot Wifi Button
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.reboot_wifi_liver_sel_count == 1 and game.reboot_wifi_window_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.reboot_wifi_liver.click(pos):
             game.effect_sounds['task_completed'].play()
             game.effect_sounds['rebooted_wifi_BG'].play(-1)
@@ -316,7 +317,7 @@ def dispatch(game, event):
             game.reboot_wifi_task_play_count -= 1
             game.missions_done += 1
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.reboot_wifi_window_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.reboot_wifi_close_btn.click(pos):
             game.effect_sounds['go_back'].play()
             game.effect_sounds['reboot_wifi_BG'].fadeout(500)
@@ -330,11 +331,11 @@ def dispatch(game, event):
     """ EMERGENCY MEETING & VOTING BUTTONS & EVENTS"""
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and (
             game.emerg_meeting_button_status or game.emerg_meeting_report_status) and game.emergency == True and game.player.alive_status == True:
-        meeting.handle_vote_click(game, pg.mouse.get_pos())
+        meeting.handle_vote_click(game, display.mouse_pos())
 
     """ ELECTRIC WIRES TASK BUTTONS & EVENTS"""
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.electricity_wire_window_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.electricity_wire_red_btn.click(pos) and game.electricity_wires_red_sel_count == 1:
             random.choice(game.electric_shock_sounds['electric_shock']).play()
             game.electricity_wires_red_sel_count -= 1
@@ -364,7 +365,7 @@ def dispatch(game, event):
             game.electricity_wires_fixed_count += 1
 
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.electricity_wire_window_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.electricity_wire_close_btn.click(pos):
             game.effect_sounds['go_back'].play()
             game.effect_sounds['fix_electric_wires_BG'].fadeout(500)
@@ -387,7 +388,7 @@ def dispatch(game, event):
 
     """ DIVERT POWER TO REACTOR TASK BUTTONS & EVENTS"""
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.divert_power_to_reactor_window_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.divert_power_to_reactor_livers_btn.click(pos) and game.divert_power_to_reactor_liversUP_sel_count == 1:
             game.effect_sounds['task_completed'].play()
             game.divert_power_to_reactor_livers_btn_status = False
@@ -406,7 +407,7 @@ def dispatch(game, event):
 
     """ ALIGN ENGINE OUTPUT TASK BUTTONS & EVENTS"""
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.align_engine_output_window_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.align_engine_liver_pos_btn1.click(pos) and game.align_engine_liver_pos_btn1_sel_count == 1:
             game.effect_sounds['map_click'].play()
             game.align_engine_output_window2_status = False
@@ -426,7 +427,7 @@ def dispatch(game, event):
             game.effect_sounds['imposter_kill_cooldown_sound'].play()
 
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.align_engine_output_window_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.align_engine_output_close_btn.click(pos):
             game.effect_sounds['go_back'].play()
             game.align_engine_output_window_status = False
@@ -444,7 +445,7 @@ def dispatch(game, event):
 
     """ FUEL ENGINE TASK BUTTONS & EVENTS"""
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and game.fuel_engine_fill_btn_sel_count == 1 and not game.paused and game.fuel_engine_window_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.fuel_engine_fill_btn.click(pos):
             game.effect_sounds['fill_gas_can'].play()
             game.fuel_level -= 10
@@ -456,7 +457,7 @@ def dispatch(game, event):
                 game.fuel_engine_task_play_count -=1
 
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.fuel_engine_window_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.fuel_engine_close_btn.click(pos):
             game.effect_sounds['go_back'].play()
             game.fuel_engine_window_status = False
@@ -465,7 +466,7 @@ def dispatch(game, event):
             game.fuel_engine_sound_play_count +=1
 
     if event.type == pg.MOUSEBUTTONDOWN and event.button == LEFT_MOUSE_BUTTON and not game.paused and game.gas_can_not_picked_text_visible_status:
-        pos = pg.mouse.get_pos()
+        pos = display.mouse_pos()
         if game.fuel_engine_close_btn2.click(pos):
             game.gas_can_not_picked_text_visible_status = False
             game.isdoingTask = False

@@ -1,6 +1,7 @@
 import random
 from time import sleep
 import pygame as pg
+from core import display
 import sys
 import math
 from os import path
@@ -37,7 +38,7 @@ from pygame.locals import *
 class Game:
     def __init__(self):
         pg.init()
-        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
+        self.screen = display.create_canvas()
         self.board = Board(WIDTH, HEIGHT, self)
         self.tasks = Task(self)
         self.gamefuctions = GameFunctions(self)
@@ -1216,7 +1217,7 @@ class Game:
                 self.timer_start = pygame.time.get_ticks()
             self.display_kill_victim_anim()  # this layer is beneath the screen
 
-        pg.display.flip()
+        display.present()
 
     def events(self):
         input_events.pump(self)

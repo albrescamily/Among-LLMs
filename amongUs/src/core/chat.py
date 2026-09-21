@@ -29,6 +29,7 @@ be tried out right away.
 import random
 
 import pygame as pg
+from core import display
 
 from core.settings import *
 
@@ -303,11 +304,11 @@ class MeetingChat:
                              else -CHAT_SCROLL_STEP)
                 return True
             if event.button == LEFT_MOUSE_BUTTON:
-                if self.send_rect.collidepoint(event.pos):
+                if self.send_rect.collidepoint(display.to_canvas(event.pos)):
                     self.send()
                     return True
                 # swallow clicks on the panel so they do not reach the game
-                return bool(self.panel_rect.collidepoint(event.pos))
+                return bool(self.panel_rect.collidepoint(display.to_canvas(event.pos)))
             return False
 
         return False

@@ -1,6 +1,7 @@
 from os import path
 from core.drawable import Drawable
 import pygame as pg
+from core import display
 import sys
 from core.settings import *
 from pygame import mixer
@@ -73,7 +74,7 @@ class Menu:
     def game_help(self):
         i = 0
         while True:
-            pg.display.flip()
+            display.present()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     quit_game()
@@ -93,7 +94,7 @@ class Menu:
         
     def game_credits(self):
         while True:
-            pg.display.flip()
+            display.present()
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE or event.key == pg.K_RETURN:
@@ -133,7 +134,7 @@ class Menu:
     def game_input(self):
         self.word = ""
         while True:
-            pg.display.flip()
+            display.present()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     quit_game()
@@ -163,7 +164,7 @@ class Menu:
     def game_input_address(self):
         word_ip = ""
         while True:
-            pg.display.flip()
+            display.present()
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     quit_game()
