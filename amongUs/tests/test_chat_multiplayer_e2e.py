@@ -34,7 +34,8 @@ def rows_from(sock):
             update = pickle.load(buffer)
         except EOFError:
             break
-        assert update[0] == 'player locations'
+        if update[0] != 'player locations':
+            continue   # e.g. the lobby status sent whenever someone joins
         for row in update[1:]:
             rows[row[0]] = row
     return rows

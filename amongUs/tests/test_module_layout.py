@@ -50,7 +50,11 @@ MODULES = [
     "multiplayer.net_client",
     "multiplayer.state_sync",
     "multiplayer.world_sync",
+    "multiplayer.lobby",
     "multiplayer.session",
+    # headless agents (agents.__main__ is deliberately absent: it opens a socket)
+    "agents.agent_input",
+    "agents.wander",
     # single player only
     "singleplayer.freeplay",
     # the embedded mini-game

@@ -137,3 +137,13 @@ def test_a_typed_address_with_stray_whitespace_still_connects(lan):
     client.close()
 
     assert messages and messages[0][0] == 'id update'
+
+
+def test_poll_decodes_two_messages_that_arrive_in_one_read(wire):
+    # TCP has no message boundaries: an id update followed at once by a lobby
+    # status is one read on the client, and dropping the second would leave a
+    # waiting player stuck in the lobby for good.
+    client, peer = wire
+    peer.send(pickle.dumps(['id update', 4242]) + pickle.dumps(['lobby status', 2, 2, True]))
+
+    assert client.poll() == [['id update', 4242], ['lobby status', 2, 2, True]]

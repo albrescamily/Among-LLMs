@@ -17,12 +17,22 @@ from pygame import mixer
 from core.audio import stop_all_audio
 from core.loop import tick
 from core.sprites import Player
-from multiplayer import state_sync, world_sync
+from multiplayer import lobby, state_sync, world_sync
 from multiplayer.net_client import NetClient
 
 
-def run(game):
-    """Play a multiplayer round, returning when it is over."""
+def run(game, on_tick=None):
+    """Play a multiplayer round, returning when it is over.
+
+    on_tick, if given, is called once a frame with the game, after the server's
+    rows have been applied and before the local state goes back out. An agent
+    uses it to decide from the freshest world and have that decision sent this frame.
+    """
+    # Connect first and wait in the lobby, so the cooldown timers below start
+    # with the round and not with this player joining
+    net = NetClient(game.serveraddress).connect()
+    player_id = lobby.wait_for_start(game, net)
+
     # Game main loop - set game.playing = False to end the game
     # bg music
     global ge
@@ -41,11 +51,6 @@ def run(game):
     game.meetingcooldown_start = pygame.time.get_ticks()
     game.timer_start = pygame.time.get_ticks()
 
-
-    net = NetClient(game.serveraddress).connect()
-
-    # temp var to store dynamically generated id
-    player_id = 0
 
     # dictionary that stores all connected players as objects, including local player. uses player id as key
     game.player = Player(game, random.choice(game.player_pos), 0, True, game.player_colour)
@@ -75,6 +80,8 @@ def run(game):
         # now after receiving data from the server, time to send data to the server
         # update local player object in the list
         game.Players[game.player.player_id] = game.player
+        if on_tick:
+            on_tick(game)
         net.send(state_sync.build_state_packet(game, player_id))
 
         # check for game end condition

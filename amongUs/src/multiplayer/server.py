@@ -39,6 +39,9 @@ class RoundState:
 
     def __init__(self):
         self.imposter_id = None
+        # set once every expected player has connected; clients wait in a
+        # lobby until they are told, so nobody starts before the others
+        self.started = False
         # edge-trigger guard: a majority is only acted on once, and resets
         # to None on its own once votes clear out at the end of a meeting
         self.last_majority_colour = None
@@ -58,6 +61,23 @@ def assign_imposter_if_ready(expected_players):
         return
     round_state.imposter_id = random.choice(list(minionmap.keys()))
     print("[round] imposter assigned: player %s" % round_state.imposter_id)
+
+
+def broadcast_lobby(expected_players):
+  """Tell every client how many have connected, and whether the round has started.
+
+  The round starts, for good, the moment the expected number of players is
+  reached; a client leaves its lobby screen on the first message that says so.
+  """
+  if not round_state.started and len(minionmap) >= expected_players:
+    round_state.started = True
+    print("[round] all %d players connected, starting" % len(minionmap))
+  message = pickle.dumps(['lobby status', len(minionmap), expected_players, round_state.started])
+  for conn in list(outgoing):
+    try:
+      conn.send(message)
+    except Exception:
+      outgoing.remove(conn)
 
 
 def apply_round_authority():
@@ -234,6 +254,7 @@ class MainServer(asyncore.dispatcher):
           % (player_id, len(minionmap), self.expected_players))
     conn.send(pickle.dumps(['id update', player_id]))
     assign_imposter_if_ready(self.expected_players)
+    broadcast_lobby(self.expected_players)
     SecondaryServer(conn)
 
 class SecondaryServer(asyncore.dispatcher_with_send):

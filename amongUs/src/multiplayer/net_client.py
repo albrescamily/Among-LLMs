@@ -6,6 +6,7 @@ and send() once a frame with the local player's state. Nothing here blocks --
 the game has to keep drawing at sixty frames a second either way.
 """
 
+import io
 import pickle
 import select
 import socket
@@ -45,8 +46,13 @@ class NetClient:
         messages = []
         readable, _writable, _errored = select.select([self.socket], [], [], 0)
         for ready in readable:
+            data = ready.recv(BUFFERSIZE)
+            # TCP does not keep messages apart: two sent back to back can arrive
+            # in one read, so decode every pickle in the buffer, not just the first
+            stream = io.BytesIO(data)
             try:
-                messages.append(pickle.loads(ready.recv(BUFFERSIZE)))
+                while stream.tell() < len(data):
+                    messages.append(pickle.load(stream))
             except Exception:
                 continue
         return messages
